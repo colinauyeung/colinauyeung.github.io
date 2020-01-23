@@ -6,3 +6,8 @@ body{
 	font-style: normal;
 	font-weight: 400;
 }
+
+
+.centered {
+	align-content: center
+}
