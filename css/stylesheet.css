@@ -9,9 +9,9 @@ body{
 
 
 .centered {
-	align-content: center
+  margin: auto;
+  width: 50%;
 }
-
 .borderless {
   margin-bottom: 0rem;
 }
