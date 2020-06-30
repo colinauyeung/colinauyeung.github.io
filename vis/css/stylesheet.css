@@ -1,0 +1,63 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	font-family: 'Montserrat', sans-serif;
+	font-style: normal;
+	font-weight: 400;
+}
+
+
+.centered {
+  margin: auto;
+  width: 50%;
+}
+.borderless {
+  margin-bottom: 0rem;
+}
+
+.jumbotron_top {
+	margin-top: 5rem;
+	margin-bottom: 5rem;
+}
+
+.col-xl-6 {
+	max-width: 100%;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.img-full-width {
+    width: 100.5%;
+    height: auto;
+}
+
+.container-fluid.full-width {
+	padding-left: 0;
+	padding-right: 0;
+	overflow-x: hidden;
+	padding-top: 0px;
+}
+.row.row-no-gutter {
+    margin: 0
+}
+.row.row-no-gutter [class*="col-"] {
+    padding: 0
+}
+
+.has-inner .row.row-no-gutter {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+.row.row-no-gutter .inner {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.container-fluid.full-width {
+}
