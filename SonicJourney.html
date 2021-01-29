@@ -1,627 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Describe this page." />
-        <title>Project 0</title>    
-        <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://d3js.org/d3-ease.v2.min.js"></script>
-        <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3-transform/1.0.4/d3-transform.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
-        <style>
-
-            html, body { margin:0; padding:0; overflow:hidden; background-color: #2c3034}
-            svg { position:fixed; top:0; left:0; height:100%; width:100% }
-        </style>
-    </head>
-    <body>
-    
-        <svg id="svg" viewBox="0 0 1080 720" width="100%" height="900" preserveAspectRatio="xMinyMax">
-        </svg>
-        <script>
-            var first = 0;
-            var playingsounds = [];
-            var motor = new Howl({
-                src: ['sounds/motorcycle.mp3'],
-                loop: true,
-                volume: 0.1
-
-            })
-            var motor2 = new Howl({
-            src: ['sounds/motorcycle.mp3'],
-                loop: true,
-                volume: 0.05
-
-            })
-
-            var waterfall = new Howl({
-                src: ['sounds/waterfall.mp3'],
-                loop: true,
-            })
-            var sheep = new Howl({
-                src: ['sounds/sheep.mp3'],
-                loop: true,
-            })
-            var birds = new Howl({
-                src: ['sounds/birds.mp3'],
-                loop: true,
-            })
-            var bells = new Howl({
-                src: ['sounds/bells.mp3'],
-                loop: true,
-            })
-            var children = new Howl({
-                src: ['sounds/children.mp3'],
-                loop: true,
-            })
-            var stream = new Howl({
-                src: ['sounds/stream.mp3'],
-                loop: true,
-            })
-            var crowd = new Howl({
-                src: ['sounds/crowd.mp3'],
-                loop: true,
-            })
-            var accel = new Howl({
-                src: ['sounds/accelerate.mp3'],
-                volume: 0.3,
-                onend: function () {
-                    first = 2;
-                    motor.play();
-                    console.log("finished");
-                    setInterval(randomize, 2500);
-                    setInterval(updatesounds, 1000);
-                    fadebackfirst();
-                }
-            })
-
-            var currentword = 0;
-            var wordswordswords = [
-                "How Far Have We Gone",
-                "Just Keep Riding",
-                "Where Shall We Go Next",
-                "Where Are We",
-                "Blissfully Lost",
-                "How Long Have We Been Riding",
-                "The Next Destination is Just Ahead",
-                "Who Needs a Map",
-                "There's Joy in Heading Nowhere",
-                "Somewhere is Right Here"
-            ]
-
-            var currentsound = 0;
-            var soundscape = [
-                {
-                    color: "#00CED1",
-                    color2: "#028082",
-                    sound: "waterfall",
-                    tension: 0.2
-                },
-                {
-                    color: "#228B22",
-                    color2: '#186318',
-                    sound: "sheep",
-                    tension: 0.5
-                },
-                {
-                    color: "#1E90FF",
-                    color2: "#124e89",
-                    sound: "stream",
-                    tension: 0.03
-                },
-                {
-                    color:"#FF7F50",
-                    color2:"#a35338",
-                    sound: "birds",
-                    tension: 0.7
-                },
-                {
-                    color:"#FFC0CB",
-                    color2:"#9c7c82",
-                    sound: "children",
-                    tension: 0.97
-                },
-                {
-                    color:"#FFA500",
-                    color2:"#845602",
-                    sound: "bells",
-                    tension: 0.6
-                },
-                {
-                    color:"#B0C4DE",
-                    color2:"#798697",
-                    sound:"crowd",
-                    tension: 0.5
-                }
-
-            ];
-
-            var data = [
-                {
-                    //top
-                    n: 0,
-                    val: 5
-                },
-                {
-                    //right
-                    n:1,
-                    val: 5
-                },
-                {
-                    n:2,
-                    val: 5
-                },
-                {
-                    //left
-                    n:3,
-                    val: 5
-                }
-            ]
-
-            let vertialscale = d3.scaleLinear()
-                .domain([-10, 10])
-                .range([5,0])
-
-
-            let height = document.getElementById("svg").viewBox.baseVal.height;
-            let width = document.getElementById("svg").viewBox.baseVal.width;
-            let margin = 10;
-            let radius = (height/3)
-
-
-            let svg = d3.select("svg");
-
-
-            //D3 Conversion from https://www.visualcinnamon.com/2016/06/glow-filter-d3-visualization/
-            //SVG filter for the gooey effect
-            //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
-            var defs = svg.append('defs');
-            var filter = defs.append("filter")
-                .attr("id","glow");
-            filter.append("feGaussianBlur")
-                .attr("stdDeviation","3.5")
-                .attr("result","coloredBlur");
-            var feMerge = filter.append("feMerge");
-            feMerge.append("feMergeNode")
-                .attr("in","coloredBlur");
-            feMerge.append("feMergeNode")
-                .attr("in","SourceGraphic");
-            //////////////////////////////////////////////////////////////////////////////
-
-            //D3 Conversion from https://www.visualcinnamon.com/2015/05/gooey-effect/
-            //SVG filter for the gooey effect
-            //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
-            var filter2 = defs.append('filter').attr('id','gooey');
-            filter2.append('feGaussianBlur')
-                .attr('in','SourceGraphic')
-                .attr('stdDeviation','10')
-                .attr('result','blur');
-            filter2.append('feColorMatrix')
-                .attr('in','blur')
-                .attr('mode','matrix')
-                .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
-                .attr('result','gooey');
-            ///////////////////////////////////////////////////////////////////////////
-
-            defs.append('style')
-                .attr('type', 'text/css')
-                .text("@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Oxygen:wght@700&display=swap');");
-
-            let layer1 = svg.append("g");
-            layer1.style("filter", "url(#gooey)")
-            let layer2 = svg.append("g");
-            let layer3 = svg.append('g');
-
-            let title = layer3.append("text")
-                .attr("x", width/2)
-                .attr("y", 4*(height/5))
-                .attr("dominant-baseline", "middle")
-                .attr("text-anchor", "middle")
-                .attr("fill", "white")
-                .style("font-size", "20px")
-                .style("font-family", "Lato")
-                .text("Let's Go For a Ride")
-
-            layer3.append("text")
-                .attr("x", width)
-                .attr("y", height -10)
-                .attr("dominant-baseline", "text-bottom")
-                .attr("text-anchor", "end")
-                .attr("fill", "white")
-                .style("font-size", "10px")
-                .style("font-family", "Lato")
-                .text("Sound effects obtained from https://www.zapsplat.com")
-
-
-            let yscale = d3.scaleLinear()
-                .domain([0,10])
-                .range([0, radius]);
-
-            let xscale = d3.scaleLinear()
-                .domain([0, 4])
-                .range([0, 2*Math.PI]);
-
-            var centre = d3Transform()
-                .translate([width/2,height/2]);
-
-
-            let line = d3.lineRadial()
-                .curve(d3.curveCardinalClosed.tension(0.2))
-                .angle(d => xscale(d.n))
-
-
-
-            function getline(val){
-                let lined = d3.lineRadial()
-                    .curve(d3.curveCardinalClosed.tension(val))
-                    .angle(d => xscale(d.n))
-
-                return lined;
-            }
-
-            let path = layer2.append("path")
-                .style("filter", "url(#glow)")
-                .attr("fill", "steelblue")
-                .attr("stroke", "steelblue")
-                .attr("fill-opacity", 0.2)
-                .attr("stroke-width", 1.5)
-                .attr("transform", centre)
-                .on("click", handleclick);
-
-            path.attr("d", line
-                    .radius(d => yscale(d.val))
-                (data));
-
-
-
-            function fadeback(){
-
-                let val = Math.floor(Math.random() * (wordswordswords.length));
-                if(val > wordswordswords.length -1){
-                    val = wordswordswords.length-1;
-                }
-                while(val === currentword){
-                    let val = Math.floor(Math.random() * (wordswordswords.length));
-                    if(val > wordswordswords.length -1){
-                        val = wordswordswords.length-1;
-                    }
-                }
-                title.text(wordswordswords[val])
-                    .transition()
-                    .duration(1000)
-                    .style("opacity", 1)
-
-            }
-            function fadebackfirst(){
-                title.text("Where Shall We Go")
-                    .transition()
-                    .duration(1000)
-                    .style("opacity", 1)
-
-            }
-
-
-
-
-            function handleclick(){
-                if(first === 0){
-                    title.transition()
-                        .duration(1000)
-                        .style("opacity", 0)
-                    first = 1;
-                    accel.play();
-                    setTimeout(function (){
-                            motor2.play()
-                            console.log('running')}
-                        , 5000)
-                }
-                else{
-                    if(first === 2){
-                        title.transition()
-                            .duration(1000)
-                            .style("opacity", 0)
-
-                        setTimeout(fadeback, 1000)
-                        let top = data[0].val
-                        let right = data[1].val
-                        let left = data[3].val
-
-                        let x = (right - left)/2;
-
-                        let volscale = d3.scaleLinear()
-                            .domain([3,10])
-                            .range([5,0])
-                        let z = volscale(top)
-
-                        let sound = soundscape[currentsound].sound
-                        let id = 0;
-                        let chunk = {};
-                        let back = -15
-                        switch (sound){
-                            case "waterfall":
-                                id = waterfall.play();
-                                waterfall.pos(x, back, z, id);
-                                chunk = {
-                                    color: soundscape[currentsound].color2,
-                                    type: sound,
-                                    id: id,
-                                    pos: [x,back,z],
-                                    height: Math.random()
-                                }
-                                playingsounds.push(chunk);
-                                break;
-                            case "sheep":
-                                id = sheep.play();
-                                sheep.pos(x, back, z, id);
-                                chunk = {
-                                    color: soundscape[currentsound].color2,
-                                    type: sound,
-                                    id: id,
-                                    pos: [x,back,z],
-                                    height: Math.random()
-                                }
-                                playingsounds.push(chunk);
-                                break;
-                            case "bells":
-                                id = bells.play();
-                                bells.pos(x, back, z, id);
-                                chunk = {
-                                    color: soundscape[currentsound].color2,
-                                    type: sound,
-                                    id: id,
-                                    pos: [x,back,z],
-                                    height: Math.random()
-                                }
-                                playingsounds.push(chunk);
-                                break;
-                            case "birds":
-                                id = birds.play();
-                                birds.pos(x, back, z, id);
-                                chunk = {
-                                    color: soundscape[currentsound].color2,
-                                    type: sound,
-                                    id: id,
-                                    pos: [x,back,z],
-                                    height: Math.random()
-                                }
-                                playingsounds.push(chunk);
-                                break;
-                            case "children":
-                                id = children.play();
-                                children.pos(x, back, z, id);
-                                chunk = {
-                                    color: soundscape[currentsound].color2,
-                                    type: sound,
-                                    id: id,
-                                    pos: [x,back,z],
-                                    height: Math.random()
-                                }
-                                playingsounds.push(chunk);
-                                break;
-                            case "crowd":
-                                id = crowd.play();
-                                crowd.pos(x, back, z, id);
-                                chunk = {
-                                    color: soundscape[currentsound].color2,
-                                    type: sound,
-                                    id: id,
-                                    pos: [x,back,z],
-                                    height: Math.random()
-                                }
-                                playingsounds.push(chunk);
-                                break;
-                            case "stream":
-                                id = stream.play();
-                                stream.pos(x, back, z, id);
-                                chunk = {
-                                    color: soundscape[currentsound].color2,
-                                    type: sound,
-                                    id: id,
-                                    pos: [x,back,z],
-                                    height: Math.random()
-                                }
-                                playingsounds.push(chunk);
-                                break;
-                        }
-
-
-                    }
-                }
-
-            }
-            var leftlarge = d3.scaleLinear()
-                .domain([0, -10])
-                .range([3, 10])
-            var leftsmall = d3.scaleLinear()
-                .domain([10, 0])
-                .range([0, 3])
-            var rightlarge = d3.scaleLinear()
-                .domain([0, 10])
-                .range([3, 10])
-            var rightsmall = d3.scaleLinear()
-                .domain([-10, 0])
-                .range([0, 3])
-            var tbscale = d3.scaleLinear()
-                .domain([0, 10])
-                .range([3, 10])
-
-            function randomize(){
-                let lrran = (Math.random() *20) - 10;
-                let left = 0;
-                let right = 0;
-                if(lrran >= 0){
-                    left = leftsmall(lrran)
-                    right = rightlarge(lrran)
-                }
-                else{
-                    left = leftlarge(lrran)
-                    right = rightsmall(lrran)
-                }
-
-                let tbran = Math.random() * 10
-
-                data[0].val = tbscale(tbran)
-                data[1].val = right
-                data[2].val = tbscale(tbran)
-                data[3].val = left
-
-
-                let val = Math.floor(Math.random() * (soundscape.length));
-                if(val > soundscape.length -1){
-                    val = soundscape.length;
-                }
-                currentsound = val;
-                let color = soundscape[currentsound].color
-
-                line = getline(soundscape[currentsound].tension );
-
-                path.transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .attr("d", line.radius(d => yscale(d.val))(data))
-                    .attr("fill", color)
-                    .attr("stroke", color);
-
-
-
-            }
-            var speedscale = d3.scaleLinear()
-                .domain([0, 5])
-                .range([0.9, 0.4])
-
-            let vscale = d3.scaleLinear()
-                .domain([0,1])
-                .range([0, height])
-            let hscale = d3.scaleLinear()
-                .domain([-5,5])
-                .range([0, width])
-            let rscale = d3.scaleLinear()
-                .domain([0,15])
-                .range([175, 0])
-
-
-
-            function updatesounds(){
-                let remove = []
-                playingsounds.forEach((d,i) => {
-                    y = d.pos[1];
-                    x = d.pos[0];
-                    speed = speedscale(Math.abs(x));
-                    y = y + speed;
-                    if(y > 15){
-                        switch(d.type){
-                            case "waterfall":
-                                waterfall.stop(d.id);
-                                break;
-                            case "sheep":
-                                sheep.stop(d.id);
-                                break;
-                            case "bells":
-                                bells.stop(d.id);
-                                break;
-                            case "birds":
-                                birds.stop(d.id);
-                                break;
-                            case "children":
-                                children.stop(d.id);
-                                break;
-                            case "crowd":
-                                crowd.stop(d.id);
-                                break;
-                            case "stream":
-                                stream.stop(d.id);
-                                break;
-                        }
-                        remove.push(i)
-                    }
-                    else{
-                        d.pos[1] = y;
-                        switch(d.type){
-                            case "waterfall":
-                                waterfall.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
-                                break;
-                            case "sheep":
-                                sheep.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
-                                break;
-                            case "bells":
-                                bells.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
-                                break;
-                            case "birds":
-                                birds.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
-                                break;
-                            case "children":
-                                children.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
-                                break;
-                            case "crowd":
-                                crowd.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
-                                break;
-                            case "stream":
-                                stream.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
-                                break;
-                        }
-                    }
-
-                })
-                remove.sort()
-                remove.reverse()
-                remove.forEach(d => {
-                    playingsounds.splice(d, 1)
-                })
-
-
-                let t = d3.transition()
-                    .ease(d3.easeLinear)
-                    .duration(1000)
-
-                let t2 = d3.transition()
-                    .ease(d3.easePolyInOut)
-                    .duration(2500)
-
-
-                let circle = layer1
-                    .selectAll(".bubble")
-                    .data(playingsounds, function(d) {return d.id})
-
-                circle.join(
-                    enter =>
-                        enter
-                            .append('circle')
-                            .attr('class', 'bubble')
-                            .attr('cx', d => hscale(d.pos[0]))
-                            .attr('cy', d=> {
-                                return vscale(d.height)
-                            })
-                            .attr('r', d => {
-                                return rscale(Math.abs(d.pos[1]))
-                            })
-                            .attr("opacity", 0.5)
-                            .attr('fill', d => {return d.color}),
-                    update =>
-                        update
-                            .call(update => update.transition(t)
-                                .attr('r', d => {
-                                    return rscale(Math.abs(d.pos[1]))
-                                })
-                            ),
-                    exit =>
-                        exit
-                            .call(exit => exit.transition(t2)
-                                .attr("r", 0))
-                                .remove()
-                )
-
-            }
-
-
-
-
-        </script>
-    </body>
-    <footer>
-
-    </footer>
-
-<!-- Scripts-->
-
-</html>
+  <head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sonic Journey</title>
+    <!-- Bootstrap -->
+  <link href="css/style.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Titillium+Web&display=swap" rel="stylesheet">
+
+  <!--The following script tag downloads a font from the Adobe Edge Web Fonts server for use within the web page. We recommend that you do not modify it.--><script>var __adobewebfontsappname__="dreamweaver"</script><script src="http://use.edgefonts.net/lekton:n4:default.js" type="text/javascript"></script>
+</head>
+<div class="row" id="icmq">
+  <div id="i6ah" class="cell">
+    <div data-gjs="navbar" class="navbar" id="ie9m">
+      <div class="navbar-container" id="iuc6">
+        <a href="index.html" class="navbar-brand" id="iaoe">Colin Au Yeung</a>
+        <div id="ir2c" class="navbar-burger">
+          <div class="navbar-burger-line">
+          </div>
+          <div class="navbar-burger-line">
+          </div>
+          <div class="navbar-burger-line">
+          </div>
+        </div>
+        <div data-gjs="navbar-items" class="navbar-items-c">
+          <nav data-gjs="navbar-menu" class="navbar-menu" id="imnuc">
+            <a href="index.html" class="navbar-menu-link" id="itq02">Home</a>
+            <a href="index.html" class="navbar-menu-link" id="ituqc">About</a>
+            <a href="index.html" class="navbar-menu-link" id="iess2">Contact</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="i81jm">
+      <div class="cell" id="i879f">
+        <img src="sonicjourney/mainpage.png"> </img>
+      </div>
+    </div>
+    <div class="row" id="i5sg6">
+      <div class="cell" id="ijhll">
+        <div id="ia1p6">Sonic Journey
+          <br/>
+        </div>
+        <div id="inrzl">CPSC 581 - Assignment 0
+          <br/>
+        </div>
+        <div id="icc3u">
+          <a href="SonicJourneyLive.html" class="link">Live Version</a>
+          <br/>
+        </div>
+        <div id="i1owo">Sonic Journey is an exploration of being blissfully lost. Built in Javascript using D3.js and Howler.js, Sonic Journey is an abstract representation of the delight that Ahmed, the client, takes in aimless motorcycle rides. In our brief interview together, Ahmed described the power of letting go of his worries and just being free, not caring where he is going. He also took pleasure in the new things he discovers along the way, as he puts it &quot;unwrapping a christmas present everyday&quot;. Sonic Journey represents those loves of aimlessness, freedom and discovery as it takes you on a motorcycle ride to nowhere in particular.
+          <br/>
+        </div>
+        <div id="i3ozd">How Does It Work
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="ii9wl">
+      <div class="cell" id="igphg">
+        <img src="sonicjourney/mainpagebox.png"> </img>
+      </div>
+      <div class="cell" id="i9bjv">
+        <div id="iqtdt">Starting your Journey
+          <br/>
+        </div>
+        <div id="iylep">When you first open Sonic Journey, the button is a simple un-moving diamond. However when you click it, you can hear a motorcycle start up and the button begins to morph and change color. Your journey is underway
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell" id="iwnbj">
+        <div id="irr1e">The Next Step
+          <br/>
+        </div>
+        <div id="ig0or">The morphing button represents the next thing you can discover on your journey. The color of the button represents the sound of the thing you can discover. The height of the button represents how loud that thing will be. The left-right dimensions represent how far to your left or right that thing will be. The button morphs fast, so while you may want to control it, it&#039;s often best just to follow the flow.
+          <br/>
+        </div>
+      </div>
+      <div class="cell" id="iwlno">
+        <img src="sonicjourney/solobox.png" class="max320"> </img>
+      </div>
+    </div>
+    <div class="row" id="i5q9o">
+      <div class="cell" id="ijmx9">
+        <img src="sonicjourney/box1.png" class="max320"> </img>
+      </div>
+      <div class="cell" id="iw681">
+        <div id="idqp2">A New Discovery
+          <br/>
+        </div>
+        <div id="i29se">When you click on a button, in the distance a sound appears! A corresponding circle also appears. As the sound approaches, the circle grows and soon enough the sound fades behind you as you past it with the circle along with it.
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="ijz7k">
+      <div class="cell" id="i3bx6">
+        <div id="ionul">Your Journey Continues
+          <br/>
+        </div>
+        <div id="i41oo">As you click more, more sounds come into focus and soon enough some sounds start to  blend together and as they do the circles also start to blend together.
+          <br/>
+        </div>
+      </div>
+      <div class="cell" id="iju6g">
+        <img src="sonicjourney/box2.png" class="max320"> </img>
+      </div>
+    </div>
+    <div class="row" id="ivr23">
+      <div class="cell" id="i97hx">
+        <img src="sonicjourney/box3.png" class="max320"> </img>
+      </div>
+      <div class="cell" id="iaxk6">
+        <div id="i1843f">Little More to Discover
+          <br/>
+        </div>
+        <div id="ivtbaf">One last thing before you go on your way. You can actually predict the type of sound a little bit. The &quot;sharpness&quot; of the button also relates to the &quot;sharpness&quot; of the sound. A very sharp sound will have a button with sharp edges!
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell" id="iigwp1">
+        <div id="igbkqn">Video Demo
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="i2cpnu">
+      <div class="cell" id="ixj9jn">
+        <div id="iwsa48">Design Process
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="i3q9cf">
+      <div class="cell" id="i5x7gs">
+        <div id="il3p3a">Initial Sketches
+          <br/>
+        </div>
+        <div id="i82nh9">These initial sketches explore a range of different themes that try on focus on different aspects of the things that brought the client delight. For example [2,3,7] explored the idea of aimless wondering using variations of side-scrollers. Where as [4,5] explored that same theme using top-down navigation style game ideas. [6] went in a different direction and thought about the idea of discovering new things with a button that you held down and it uncovered new things about the world. An early version of Sonic Journey [1] was also included here.
+          <br/>
+        </div>
+      </div>
+      <div class="cell" id="ilmex9">
+        <img src="sonicjourney/sketches1.png" class="max480"> </img>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell" id="isrvnk">
+        <img src="sonicjourney/sketches2.png" class="max480"> </img>
+      </div>
+      <div class="cell" id="if3cl8">
+        <div id="ia4lxf">Honing In On Sound
+          <br/>
+        </div>
+        <div id="ica0lk">These sketches begin to hone in on sound as the means to explore the ideas of exploration. With [8,9] riffing on the early idea of sonic journey. In [8] the button is surrounding by moving arrows which direct sounds to different &quot;speakers&quot; where as in [9] the button moves and based on the local &quot;sound mood&quot; plays a different sound. [10] goes back to the idea of unwrapping new experiences with a similar concept to [6], but using sound
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell" id="ig4n0i">
+        <div id="iud27g">Sonic Journey - The Button
+          <br/>
+        </div>
+        <div id="i5oq1c">Running with Sonic Journey, these sketches begin to think about how the button should look like. With [11] showcasing a sun-like circle with spikes more similar to the original and [13] moving over to a more traditional waveform for the button. We also have [12] an early version of the final button
+          <br/>
+        </div>
+      </div>
+      <div class="cell" id="icjk1e">
+        <img src="sonicjourney/sketches4.png" class="max480"> </img>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell" id="izukw1">
+        <img src="sonicjourney/sketches5.png" class="max480"> </img>
+      </div>
+      <div class="cell" id="iejbtk">
+        <div id="i2r4bi">Sonic Journey - The Sound
+          <br/>
+        </div>
+        <div id="img6om">With most of the ducks in the row on the base idea, these sketches thinking about how to use sound to get a journey. [14] shows off the initial idea of having different &quot;speakers&quot; that get affected by button presses and [16] iterates on that concept with the button just picking a &quot;speaker&quot; to play from. [15] shows off a different idea of just placing a sound in space based on the button, although this idea was scrapped due to the limitations of spatial sound on a normal headphones. [18] takes the idea of [14] and iterates on it by instead of creating a soundscape on button presses, focusing on particular sounds in an existing soundscape. Finally [17] shows off the final idea.
+          <br/>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cell" id="ilm5xg">
+        <div id="ijbt5j">Refinement
+          <br/>
+        </div>
+        <div id="iawcwa">These final sketches show reflection on feedback received about the design. [19,20] reflect on the feedback that a sharp shape would reflect a sharp sound, so these sketches start to think about how to create a variable button that can change on the sound. [21] reflects on feedback that approach sounds should make approaching shapes as opposed to falling shapes
+          <br/>
+        </div>
+      </div>
+      <div class="cell" id="ia3xfh">
+        <img src="sonicjourney/sketches6.png" class="max480"> </img>
+      </div>
+    </div>
+  </div>
+</div>
+<script>var items = document.querySelectorAll('#ir2c');
+  for (var i = 0, len = items.length; i < len; i++) {
+    (function(){
+      var e,t=0,n=function(){
+        var e,t=document.createElement("void"),n={
+          transition:"transitionend",OTransition:"oTransitionEnd",MozTransition:"transitionend",WebkitTransition:"webkitTransitionEnd"};
+        for(e in n)if(void 0!==t.style[e])return n[e]}
+      (),r=function(e){
+        var t=window.getComputedStyle(e),n=t.display,r=(t.position,t.visibility,t.height,parseInt(t["max-height"]));
+        if("none"!==n&&"0"!==r)return e.offsetHeight;
+        e.style.height="auto",e.style.display="block",e.style.position="absolute",e.style.visibility="hidden";
+        var i=e.offsetHeight;
+        return e.style.height="",e.style.display="",e.style.position="",e.style.visibility="",i}
+      ,i=function(e){
+        t=1;
+        var n=r(e),i=e.style;
+        i.display="block",i.transition="max-height 0.25s ease-in-out",i.overflowY="hidden",""==i["max-height"]&&(i["max-height"]=0),0==parseInt(i["max-height"])?(i["max-height"]="0",setTimeout(function(){
+          i["max-height"]=n+"px"}
+,10)):i["max-height"]="0"}
+      ,a=function(r){
+        if(r.preventDefault(),!t){
+          var a=this.closest("[data-gjs=navbar]"),o=a.querySelector("[data-gjs=navbar-items]");
+          i(o),e||(o.addEventListener(n,function(){
+            t=0;
+            var e=o.style;
+            0==parseInt(e["max-height"])&&(e.display="",e["max-height"]="")}
+                                     ),e=1)}
+      };
+      "gjs-collapse"in this||this.addEventListener("click",a),this["gjs-collapse"]=1}
+     .bind(items[i]))();
+  }
+</script>

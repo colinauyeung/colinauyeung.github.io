@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Describe this page." />
+        <title>Project 0</title>    
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/d3-ease.v2.min.js"></script>
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3-transform/1.0.4/d3-transform.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+        <style>
+
+            html, body { margin:0; padding:0; overflow:hidden; background-color: #2c3034}
+            svg { position:fixed; top:0; left:0; height:100%; width:100% }
+        </style>
+    </head>
+    <body>
+    
+        <svg id="svg" viewBox="0 0 1080 720" width="100%" height="900" preserveAspectRatio="xMinyMax">
+        </svg>
+        <script>
+            var first = 0;
+            var playingsounds = [];
+            var motor = new Howl({
+                src: ['sounds/motorcycle.mp3'],
+                loop: true,
+                volume: 0.1
+
+            })
+            var motor2 = new Howl({
+            src: ['sounds/motorcycle.mp3'],
+                loop: true,
+                volume: 0.05
+
+            })
+
+            var waterfall = new Howl({
+                src: ['sounds/waterfall.mp3'],
+                loop: true,
+            })
+            var sheep = new Howl({
+                src: ['sounds/sheep.mp3'],
+                loop: true,
+            })
+            var birds = new Howl({
+                src: ['sounds/birds.mp3'],
+                loop: true,
+            })
+            var bells = new Howl({
+                src: ['sounds/bells.mp3'],
+                loop: true,
+            })
+            var children = new Howl({
+                src: ['sounds/children.mp3'],
+                loop: true,
+            })
+            var stream = new Howl({
+                src: ['sounds/stream.mp3'],
+                loop: true,
+            })
+            var crowd = new Howl({
+                src: ['sounds/crowd.mp3'],
+                loop: true,
+            })
+            var accel = new Howl({
+                src: ['sounds/accelerate.mp3'],
+                volume: 0.3,
+                onend: function () {
+                    first = 2;
+                    motor.play();
+                    console.log("finished");
+                    setInterval(randomize, 2500);
+                    setInterval(updatesounds, 1000);
+                    fadebackfirst();
+                }
+            })
+
+            var currentword = 0;
+            var wordswordswords = [
+                "How Far Have We Gone",
+                "Just Keep Riding",
+                "Where Shall We Go Next",
+                "Where Are We",
+                "Blissfully Lost",
+                "How Long Have We Been Riding",
+                "The Next Destination is Just Ahead",
+                "Who Needs a Map",
+                "There's Joy in Heading Nowhere",
+                "Somewhere is Right Here"
+            ]
+
+            var currentsound = 0;
+            var soundscape = [
+                {
+                    color: "#00CED1",
+                    color2: "#028082",
+                    sound: "waterfall",
+                    tension: 0.2
+                },
+                {
+                    color: "#228B22",
+                    color2: '#186318',
+                    sound: "sheep",
+                    tension: 0.5
+                },
+                {
+                    color: "#1E90FF",
+                    color2: "#124e89",
+                    sound: "stream",
+                    tension: 0.03
+                },
+                {
+                    color:"#FF7F50",
+                    color2:"#a35338",
+                    sound: "birds",
+                    tension: 0.7
+                },
+                {
+                    color:"#FFC0CB",
+                    color2:"#9c7c82",
+                    sound: "children",
+                    tension: 0.97
+                },
+                {
+                    color:"#FFA500",
+                    color2:"#845602",
+                    sound: "bells",
+                    tension: 0.6
+                },
+                {
+                    color:"#B0C4DE",
+                    color2:"#798697",
+                    sound:"crowd",
+                    tension: 0.5
+                }
+
+            ];
+
+            var data = [
+                {
+                    //top
+                    n: 0,
+                    val: 5
+                },
+                {
+                    //right
+                    n:1,
+                    val: 5
+                },
+                {
+                    n:2,
+                    val: 5
+                },
+                {
+                    //left
+                    n:3,
+                    val: 5
+                }
+            ]
+
+            let vertialscale = d3.scaleLinear()
+                .domain([-10, 10])
+                .range([5,0])
+
+
+            let height = document.getElementById("svg").viewBox.baseVal.height;
+            let width = document.getElementById("svg").viewBox.baseVal.width;
+            let margin = 10;
+            let radius = (height/3)
+
+
+            let svg = d3.select("svg");
+
+
+            //D3 Conversion from https://www.visualcinnamon.com/2016/06/glow-filter-d3-visualization/
+            //SVG filter for the gooey effect
+            //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+            var defs = svg.append('defs');
+            var filter = defs.append("filter")
+                .attr("id","glow");
+            filter.append("feGaussianBlur")
+                .attr("stdDeviation","3.5")
+                .attr("result","coloredBlur");
+            var feMerge = filter.append("feMerge");
+            feMerge.append("feMergeNode")
+                .attr("in","coloredBlur");
+            feMerge.append("feMergeNode")
+                .attr("in","SourceGraphic");
+            //////////////////////////////////////////////////////////////////////////////
+
+            //D3 Conversion from https://www.visualcinnamon.com/2015/05/gooey-effect/
+            //SVG filter for the gooey effect
+            //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+            var filter2 = defs.append('filter').attr('id','gooey');
+            filter2.append('feGaussianBlur')
+                .attr('in','SourceGraphic')
+                .attr('stdDeviation','10')
+                .attr('result','blur');
+            filter2.append('feColorMatrix')
+                .attr('in','blur')
+                .attr('mode','matrix')
+                .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
+                .attr('result','gooey');
+            ///////////////////////////////////////////////////////////////////////////
+
+            defs.append('style')
+                .attr('type', 'text/css')
+                .text("@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Oxygen:wght@700&display=swap');");
+
+            let layer1 = svg.append("g");
+            layer1.style("filter", "url(#gooey)")
+            let layer2 = svg.append("g");
+            let layer3 = svg.append('g');
+
+            let title = layer3.append("text")
+                .attr("x", width/2)
+                .attr("y", 4*(height/5))
+                .attr("dominant-baseline", "middle")
+                .attr("text-anchor", "middle")
+                .attr("fill", "white")
+                .style("font-size", "20px")
+                .style("font-family", "Lato")
+                .text("Let's Go For a Ride")
+
+            layer3.append("text")
+                .attr("x", width)
+                .attr("y", height -10)
+                .attr("dominant-baseline", "text-bottom")
+                .attr("text-anchor", "end")
+                .attr("fill", "white")
+                .style("font-size", "10px")
+                .style("font-family", "Lato")
+                .text("Sound effects obtained from https://www.zapsplat.com")
+
+
+            let yscale = d3.scaleLinear()
+                .domain([0,10])
+                .range([0, radius]);
+
+            let xscale = d3.scaleLinear()
+                .domain([0, 4])
+                .range([0, 2*Math.PI]);
+
+            var centre = d3Transform()
+                .translate([width/2,height/2]);
+
+
+            let line = d3.lineRadial()
+                .curve(d3.curveCardinalClosed.tension(0.2))
+                .angle(d => xscale(d.n))
+
+
+
+            function getline(val){
+                let lined = d3.lineRadial()
+                    .curve(d3.curveCardinalClosed.tension(val))
+                    .angle(d => xscale(d.n))
+
+                return lined;
+            }
+
+            let path = layer2.append("path")
+                .style("filter", "url(#glow)")
+                .attr("fill", "steelblue")
+                .attr("stroke", "steelblue")
+                .attr("fill-opacity", 0.2)
+                .attr("stroke-width", 1.5)
+                .attr("transform", centre)
+                .on("click", handleclick);
+
+            path.attr("d", line
+                    .radius(d => yscale(d.val))
+                (data));
+
+
+
+            function fadeback(){
+
+                let val = Math.floor(Math.random() * (wordswordswords.length));
+                if(val > wordswordswords.length -1){
+                    val = wordswordswords.length-1;
+                }
+                while(val === currentword){
+                    let val = Math.floor(Math.random() * (wordswordswords.length));
+                    if(val > wordswordswords.length -1){
+                        val = wordswordswords.length-1;
+                    }
+                }
+                title.text(wordswordswords[val])
+                    .transition()
+                    .duration(1000)
+                    .style("opacity", 1)
+
+            }
+            function fadebackfirst(){
+                title.text("Where Shall We Go")
+                    .transition()
+                    .duration(1000)
+                    .style("opacity", 1)
+
+            }
+
+
+
+
+            function handleclick(){
+                if(first === 0){
+                    title.transition()
+                        .duration(1000)
+                        .style("opacity", 0)
+                    first = 1;
+                    accel.play();
+                    setTimeout(function (){
+                            motor2.play()
+                            console.log('running')}
+                        , 5000)
+                }
+                else{
+                    if(first === 2){
+                        title.transition()
+                            .duration(1000)
+                            .style("opacity", 0)
+
+                        setTimeout(fadeback, 1000)
+                        let top = data[0].val
+                        let right = data[1].val
+                        let left = data[3].val
+
+                        let x = (right - left)/2;
+
+                        let volscale = d3.scaleLinear()
+                            .domain([3,10])
+                            .range([5,0])
+                        let z = volscale(top)
+
+                        let sound = soundscape[currentsound].sound
+                        let id = 0;
+                        let chunk = {};
+                        let back = -15
+                        switch (sound){
+                            case "waterfall":
+                                id = waterfall.play();
+                                waterfall.pos(x, back, z, id);
+                                chunk = {
+                                    color: soundscape[currentsound].color2,
+                                    type: sound,
+                                    id: id,
+                                    pos: [x,back,z],
+                                    height: Math.random()
+                                }
+                                playingsounds.push(chunk);
+                                break;
+                            case "sheep":
+                                id = sheep.play();
+                                sheep.pos(x, back, z, id);
+                                chunk = {
+                                    color: soundscape[currentsound].color2,
+                                    type: sound,
+                                    id: id,
+                                    pos: [x,back,z],
+                                    height: Math.random()
+                                }
+                                playingsounds.push(chunk);
+                                break;
+                            case "bells":
+                                id = bells.play();
+                                bells.pos(x, back, z, id);
+                                chunk = {
+                                    color: soundscape[currentsound].color2,
+                                    type: sound,
+                                    id: id,
+                                    pos: [x,back,z],
+                                    height: Math.random()
+                                }
+                                playingsounds.push(chunk);
+                                break;
+                            case "birds":
+                                id = birds.play();
+                                birds.pos(x, back, z, id);
+                                chunk = {
+                                    color: soundscape[currentsound].color2,
+                                    type: sound,
+                                    id: id,
+                                    pos: [x,back,z],
+                                    height: Math.random()
+                                }
+                                playingsounds.push(chunk);
+                                break;
+                            case "children":
+                                id = children.play();
+                                children.pos(x, back, z, id);
+                                chunk = {
+                                    color: soundscape[currentsound].color2,
+                                    type: sound,
+                                    id: id,
+                                    pos: [x,back,z],
+                                    height: Math.random()
+                                }
+                                playingsounds.push(chunk);
+                                break;
+                            case "crowd":
+                                id = crowd.play();
+                                crowd.pos(x, back, z, id);
+                                chunk = {
+                                    color: soundscape[currentsound].color2,
+                                    type: sound,
+                                    id: id,
+                                    pos: [x,back,z],
+                                    height: Math.random()
+                                }
+                                playingsounds.push(chunk);
+                                break;
+                            case "stream":
+                                id = stream.play();
+                                stream.pos(x, back, z, id);
+                                chunk = {
+                                    color: soundscape[currentsound].color2,
+                                    type: sound,
+                                    id: id,
+                                    pos: [x,back,z],
+                                    height: Math.random()
+                                }
+                                playingsounds.push(chunk);
+                                break;
+                        }
+
+
+                    }
+                }
+
+            }
+            var leftlarge = d3.scaleLinear()
+                .domain([0, -10])
+                .range([3, 10])
+            var leftsmall = d3.scaleLinear()
+                .domain([10, 0])
+                .range([0, 3])
+            var rightlarge = d3.scaleLinear()
+                .domain([0, 10])
+                .range([3, 10])
+            var rightsmall = d3.scaleLinear()
+                .domain([-10, 0])
+                .range([0, 3])
+            var tbscale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([3, 10])
+
+            function randomize(){
+                let lrran = (Math.random() *20) - 10;
+                let left = 0;
+                let right = 0;
+                if(lrran >= 0){
+                    left = leftsmall(lrran)
+                    right = rightlarge(lrran)
+                }
+                else{
+                    left = leftlarge(lrran)
+                    right = rightsmall(lrran)
+                }
+
+                let tbran = Math.random() * 10
+
+                data[0].val = tbscale(tbran)
+                data[1].val = right
+                data[2].val = tbscale(tbran)
+                data[3].val = left
+
+
+                let val = Math.floor(Math.random() * (soundscape.length));
+                if(val > soundscape.length -1){
+                    val = soundscape.length;
+                }
+                currentsound = val;
+                let color = soundscape[currentsound].color
+
+                line = getline(soundscape[currentsound].tension );
+
+                path.transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .attr("d", line.radius(d => yscale(d.val))(data))
+                    .attr("fill", color)
+                    .attr("stroke", color);
+
+
+
+            }
+            var speedscale = d3.scaleLinear()
+                .domain([0, 5])
+                .range([0.9, 0.4])
+
+            let vscale = d3.scaleLinear()
+                .domain([0,1])
+                .range([0, height])
+            let hscale = d3.scaleLinear()
+                .domain([-5,5])
+                .range([0, width])
+            let rscale = d3.scaleLinear()
+                .domain([0,15])
+                .range([175, 0])
+
+
+
+            function updatesounds(){
+                let remove = []
+                playingsounds.forEach((d,i) => {
+                    y = d.pos[1];
+                    x = d.pos[0];
+                    speed = speedscale(Math.abs(x));
+                    y = y + speed;
+                    if(y > 15){
+                        switch(d.type){
+                            case "waterfall":
+                                waterfall.stop(d.id);
+                                break;
+                            case "sheep":
+                                sheep.stop(d.id);
+                                break;
+                            case "bells":
+                                bells.stop(d.id);
+                                break;
+                            case "birds":
+                                birds.stop(d.id);
+                                break;
+                            case "children":
+                                children.stop(d.id);
+                                break;
+                            case "crowd":
+                                crowd.stop(d.id);
+                                break;
+                            case "stream":
+                                stream.stop(d.id);
+                                break;
+                        }
+                        remove.push(i)
+                    }
+                    else{
+                        d.pos[1] = y;
+                        switch(d.type){
+                            case "waterfall":
+                                waterfall.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
+                                break;
+                            case "sheep":
+                                sheep.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
+                                break;
+                            case "bells":
+                                bells.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
+                                break;
+                            case "birds":
+                                birds.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
+                                break;
+                            case "children":
+                                children.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
+                                break;
+                            case "crowd":
+                                crowd.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
+                                break;
+                            case "stream":
+                                stream.pos(d.pos[0], d.pos[1], d.pos[2], d.id);
+                                break;
+                        }
+                    }
+
+                })
+                remove.sort()
+                remove.reverse()
+                remove.forEach(d => {
+                    playingsounds.splice(d, 1)
+                })
+
+
+                let t = d3.transition()
+                    .ease(d3.easeLinear)
+                    .duration(1000)
+
+                let t2 = d3.transition()
+                    .ease(d3.easePolyInOut)
+                    .duration(2500)
+
+
+                let circle = layer1
+                    .selectAll(".bubble")
+                    .data(playingsounds, function(d) {return d.id})
+
+                circle.join(
+                    enter =>
+                        enter
+                            .append('circle')
+                            .attr('class', 'bubble')
+                            .attr('cx', d => hscale(d.pos[0]))
+                            .attr('cy', d=> {
+                                return vscale(d.height)
+                            })
+                            .attr('r', d => {
+                                return rscale(Math.abs(d.pos[1]))
+                            })
+                            .attr("opacity", 0.5)
+                            .attr('fill', d => {return d.color}),
+                    update =>
+                        update
+                            .call(update => update.transition(t)
+                                .attr('r', d => {
+                                    return rscale(Math.abs(d.pos[1]))
+                                })
+                            ),
+                    exit =>
+                        exit
+                            .call(exit => exit.transition(t2)
+                                .attr("r", 0))
+                                .remove()
+                )
+
+            }
+
+
+
+
+        </script>
+    </body>
+    <footer>
+
+    </footer>
+
+<!-- Scripts-->
+
+</html>
