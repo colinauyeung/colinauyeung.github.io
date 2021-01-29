@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Describe this page." />
-        <title>Project 0</title>    
+        <title>Project 0</title>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://d3js.org/d3-ease.v2.min.js"></script>
         <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3-transform/1.0.4/d3-transform.min.js"></script>
@@ -16,8 +16,8 @@
         </style>
     </head>
     <body>
-    
-        <svg id="svg" viewBox="0 0 1080 720" width="100%" height="900" preserveAspectRatio="xMinYMin meet">
+
+        <svg id="svg" viewBox="0 0 1080 720" width="100%" height="900" preserveAspectRatio="none">
         </svg>
         <script>
             var first = 0;
@@ -71,7 +71,6 @@
                     motor.play();
                     console.log("finished");
                     setInterval(randomize, 2500);
-
                     setInterval(updatesounds, 1000);
                     fadebackfirst();
                 }
@@ -282,12 +281,12 @@
                 if(val > wordswordswords.length -1){
                     val = wordswordswords.length-1;
                 }
-                // while(val === currentword){
-                //     let val = Math.floor(Math.random() * (wordswordswords.length));
-                //     if(val > wordswordswords.length -1){
-                //         val = wordswordswords.length-1;
-                //     }
-                // }
+                while(val === currentword){
+                    let val = Math.floor(Math.random() * (wordswordswords.length));
+                    if(val > wordswordswords.length -1){
+                        val = wordswordswords.length-1;
+                    }
+                }
                 title.text(wordswordswords[val])
                     .transition()
                     .duration(1000)
@@ -504,9 +503,6 @@
 
 
             function updatesounds(){
-
-
-
                 let remove = []
                 playingsounds.forEach((d,i) => {
                     y = d.pos[1];
