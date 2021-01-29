@@ -89,6 +89,9 @@ body {
 .max480{
   max-width: 480px
 }
+.youtube{
+  margin: auto;
+}
 #iaoe{
   padding:15px 15px 10px 15px;
 }
@@ -130,6 +133,7 @@ body {
   padding:10px;
 }
 #i3ozd{
+  text-align: center;
   padding:10px;
   font-size:30px;
 }
