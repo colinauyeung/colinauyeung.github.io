@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../CPSC583-WHO-Happiness/.idea/CPSC583-WHO-Happiness.iml" filepath="$PROJECT_DIR$/../CPSC583-WHO-Happiness/.idea/CPSC583-WHO-Happiness.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/colinauyeung.iml" filepath="$PROJECT_DIR$/.idea/colinauyeung.iml" />
     </modules>
   </component>

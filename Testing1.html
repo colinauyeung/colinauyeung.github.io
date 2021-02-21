@@ -7,6 +7,8 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="js/d3-xyzoom.js"></script>
     <style>
         body{
             background-color: #255459;
@@ -31,7 +33,6 @@
         .button:active {
             background-color: #3a4a59;
             position:relative;
-            top:1px;
         }
 
         #textarea {
@@ -56,5 +57,40 @@
 
 
     </div>
+    <div id="chatcontainer"></div>
+
+    <script>
+
+        const w  = window.innerWidth || document.documentElement.clientWidth ||
+            document.body.clientWidth;
+        var h = window.innerHeight|| document.documentElement.clientHeight||
+            document.body.clientHeight;
+
+        h = h - 60;
+
+
+
+        const viewbox = d3.select("#chatcontainer")
+            .append("svg")
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 " + w + " " + h)
+            .style("background", "#c9e8fd");
+
+        const svg = viewbox.append("g")
+            .attr("id", "svgcontainer");
+
+        svg.append('rect')
+            .attr("width", 400)
+            .attr("height", 100)
+            .style("fill", "blue");
+
+
+
+
+
+
+
+    </script>
+
 </body>
 </html>
