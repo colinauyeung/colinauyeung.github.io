@@ -19,7 +19,7 @@
         .attr("fill", "black")
         .attr("x", 50)
         .attr("y", 50)
-        .text("Hello v2");
+        .text("Hello v3");
 
     window.addEventListener("load", (e) => {
         init();
@@ -27,7 +27,7 @@
 
     function init(){
         var AC = window.AudioContext || window.webkitAudioContext;
-        var audioContext = new AudioContext();
+        var audioContext = new AC();
         var microphone;
 
         var analyzer = audioContext.createAnalyser();
