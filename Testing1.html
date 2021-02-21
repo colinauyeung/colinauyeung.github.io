@@ -8,6 +8,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+            crossorigin="anonymous"></script>
     <script src="js/d3-xyzoom.js"></script>
     <style>
         body{
@@ -27,8 +31,9 @@
             color: #EEF1F7;
             font-family: 'Lato', sans-serif;
             font-weight: 900;
-            font-size: 100px;
-            width: 20%;
+            font-size: 16px;
+            width: 50%;
+            height: 32px;
             border: transparent;
 
             -webkit-user-select: none; /* Safari */
@@ -46,7 +51,7 @@
             outline: none;
             font-family: 'Lato', sans-serif;
             font-weight: 400;
-            font-size: 32px;
+            font-size: 16px;
         }
 
 
@@ -55,9 +60,16 @@
 </head>
 <body>
     <div class="flex-container">
+
+        <textarea name="text" class="fill-width" id="textarea" rows="2" cols="10" wrap="soft" maxlength="100" style="overflow:hidden; resize:none;">  </textarea>
+        <!--        <input type="textarea" class="fill-width" id="fname" name="fname" wrap="soft">-->
+
+
+
+
+    </div>
+    <div class="flex-container">
         <button type="button" class="button" onclick=""></button>
-        <textarea name="text" class="fill-width" id="textarea" rows="3" cols="10" wrap="soft" maxlength="300" style="overflow:hidden; resize:none;">  </textarea>
-<!--        <input type="textarea" class="fill-width" id="fname" name="fname" wrap="soft">-->
 
 
 
@@ -69,12 +81,21 @@
 
     <script>
 
+        $("textarea").keydown(function(e){
+// Enter was pressed without shift key
+            if (e.keyCode == 13)
+            {
+                // prevent default behavior
+                e.preventDefault();
+            }
+        });
+
         const w  = window.innerWidth || document.documentElement.clientWidth ||
             document.body.clientWidth;
         var h = window.innerHeight|| document.documentElement.clientHeight||
             document.body.clientHeight;
 
-        h = h - 60;
+        h = h - 75;
 
 
 
