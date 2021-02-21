@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+    <style>
+        body{
+            background-color: #255459;
+        }
+        .flex-container {
+            display:flex;
+
+        }
+
+        .fill-width{
+            flex: 1;
+        }
+
+        .button{
+            background-color: transparent;
+            color: #EEF1F7;
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            font-size: 32px;
+            border: transparent;
+        }
+        .button:active {
+            background-color: #3a4a59;
+            position:relative;
+            top:1px;
+        }
+
+        #textarea {
+            outline: none;
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="flex-container">
+        <button type="button" class="button" onclick="">~</button>
+        <textarea name="text" class="fill-width" id="textarea" rows="3" cols="10" wrap="soft" maxlength="300" style="overflow:hidden; resize:none;">  </textarea>
+<!--        <input type="textarea" class="fill-width" id="fname" name="fname" wrap="soft">-->
+
+
+
+        <button type="button" class="button" onclick="">></button>
+
+
+    </div>
+</body>
+</html>
