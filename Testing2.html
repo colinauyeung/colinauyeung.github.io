@@ -19,14 +19,15 @@
         .attr("fill", "black")
         .attr("x", 50)
         .attr("y", 50)
-        .text("Hello");
+        .text("Hello v2");
 
     window.addEventListener("load", (e) => {
         init();
     })
 
     function init(){
-        var audioContext = new(window.AudioContext || window.webkitAudiocontext)();
+        var AC = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AudioContext();
         var microphone;
 
         var analyzer = audioContext.createAnalyser();
@@ -39,7 +40,7 @@
                         microphone = audioContext.createMediaStreamSource(stream);
                         microphone.connect(analyzer);
                         analyzer.connect(audioContext.destination);
-                        beginRecording(analyzer);
+                        beginRecording(analyzer, audioContext.sampleRate);
                     })
                 .catch(function(err){
                     console.log("Error! "+err)
@@ -52,14 +53,14 @@
 
     }
 
-    function beginRecording(analyzer){
-        analyzeranalyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+    function beginRecording(analyzer, sampleRate){
+        analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
         var bufferlength = analyzer.fftsize;
         var freqBinDataArray = new Float32Array( bufferlength );
 
         var checkAudio = function (){
             analyzer.getFloatTimeDomainData( freqBinDataArray );
-            var ac = autoCorrelate( freqBinDataArray, audioContext.sampleRate );
+            var ac = autoCorrelate( freqBinDataArray ,sampleRate);
             text.text(ac);
             console.log(ac);
             console.log("RMS: "+ getRMS(freqBinDataArray));
