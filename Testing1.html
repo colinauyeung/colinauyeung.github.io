@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -27,7 +27,8 @@
             color: #EEF1F7;
             font-family: 'Lato', sans-serif;
             font-weight: 900;
-            font-size: 150px;
+            font-size: 100px;
+            width: 20%;
             border: transparent;
         }
         .button:active {
@@ -35,7 +36,7 @@
             position:relative;
         }
 
-        #textarea {
+        textarea {
             outline: none;
             font-family: 'Lato', sans-serif;
             font-weight: 400;
@@ -48,13 +49,13 @@
 </head>
 <body>
     <div class="flex-container">
-        <button type="button" class="button" onclick="">~</button>
+        <button type="button" class="button" onclick=""></button>
         <textarea name="text" class="fill-width" id="textarea" rows="3" cols="10" wrap="soft" maxlength="300" style="overflow:hidden; resize:none;">  </textarea>
 <!--        <input type="textarea" class="fill-width" id="fname" name="fname" wrap="soft">-->
 
 
 
-        <button type="button" class="button" onclick="">></button>
+        <button type="button" class="button" onclick=""></button>
 
 
     </div>
