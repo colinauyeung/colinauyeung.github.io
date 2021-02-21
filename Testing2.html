@@ -20,18 +20,46 @@
         .attr("fill", "black")
         .attr("x", 50)
         .attr("y", 50)
-        .text("Hello v5");
+        .text("Hello v6");
 
-    window.addEventListener("load", (e) => {
-        init();
-    })
+    // window.addEventListener("load", (e) => {
+    //     init();
+    // })
+    document.body.addEventListener('click', init);
 
     function init(){
+        document.body.removeEventListener('click', init);
         var AC = window.AudioContext || window.webkitAudioContext;
         var audioContext = new AC();
         var microphone;
 
+
+
+
+
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+
+
+
         var analyzer = audioContext.createAnalyser();
+        const gainNode = audioContext.createGain();
         if(navigator.mediaDevices.getUserMedia()){
             console.log("getUserMedia Supported");
             var constraints = {audio: true};
@@ -39,8 +67,12 @@
                 .then(
                     function(stream){
                         microphone = audioContext.createMediaStreamSource(stream);
-                        microphone.connect(analyzer);
+                        microphone.connect(gainNode);
+                        gainNode.gain.value = 1;
+                        gainNode.connect(analyzer);
+;
                         analyzer.connect(audioContext.destination);
+
                         beginRecording(analyzer, audioContext.sampleRate);
                     })
                 .catch(function(err){
@@ -61,17 +93,20 @@
         var freqBinDataArray = new Uint8Array(bufferlength);
 
         var checkAudio = function (){
-            // analyzer.getFloatTimeDomainData( freqBinDataArray );
-            // var ac = autoCorrelate( freqBinDataArray ,sampleRate);
-            // text.text(ac);
-            analyzer.getByteFrequencyData(freqBinDataArray);
+            analyzer.getFloatTimeDomainData( freqBinDataArray );
+            var ac = autoCorrelate( freqBinDataArray ,sampleRate);
+            text.text(ac);
+            // analyzer.getByteTimeDomainData(freqBinDataArray);
             console.log(freqBinDataArray);
-            // console.log(ac);
+            console.log(ac);
             console.log("RMS: "+ getRMS(freqBinDataArray));
             console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
         }
         setInterval(checkAudio, 64);
     }
+
+
+
 
     function autoCorrelate( buf, sampleRate ) {
         // Implements the ACF2+ algorithm
