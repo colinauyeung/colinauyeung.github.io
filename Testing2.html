@@ -4,12 +4,37 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <style>
+        .myButton {
+            background-color:#025544;
+            border-radius:42px;
+            border:1px solid #18ab29;
+            display:inline-block;
+            cursor:pointer;
+            color:#ffffff;
+            font-family:Arial;
+            font-size:50px;
+            padding:16px 31px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #2f6627;
+        }
 
+        .myButton:active {
+            background-color:#5cbf2a;
+            position:relative;
+            top:1px;
+        }
+    </style>
 </head>
 <body>
 
+<button type="button" onmousedown="beginRecording()"  onmouseup="endRecording()" class="myButton" onclick="">></button>
 <svg id="svg" viewBox="0 0 100 100" width="100%" height="900" preserveAspectRatio="xMidYMin meet"></svg>
+
+
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<!--polyfil for getfloattimedomaindata as it is not supported in safari-->
+<!--From: https://github.com/mohayonao/get-float-time-domain-data-->
 <script src="js/get-float-time-domain-data.js"></script>
 
 <script>
@@ -20,21 +45,20 @@
         .attr("fill", "black")
         .attr("x", 50)
         .attr("y", 50)
-        .text("Hello v8");
+        .text("Hello v9");
 
     // window.addEventListener("load", (e) => {
     //     init();
     // })
     document.body.addEventListener('click', init);
+    var analyzer;
+    var sampleRate;
 
     function init(){
         document.body.removeEventListener('click', init);
         var AC = window.AudioContext || window.webkitAudioContext;
         var audioContext = new AC();
         var microphone;
-
-
-
 
 
         if (navigator.mediaDevices.getUserMedia === undefined) {
@@ -58,7 +82,7 @@
 
 
 
-        var analyzer = audioContext.createAnalyser();
+        analyzer = audioContext.createAnalyser();
         const gainNode = audioContext.createGain();
         if(navigator.mediaDevices.getUserMedia()){
             console.log("getUserMedia Supported");
@@ -70,10 +94,10 @@
                         microphone.connect(gainNode);
                         gainNode.gain.value = 1;
                         gainNode.connect(analyzer);
-;
+;                       sampleRate = audioContext.sampleRate;
                         // analyzer.connect(audioContext.destination);
 
-                        beginRecording(analyzer, audioContext.sampleRate);
+                        // beginRecording(audioContext.sampleRate);
                     })
                 .catch(function(err){
                     console.log("Error! "+err)
@@ -86,7 +110,10 @@
 
     }
 
-    function beginRecording(analyzer, sampleRate){
+    var audioon;
+    var dataarray = [];
+
+    function beginRecording(){
         analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
         var bufferlength = analyzer.fftsize;
         var freqBinDataArray = new Float32Array( bufferlength );
@@ -95,19 +122,121 @@
         var checkAudio = function (){
             analyzer.getFloatTimeDomainData( freqBinDataArray );
             var ac = autoCorrelate( freqBinDataArray ,sampleRate);
-            text.text(ac);
+            // text.text(ac);
+
+            dataarray.push(ac);
+
+
             // analyzer.getByteTimeDomainData(freqBinDataArray);
-            console.log(freqBinDataArray);
-            console.log(ac);
-            console.log("RMS: "+ getRMS(freqBinDataArray));
-            console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+            // console.log(freqBinDataArray);
+            // console.log(ac);
+            // console.log("RMS: "+ getRMS(freqBinDataArray));
+            // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
         }
-        setInterval(checkAudio, 64);
+        audioon = setInterval(checkAudio, 64);
+    }
+
+    function  endRecording(){
+        var regressed1 = audioregress(spliceaudio(dataarray));
+        var regressed = toText(audioregress(spliceaudio(dataarray)));
+        var str = "";
+        for(var i = 0; i<regressed.length; i++){
+            str = str+regressed[i];
+        }
+        // console.log(dataarray);
+        console.log(regressed1);
+        dataarray = [];
+        text.text(regressed);
+        clearInterval(audioon)
+    }
+
+    function spliceaudio(data){
+        var inter = [];
+        var res = [];
+        for(var i = 0; i<data.length; i++){
+            if(data[i] === -1){
+                if(inter.length > 3){
+                    res.push(inter);
+                }
+                inter = [];
+            }
+            else{
+                inter.push([i, data[i]]);
+            }
+        }
+        if(inter.length > 3){
+            res.push(inter);
+        }
+        return res;
+    }
+
+    function audioregress(data){
+        var res = [];
+        for(var i = 0; i<data.length; i++){
+            res.push(regression(data[i]))
+        }
+        return res;
+    }
+
+    function toText(data){
+        var res = [];
+        for(var i = 0; i<data.length; i++){
+            if(data[i] > 2.5){
+                res.push("R")
+            }
+            else{
+                if(data[i] < -2.5){
+                    res.push("F")
+                }
+                else{
+                    res.push("N")
+                }
+            }
+        }
+        return res;
+    }
+
+
+    /*
+    * Simple Linear Regression
+    * Modified from https://gist.github.com/uhho/7228900#file-linear_regression-js-L7
+    * */
+    function regression(data) {
+        var sum_x = 0, sum_y = 0
+            , sum_xy = 0, sum_xx = 0
+            , count = 0
+            , m, b;
+
+        if (data.length === 0) {
+            throw new Error('Empty data');
+        }
+
+        // calculate sums
+        for (var i = 0, len = data.length; i < len; i++) {
+            var point = data[i];
+            sum_x += point[0];
+            sum_y += point[1];
+            sum_xx += point[0] * point[0];
+            sum_xy += point[0] * point[1];
+            count++;
+        }
+
+        // calculate slope (m) and y-intercept (b) for f(x) = m * x + b
+        m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
+        // b = (sum_y / count) - (m * sum_x) / count;
+
+        return m;
     }
 
 
 
 
+    /*
+    *
+    * Simple Pitch Detection
+    * From: https://github.com/cwilso/PitchDetect
+    *
+    * */
     function autoCorrelate( buf, sampleRate ) {
         // Implements the ACF2+ algorithm
         var SIZE = buf.length;
@@ -153,20 +282,20 @@
         return sampleRate/T0;
     }
 
-    function getRMS(spectrum){
-        var rms = 0;
-        for (var i = 0; i < spectrum.length; i++){
-            rms += spectrum[i] * spectrum[i];
-        }
-        rms /= spectrum.length;
-        rms = Math.sqrt(rms);
-        return rms
-    }
-
-    function  getIndexofMax(array){
-        return array.reduce((iMax, x, i, arr) => x > arr[iMax]? i : iMax,0
-        )
-    }
+    // function getRMS(spectrum){
+    //     var rms = 0;
+    //     for (var i = 0; i < spectrum.length; i++){
+    //         rms += spectrum[i] * spectrum[i];
+    //     }
+    //     rms /= spectrum.length;
+    //     rms = Math.sqrt(rms);
+    //     return rms
+    // }
+    //
+    // function  getIndexofMax(array){
+    //     return array.reduce((iMax, x, i, arr) => x > arr[iMax]? i : iMax,0
+    //     )
+    // }
 
 
 </script>
