@@ -20,7 +20,7 @@
         .attr("fill", "black")
         .attr("x", 50)
         .attr("y", 50)
-        .text("Hello v7");
+        .text("Hello v8");
 
     // window.addEventListener("load", (e) => {
     //     init();
@@ -71,7 +71,7 @@
                         gainNode.gain.value = 1;
                         gainNode.connect(analyzer);
 ;
-                        analyzer.connect(audioContext.destination);
+                        // analyzer.connect(audioContext.destination);
 
                         beginRecording(analyzer, audioContext.sampleRate);
                     })
