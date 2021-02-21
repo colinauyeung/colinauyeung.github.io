@@ -20,7 +20,7 @@
         .attr("fill", "black")
         .attr("x", 50)
         .attr("y", 50)
-        .text("Hello v4");
+        .text("Hello v5");
 
     window.addEventListener("load", (e) => {
         init();
@@ -57,13 +57,16 @@
     function beginRecording(analyzer, sampleRate){
         analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
         var bufferlength = analyzer.fftsize;
-        var freqBinDataArray = new Float32Array( bufferlength );
+        // var freqBinDataArray = new Float32Array( bufferlength );
+        var freqBinDataArray = new Uint8Array(bufferlength);
 
         var checkAudio = function (){
-            analyzer.getFloatTimeDomainData( freqBinDataArray );
-            var ac = autoCorrelate( freqBinDataArray ,sampleRate);
-            text.text(ac);
-            console.log(ac);
+            // analyzer.getFloatTimeDomainData( freqBinDataArray );
+            // var ac = autoCorrelate( freqBinDataArray ,sampleRate);
+            // text.text(ac);
+            analyzer.getByteFrequencyData(freqBinDataArray);
+            console.log(freqBinDataArray);
+            // console.log(ac);
             console.log("RMS: "+ getRMS(freqBinDataArray));
             console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
         }
