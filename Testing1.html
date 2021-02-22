@@ -8,15 +8,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-ease.v2.min.js"></script>
+    <script src="js/d3-textwrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
     <script
             src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
             crossorigin="anonymous"></script>
     <script src="js/d3-xyzoom.js"></script>
+    <script src="js/get-float-time-domain-data.js"></script>
     <style>
         body{
-            background-color: #255459;
+            /*background-color: #255459;*/
+            background-color: black;
+
         }
         .flex-container {
             display:flex;
@@ -28,7 +33,7 @@
         }
 
         .button{
-            background-color: transparent;
+            background-color: grey;
             color: #EEF1F7;
             font-family: 'Lato', sans-serif;
             font-weight: 900;
@@ -70,43 +75,17 @@
 
     </div>
     <div class="flex-container">
-        <button type="button" class="button" onclick=""></button>
+        <button type="button" class="button" onmousedown="beginRecording()"  onmouseup="endRecording()"></button>
 
 
 
-        <button type="button" class="button" onclick=""><</button>
+        <button type="button" class="button" onclick="addmessage()"><</button>
 
 
     </div>
     <div id="chatcontainer"></div>
 
     <script>
-
-        var count = 0;
-
-        const tarray = {
-            "slide":{
-                "x": -300,
-                "y": 5,
-                "opacity": 0,
-                "duration": 1000
-            }
-        };
-
-        var messages = [
-            // {
-            //     "message": "blah blah blah",
-            //     "trans": "slide",
-            //     "id": 1
-            // }
-        ];
-
-        $("textarea").keydown(function(e){
-            if (e.keyCode == 13)
-            {
-                e.preventDefault();
-            }
-        });
 
         const w  = window.innerWidth || document.documentElement.clientWidth ||
             document.body.clientWidth;
@@ -115,92 +94,538 @@
 
         h = h - 80;
 
+        var count = 0;
 
+        const basewidth = 300;
+        const baseheight = 60;
+        const num_of_intonations = 2;
 
-        const viewbox = d3.select("#chatcontainer")
-            .append("svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 " + w + " " + h);
-            // .style("background", "#c9e8fd");
+        const tarray = {
+            "slide":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": -300,
+                "xr": w+300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 500,
+                "ease": 2
+            },
 
-        const svg = viewbox.append("g")
-            .attr("id", "svgcontainer");
+            "slidetop":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": w-300,
+                "xr": 0,
+                "y": -90,
+                "opacity": 0,
+                "duration":1000,
+                "ease": 1
+            },
 
-        // svg.append('rect')
-        //     .attr("rx", 6)
-        //     .attr("ry", 6)
-        //     .attr("width", 300)
-        //     .attr("height", 60)
-        //     .attr("x", w - 300)
-        //     .attr("y", 5)
-        //     .style("fill", "blue");
-
-
-        var oscale = d3.scaleLinear()
-            .domain([0, 8])
-            .range([1, 0]);
-
-
-        function addmessage(){
-
-
-
-            messages.unshift(
-                {
-                    "message": "blah blah blah",
-                    "trans": "slide",
-                    "id": uuidv4()
-                }
-            );
-
-            if(messages.length > 9){
-                messages.pop();
+            "expandtop":{
+                "width": 10,
+                "height": 10,
+                "x": w-300,
+                "xr": 0,
+                "y": -90,
+                "opacity": 0,
+                "duration":1000,
+                "ease": 1
             }
-            count++;
-            console.log(messages);
+        };
+
+    var eases = [
+        d3.easeLinear,
+        d3.easePoly,
+        d3.easePolyOut.exponent(6)
+    ];
+
+    var tones = [];
 
 
-            let t = d3.transition()
-                .ease(d3.easeLinear)
-                .duration(1000);
+    var messages = [
+        // {
+        //     "message": "blah blah blah",
+        //     "trans": "slide",
+        //     "id": 1
+        // }
+    ];
 
-            svg
-                .selectAll(".message")
-                .data(messages, function (d){ return d.id})
-                .join(
-                    enter =>
-                        enter
-                            .append('rect')
-                            .attr("class", "message")
-                            .attr("rx", 6)
-                            .attr("ry", 6)
-                            .attr("width", 300)
-                            .attr("height", 60)
-                            .attr("x", d => {return tarray[d.trans].x})
-                            .attr("y", d => {return tarray[d.trans].y})
-                            .attr("opacity", d => {return tarray[d.trans].opacity})
-                            .style("fill", "blue")
-                            .call(
-                                enter => enter.transition(t)
-                                    .attr("x", w-300)
-                                    .attr("y", function(d,i) {return i*70 + 10})
-                                    .attr("opacity", 1)
-                            ),
-
-                    update =>
-                        update
-                            .call(update => update.transition(t)
-                                .attr("y", function(d,i) {return i*70 + 10})
-                                .attr("opacity", function (d,i) {
-                                    return oscale(i)
-                                })
-                            )
-
-                )
+    $("textarea").keydown(function(e){
+        if (e.keyCode == 13)
+        {
+            addmessage();
+            e.preventDefault();
         }
-        addmessage();
+    });
 
-        var set = setInterval(addmessage, 2000);
+
+        document.body.addEventListener('click', init);
+        var analyzer;
+        var sampleRate;
+
+        function init(){
+            document.body.removeEventListener('click', init);
+            var AC = window.AudioContext || window.webkitAudioContext;
+            var audioContext = new AC();
+            var microphone;
+
+
+            if (navigator.mediaDevices.getUserMedia === undefined) {
+                navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                    // First get ahold of the legacy getUserMedia, if present
+                    var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                    // Some browsers just don't implement it - return a rejected promise with an error
+                    // to keep a consistent interface
+                    if (!getUserMedia) {
+                        return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                    }
+
+                    // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                    return new Promise(function(resolve, reject) {
+                        getUserMedia.call(navigator, constraints, resolve, reject);
+                    });
+                }
+            }
+
+
+
+            analyzer = audioContext.createAnalyser();
+            const gainNode = audioContext.createGain();
+            if(navigator.mediaDevices.getUserMedia()){
+                console.log("getUserMedia Supported");
+                var constraints = {audio: true};
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(
+                        function(stream){
+                            microphone = audioContext.createMediaStreamSource(stream);
+                            microphone.connect(gainNode);
+                            gainNode.gain.value = 1;
+                            gainNode.connect(analyzer);
+                            ;                       sampleRate = audioContext.sampleRate;
+                            // analyzer.connect(audioContext.destination);
+
+                            // beginRecording(audioContext.sampleRate);
+                        })
+                    .catch(function(err){
+                        console.log("Error! "+err)
+                    })
+            }
+            else{
+                console.log("getUserMedia is not supported");
+            }
+
+
+        }
+
+        var audioon;
+        var dataarray = [];
+
+        function beginRecording(){
+            analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+            var bufferlength = analyzer.fftsize;
+            var freqBinDataArray = new Float32Array( bufferlength );
+            // var freqBinDataArray = new Uint8Array(bufferlength);
+
+            var checkAudio = function (){
+                analyzer.getFloatTimeDomainData( freqBinDataArray );
+                var ac = autoCorrelate( freqBinDataArray ,sampleRate);
+                // text.text(ac);
+
+                dataarray.push(ac);
+
+
+                // analyzer.getByteTimeDomainData(freqBinDataArray);
+                // console.log(freqBinDataArray);
+                // console.log(ac);
+                // console.log("RMS: "+ getRMS(freqBinDataArray));
+                // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+            }
+            audioon = setInterval(checkAudio, 64);
+        }
+
+        function  endRecording(){
+            var regressed = toText(audioregress(spliceaudio(dataarray)));
+            var str = "";
+            for(var i = 0; i<regressed.length; i++){
+                str = str+regressed[i];
+            }
+            // console.log(dataarray);
+            console.log(regressed);
+            tones = regressed;
+            dataarray = [];
+            clearInterval(audioon)
+        }
+
+        function spliceaudio(data){
+            var inter = [];
+            var res = [];
+            for(var i = 0; i<data.length; i++){
+                if(data[i] === -1){
+                    if(inter.length > 3){
+                        res.push(inter);
+                    }
+                    inter = [];
+                }
+                else{
+                    inter.push([i, data[i]]);
+                }
+            }
+            if(inter.length > 3){
+                res.push(inter);
+            }
+            return res;
+        }
+
+        function audioregress(data){
+            var res = [];
+            for(var i = 0; i<data.length; i++){
+                res.push(regression(data[i]))
+            }
+            return res;
+        }
+
+        function toText(data){
+            var res = [];
+            var lens = num_of_intonations;
+            if(data.length < num_of_intonations){
+                lens = data.length
+            }
+            for(var i = 0; i<lens; i++){
+                if(data[i] > 2.5){
+                    res.push("R")
+                }
+                else{
+                    if(data[i] < -2.5){
+                        res.push("F")
+                    }
+                    else{
+                        res.push("N")
+                    }
+                }
+            }
+            return res;
+        }
+
+        /*
+        * Simple Linear Regression
+        * Modified from https://gist.github.com/uhho/7228900#file-linear_regression-js-L7
+        * */
+        function regression(data) {
+            var sum_x = 0, sum_y = 0
+                , sum_xy = 0, sum_xx = 0
+                , count = 0
+                , m, b;
+
+            if (data.length === 0) {
+                throw new Error('Empty data');
+            }
+
+            // calculate sums
+            for (var i = 0, len = data.length; i < len; i++) {
+                var point = data[i];
+                sum_x += point[0];
+                sum_y += point[1];
+                sum_xx += point[0] * point[0];
+                sum_xy += point[0] * point[1];
+                count++;
+            }
+
+            // calculate slope (m) and y-intercept (b) for f(x) = m * x + b
+            m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
+            // b = (sum_y / count) - (m * sum_x) / count;
+
+            return m;
+        }
+
+
+        /*
+        *
+        * Simple Pitch Detection
+        * From: https://github.com/cwilso/PitchDetect
+        *
+        * */
+        function autoCorrelate( buf, sampleRate ) {
+            // Implements the ACF2+ algorithm
+            var SIZE = buf.length;
+            var rms = 0;
+
+            for (var i=0;i<SIZE;i++) {
+                var val = buf[i];
+                rms += val*val;
+            }
+            rms = Math.sqrt(rms/SIZE);
+            if (rms<0.01) // not enough signal
+                return -1;
+
+            var r1=0, r2=SIZE-1, thres=0.2;
+            for (var i=0; i<SIZE/2; i++)
+                if (Math.abs(buf[i])<thres) { r1=i; break; }
+            for (var i=1; i<SIZE/2; i++)
+                if (Math.abs(buf[SIZE-i])<thres) { r2=SIZE-i; break; }
+
+            buf = buf.slice(r1,r2);
+            SIZE = buf.length;
+
+            var c = new Array(SIZE).fill(0);
+            for (var i=0; i<SIZE; i++)
+                for (var j=0; j<SIZE-i; j++)
+                    c[i] = c[i] + buf[j]*buf[j+i];
+
+            var d=0; while (c[d]>c[d+1]) d++;
+            var maxval=-1, maxpos=-1;
+            for (var i=d; i<SIZE; i++) {
+                if (c[i] > maxval) {
+                    maxval = c[i];
+                    maxpos = i;
+                }
+            }
+            var T0 = maxpos;
+
+            var x1=c[T0-1], x2=c[T0], x3=c[T0+1];
+            a = (x1 + x3 - 2*x2)/2;
+            b = (x3 - x1)/2;
+            if (a) T0 = T0 - b/(2*a);
+
+            return sampleRate/T0;
+        }
+
+
+
+
+
+    const viewbox = d3.select("#chatcontainer")
+        .append("svg")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 " + w + " " + h);
+        // .style("background", "#c9e8fd");
+
+    const svg = viewbox.append("g")
+        .attr("id", "svgcontainer");
+
+    // svg.append('rect')
+    //     .attr("rx", 6)
+    //     .attr("ry", 6)
+    //     .attr("width", 300)
+    //     .attr("height", 60)
+    //     .attr("x", w - 300)
+    //     .attr("y", 5)
+    //     .style("fill", "blue");
+
+    var num_of_bars = Math.floor((h-10)/75);
+
+
+    var oscale = d3.scalePow()
+        .exponent(0.5)
+        .domain([0, (num_of_bars)])
+        .range([1, 0]);
+
+
+
+    function addmessage(){
+
+        var res = document.getElementById("textarea").value;
+        if(res === ""){
+            return 0;
+        }
+
+        var side = 0;
+        if(res.startsWith("~")){
+            res = res.substring(1);
+            side = 1;
+        }
+
+        document.getElementById("textarea").value = "";
+        messages.unshift(
+            {
+                "message": res,
+                "trans": "slide",
+                "id": uuidv4(),
+                "side": side,
+            }
+        );
+
+
+        // if(count % 2 === 0){
+        //     messages.unshift(
+        //         {
+        //             "message": res,
+        //             "trans": "slide",
+        //             "id": uuidv4(),
+        //             "side": 0,
+        //         }
+        //     );
+        //
+        // }
+        // else{
+        //     messages.unshift(
+        //         {
+        //             "message": res,
+        //             "trans": "expandtop",
+        //             "id": uuidv4(),
+        //             "side": 1,
+        //         }
+        //     );
+        // }
+
+
+        if(messages.length > num_of_bars){
+            messages.pop();
+        }
+        count++;
+        console.log(messages);
+
+
+        let t = d3.transition()
+            .ease(d3.easeLinear)
+            .duration(1000);
+
+        var wrap;
+        wrap = d3.textwrap()
+            .bounds({height: baseheight, width: basewidth})
+            .padding(10)
+            .method('tspans');;
+
+
+        var easebuf = 0;
+
+
+        svg
+            .selectAll(".message")
+            .data(messages, function (d){ return d.id})
+            .join(
+                enter =>
+                    enter
+                        .append('rect')
+                        .attr("class", "message")
+                        .attr("rx", 6)
+                        .attr("ry", 6)
+                        .attr("width", d => {return d.width})
+                        .attr("height", d=> {return d.height})
+                        .attr("x", d => {
+                            if(d.side === 0){
+                                return tarray[d.trans].x
+                            }
+                            else{
+                                return tarray[d.trans].xr
+                            }
+                        })
+                        .attr("y", d => {return tarray[d.trans].y})
+                        .attr("opacity", d => {
+                            easebuf = tarray[d.trans].ease;
+                            return tarray[d.trans].opacity})
+                        .style("fill", "blue")
+                        .call(
+                            enter => enter.transition()
+                                .ease(eases[easebuf])
+                                .duration(d => {return tarray[d.trans].duration})
+                                .attr("x", d => {
+                                    if(d.side === 0){
+                                        return w-300;
+                                    }
+                                    else{
+                                        return 0;
+                                    }
+                                })
+                                .attr("y", function(d,i) {return (i*(baseheight+15)) + 10})
+                                .attr("opacity", 1)
+                                .attr("width", basewidth)
+                                .attr("height", baseheight)
+                        ),
+
+                update =>
+                    update
+                        .call(update => update.transition(t)
+                            .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
+                            .duration(2000)
+                            .attr("y", function(d,i) {return (i*(baseheight+15)) + 10})
+                            .attr("opacity", function (d,i) {
+                                return oscale(i)
+                            })
+                        ),
+
+                exit =>
+                    exit
+                        .call(exit => exit.transition(t)
+                            .attr("opacity", 0)
+                         )
+
+
+            )
+
+
+        svg
+            .selectAll(".messagetext")
+            .data(messages, function (d){ return d.id})
+            .join(
+                enter =>
+                    enter
+                        .append('text')
+                        .attr("class", "messagetext")
+                        .text(d => {return d.message})
+                        .call(wrap)
+                        .style("font-size", 16)
+                        .style("font", "Lato")
+                        // .style("font-style", "italic")
+                        .style("font-weight", 900)
+                        .attr("x", d => {
+                            if(d.side === 0){
+                                return tarray[d.trans].x + 7
+                            }
+                            else{
+                                return tarray[d.trans].xr + 7
+                            }
+                        })
+                        .attr("y", d => {return tarray[d.trans].y + 19})
+                        .attr("opacity", d => {
+                            easebuf = tarray[d.trans].ease;
+                            return tarray[d.trans].opacity})
+
+                        .call(
+                            enter => enter.transition()
+                                .ease(eases[easebuf])
+                                .duration(d => {return tarray[d.trans].duration})
+                                .attr("x", d => {
+                                    if(d.side === 0){
+                                        return w-300 + 7;
+                                    }
+                                    else{
+                                        return 0 + 7;
+                                    }
+                                })
+                                .attr("y", function(d,i) {return (i*(baseheight+15)) + 10 + 19})
+                                .attr("opacity", 1)
+                                .attr("width", basewidth)
+                                .attr("height", baseheight)
+                        ),
+
+                update =>
+                    update
+                        .call(update => update.transition(t)
+                            .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
+                            .duration(2000)
+                            .attr("y", function(d,i) {return (i*(baseheight+15)) + 10 + 19})
+                            .attr("opacity", function (d,i) {
+                                return oscale(i)
+                            })
+                        ),
+
+                exit =>
+                    exit
+                        .call(exit => exit.transition(t)
+                            .attr("opacity", 0)
+                        )
+
+
+            )
+
+    }
+    // addmessage();
+    //
+    // var set = setInterval(addmessage, 3000);
 
 
 
