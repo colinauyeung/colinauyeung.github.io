@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
     <script
             src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
@@ -81,11 +82,28 @@
 
     <script>
 
+        var count = 0;
+
+        const tarray = {
+            "slide":{
+                "x": -300,
+                "y": 5,
+                "opacity": 0,
+                "duration": 1000
+            }
+        };
+
+        var messages = [
+            // {
+            //     "message": "blah blah blah",
+            //     "trans": "slide",
+            //     "id": 1
+            // }
+        ];
+
         $("textarea").keydown(function(e){
-// Enter was pressed without shift key
             if (e.keyCode == 13)
             {
-                // prevent default behavior
                 e.preventDefault();
             }
         });
@@ -95,23 +113,94 @@
         var h = window.innerHeight|| document.documentElement.clientHeight||
             document.body.clientHeight;
 
-        h = h - 75;
+        h = h - 80;
 
 
 
         const viewbox = d3.select("#chatcontainer")
             .append("svg")
             .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 " + w + " " + h)
-            .style("background", "#c9e8fd");
+            .attr("viewBox", "0 0 " + w + " " + h);
+            // .style("background", "#c9e8fd");
 
         const svg = viewbox.append("g")
             .attr("id", "svgcontainer");
 
-        svg.append('rect')
-            .attr("width", 400)
-            .attr("height", 100)
-            .style("fill", "blue");
+        // svg.append('rect')
+        //     .attr("rx", 6)
+        //     .attr("ry", 6)
+        //     .attr("width", 300)
+        //     .attr("height", 60)
+        //     .attr("x", w - 300)
+        //     .attr("y", 5)
+        //     .style("fill", "blue");
+
+
+        var oscale = d3.scaleLinear()
+            .domain([0, 8])
+            .range([1, 0]);
+
+
+        function addmessage(){
+
+
+
+            messages.unshift(
+                {
+                    "message": "blah blah blah",
+                    "trans": "slide",
+                    "id": uuidv4()
+                }
+            );
+
+            if(messages.length > 9){
+                messages.pop();
+            }
+            count++;
+            console.log(messages);
+
+
+            let t = d3.transition()
+                .ease(d3.easeLinear)
+                .duration(1000);
+
+            svg
+                .selectAll(".message")
+                .data(messages, function (d){ return d.id})
+                .join(
+                    enter =>
+                        enter
+                            .append('rect')
+                            .attr("class", "message")
+                            .attr("rx", 6)
+                            .attr("ry", 6)
+                            .attr("width", 300)
+                            .attr("height", 60)
+                            .attr("x", d => {return tarray[d.trans].x})
+                            .attr("y", d => {return tarray[d.trans].y})
+                            .attr("opacity", d => {return tarray[d.trans].opacity})
+                            .style("fill", "blue")
+                            .call(
+                                enter => enter.transition(t)
+                                    .attr("x", w-300)
+                                    .attr("y", function(d,i) {return i*70 + 10})
+                                    .attr("opacity", 1)
+                            ),
+
+                    update =>
+                        update
+                            .call(update => update.transition(t)
+                                .attr("y", function(d,i) {return i*70 + 10})
+                                .attr("opacity", function (d,i) {
+                                    return oscale(i)
+                                })
+                            )
+
+                )
+        }
+        addmessage();
+
+        var set = setInterval(addmessage, 2000);
 
 
 
