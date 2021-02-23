@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400;1,500;1,900&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://d3js.org/d3-ease.v2.min.js"></script>
     <script src="js/d3-textwrap.min.js"></script>
@@ -15,7 +17,6 @@
             src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
             crossorigin="anonymous"></script>
-    <script src="js/d3-xyzoom.js"></script>
     <script src="js/get-float-time-domain-data.js"></script>
     <style>
         body{
@@ -75,11 +76,12 @@
 
     </div>
     <div class="flex-container">
-        <button type="button" class="button" onmousedown="beginRecording()"  onmouseup="endRecording()"></button>
+        <button type="button" class="button" id="start" onclick="beginRecording()" >Start</button>
 
 
 
-        <button type="button" class="button" onclick="addmessage()"><</button>
+        <button type="button" class="button" onclick="endRecording()">End</button>
+        <button type="button" class="button" onclick="addmessage()">Send</button>
 
 
     </div>
@@ -100,45 +102,163 @@
         const baseheight = 60;
         const num_of_intonations = 2;
 
+        var palatte1 = ["#FF5211", "#E64910", "#BF3D0D", "#802909", "#401404"];
+        var palatte0 = ["#017DFF", "#006FE6", "#005CBF", "#003E80", "#001F40"];
+
+
         const tarray = {
-            "slide":{
+            "excited":{
                 "width": basewidth,
                 "height": baseheight,
                 "x": -300,
                 "xr": w+300,
                 "y": 10,
                 "opacity": 1,
-                "duration": 500,
-                "ease": 2
+                "duration": 250,
+                "ease": 0,
+                "color": 0,
+                "fontw": 500,
+                "fontstyle": "italic"
             },
 
-            "slidetop":{
+            "interested":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": w-300,
+                "xr": 0,
+                "y": 85,
+                "opacity": 1,
+                "duration": 500,
+                "ease": 1,
+                "color": 0,
+                "fontw": 400,
+                "fontstyle": "normal"
+            },
+
+            "questioning":{
                 "width": basewidth,
                 "height": baseheight,
                 "x": w-300,
                 "xr": 0,
                 "y": -90,
-                "opacity": 0,
-                "duration":1000,
-                "ease": 1
+                "opacity": 1,
+                "duration": 1000,
+                "ease": 2,
+                "color": 1,
+                "fontw": 300,
+                "fontstyle": "normal"
             },
 
-            "expandtop":{
-                "width": 10,
-                "height": 10,
-                "x": w-300,
-                "xr": 0,
-                "y": -90,
-                "opacity": 0,
-                "duration":1000,
-                "ease": 1
+            "right":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": -300,
+                "xr": w+300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 1000,
+                "ease": 3,
+                "color": 1,
+                "fontw": 100,
+                "fontstyle": "normal"
+            },
+
+            "unsure":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": -300,
+                "xr": w+300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 1000,
+                "ease": 4,
+                "color": 1,
+                "fontw": 100,
+                "fontstyle": "normal"
+            },
+
+            "neutral":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": w+300,
+                "xr": -300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 500,
+                "ease": 5,
+                "color": 2,
+                "fontw": 400,
+                "fontstyle": "normal"
+            },
+
+            "sarcasm":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": w+300,
+                "xr": -300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 500,
+                "ease": 5,
+                "color": 2,
+                "fontw": 400,
+                "fontstyle": "italic"
+            },
+
+            "umno":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": w+300,
+                "xr": -300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 1000,
+                "ease": 6,
+                "color": 3,
+                "fontw": 500,
+                "fontstyle": "regular"
+            },
+
+            "no":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": w+300,
+                "xr": -300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 500,
+                "ease": 7,
+                "color": 3,
+                "fontw": 700,
+                "fontstyle": "regular"
+            },
+
+            "bigno":{
+                "width": basewidth,
+                "height": baseheight,
+                "x": w+300,
+                "xr": -300,
+                "y": 10,
+                "opacity": 1,
+                "duration": 500,
+                "ease": 8,
+                "color": 4,
+                "fontw": 900,
+                "fontstyle": "italic"
             }
+
         };
 
     var eases = [
+        d3.easePolyOut.exponent(0.7),
+        d3.easePolyOut.exponent(0.9),
+        d3.easePolyIn.exponent(2),
+        d3.easePolyInOut.exponent(0.3),
+        d3.easePolyInOut.exponent(4),
         d3.easeLinear,
-        d3.easePoly,
-        d3.easePolyOut.exponent(6)
+        d3.easePolyInOut.exponent(2),
+        d3.easePolyIn.exponent(4),
+        d3.easePolyIn.exponent(6),
     ];
 
     var tones = [];
@@ -161,237 +281,239 @@
     });
 
 
-        document.body.addEventListener('click', init);
-        var analyzer;
-        var sampleRate;
+    document.body.addEventListener('click', init);
+    var analyzer;
+    var sampleRate;
 
-        function init(){
-            document.body.removeEventListener('click', init);
-            var AC = window.AudioContext || window.webkitAudioContext;
-            var audioContext = new AC();
-            var microphone;
+    function init(){
+        document.body.removeEventListener('click', init);
+        var AC = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AC();
+        var microphone;
 
 
-            if (navigator.mediaDevices.getUserMedia === undefined) {
-                navigator.mediaDevices.getUserMedia = function(constraints) {
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function(constraints) {
 
-                    // First get ahold of the legacy getUserMedia, if present
-                    var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
-                    // Some browsers just don't implement it - return a rejected promise with an error
-                    // to keep a consistent interface
-                    if (!getUserMedia) {
-                        return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-                    }
-
-                    // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-                    return new Promise(function(resolve, reject) {
-                        getUserMedia.call(navigator, constraints, resolve, reject);
-                    });
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
                 }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
             }
+        }
 
 
 
-            analyzer = audioContext.createAnalyser();
-            const gainNode = audioContext.createGain();
-            if(navigator.mediaDevices.getUserMedia()){
-                console.log("getUserMedia Supported");
-                var constraints = {audio: true};
-                navigator.mediaDevices.getUserMedia(constraints)
-                    .then(
-                        function(stream){
-                            microphone = audioContext.createMediaStreamSource(stream);
-                            microphone.connect(gainNode);
-                            gainNode.gain.value = 1;
-                            gainNode.connect(analyzer);
-                            ;                       sampleRate = audioContext.sampleRate;
-                            // analyzer.connect(audioContext.destination);
+        analyzer = audioContext.createAnalyser();
+        const gainNode = audioContext.createGain();
+        if(navigator.mediaDevices.getUserMedia()){
+            console.log("getUserMedia Supported");
+            var constraints = {audio: true};
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(
+                    function(stream){
+                        microphone = audioContext.createMediaStreamSource(stream);
+                        microphone.connect(gainNode);
+                        gainNode.gain.value = 1;
+                        gainNode.connect(analyzer);
+                        ;                       sampleRate = audioContext.sampleRate;
+                        // analyzer.connect(audioContext.destination);
 
-                            // beginRecording(audioContext.sampleRate);
-                        })
-                    .catch(function(err){
-                        console.log("Error! "+err)
+                        // beginRecording(audioContext.sampleRate);
                     })
+                .catch(function(err){
+                    console.log("Error! "+err)
+                })
+        }
+        else{
+            console.log("getUserMedia is not supported");
+        }
+
+
+    }
+
+    var audioon;
+    var dataarray = [];
+
+    function beginRecording(){
+        document.getElementById("start").style.background='#3a4a59';
+        analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+        var bufferlength = analyzer.fftsize;
+        var freqBinDataArray = new Float32Array( bufferlength );
+        // var freqBinDataArray = new Uint8Array(bufferlength);
+
+        var checkAudio = function (){
+            analyzer.getFloatTimeDomainData( freqBinDataArray );
+            var ac = autoCorrelate( freqBinDataArray ,sampleRate);
+            // text.text(ac);
+
+            dataarray.push(ac);
+
+
+            // analyzer.getByteTimeDomainData(freqBinDataArray);
+            // console.log(freqBinDataArray);
+            // console.log(ac);
+            // console.log("RMS: "+ getRMS(freqBinDataArray));
+            // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+        }
+        audioon = setInterval(checkAudio, 64);
+    }
+
+    function  endRecording(){
+        document.getElementById("start").style.background='grey';
+        var regressed = toText(audioregress(spliceaudio(dataarray)));
+        var str = "";
+        for(var i = 0; i<regressed.length; i++){
+            str = str+regressed[i];
+        }
+        // console.log(dataarray);
+        console.log(regressed);
+        tones = regressed;
+        dataarray = [];
+        clearInterval(audioon)
+    }
+
+    function spliceaudio(data){
+        var inter = [];
+        var res = [];
+        for(var i = 0; i<data.length; i++){
+            if(data[i] === -1){
+                if(inter.length > 3){
+                    res.push(inter);
+                }
+                inter = [];
             }
             else{
-                console.log("getUserMedia is not supported");
+                inter.push([i, data[i]]);
             }
-
-
         }
+        if(inter.length > 3){
+            res.push(inter);
+        }
+        return res;
+    }
 
-        var audioon;
-        var dataarray = [];
+    function audioregress(data){
+        var res = [];
+        for(var i = 0; i<data.length; i++){
+            res.push(regression(data[i]))
+        }
+        return res;
+    }
 
-        function beginRecording(){
-            analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
-            var bufferlength = analyzer.fftsize;
-            var freqBinDataArray = new Float32Array( bufferlength );
-            // var freqBinDataArray = new Uint8Array(bufferlength);
-
-            var checkAudio = function (){
-                analyzer.getFloatTimeDomainData( freqBinDataArray );
-                var ac = autoCorrelate( freqBinDataArray ,sampleRate);
-                // text.text(ac);
-
-                dataarray.push(ac);
-
-
-                // analyzer.getByteTimeDomainData(freqBinDataArray);
-                // console.log(freqBinDataArray);
-                // console.log(ac);
-                // console.log("RMS: "+ getRMS(freqBinDataArray));
-                // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+    function toText(data){
+        var res = [];
+        var lens = num_of_intonations;
+        if(data.length < num_of_intonations){
+            lens = data.length
+        }
+        for(var i = 0; i<lens; i++){
+            if(data[i] > 2.5){
+                res.push("R")
             }
-            audioon = setInterval(checkAudio, 64);
-        }
-
-        function  endRecording(){
-            var regressed = toText(audioregress(spliceaudio(dataarray)));
-            var str = "";
-            for(var i = 0; i<regressed.length; i++){
-                str = str+regressed[i];
-            }
-            // console.log(dataarray);
-            console.log(regressed);
-            tones = regressed;
-            dataarray = [];
-            clearInterval(audioon)
-        }
-
-        function spliceaudio(data){
-            var inter = [];
-            var res = [];
-            for(var i = 0; i<data.length; i++){
-                if(data[i] === -1){
-                    if(inter.length > 3){
-                        res.push(inter);
-                    }
-                    inter = [];
+            else{
+                if(data[i] < -2.5){
+                    res.push("F")
                 }
                 else{
-                    inter.push([i, data[i]]);
+                    res.push("N")
                 }
             }
-            if(inter.length > 3){
-                res.push(inter);
-            }
-            return res;
+        }
+        return res;
+    }
+
+    /*
+    * Simple Linear Regression
+    * Modified from https://gist.github.com/uhho/7228900#file-linear_regression-js-L7
+    * */
+    function regression(data) {
+        var sum_x = 0, sum_y = 0
+            , sum_xy = 0, sum_xx = 0
+            , count = 0
+            , m, b;
+
+        if (data.length === 0) {
+            throw new Error('Empty data');
         }
 
-        function audioregress(data){
-            var res = [];
-            for(var i = 0; i<data.length; i++){
-                res.push(regression(data[i]))
-            }
-            return res;
+        // calculate sums
+        for (var i = 0, len = data.length; i < len; i++) {
+            var point = data[i];
+            sum_x += point[0];
+            sum_y += point[1];
+            sum_xx += point[0] * point[0];
+            sum_xy += point[0] * point[1];
+            count++;
         }
 
-        function toText(data){
-            var res = [];
-            var lens = num_of_intonations;
-            if(data.length < num_of_intonations){
-                lens = data.length
-            }
-            for(var i = 0; i<lens; i++){
-                if(data[i] > 2.5){
-                    res.push("R")
-                }
-                else{
-                    if(data[i] < -2.5){
-                        res.push("F")
-                    }
-                    else{
-                        res.push("N")
-                    }
-                }
-            }
-            return res;
+        // calculate slope (m) and y-intercept (b) for f(x) = m * x + b
+        m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
+        // b = (sum_y / count) - (m * sum_x) / count;
+
+        return m;
+    }
+
+
+    /*
+    *
+    * Simple Pitch Detection
+    * From: https://github.com/cwilso/PitchDetect
+    *
+    * */
+    function autoCorrelate( buf, sampleRate ) {
+        // Implements the ACF2+ algorithm
+        var SIZE = buf.length;
+        var rms = 0;
+
+        for (var i=0;i<SIZE;i++) {
+            var val = buf[i];
+            rms += val*val;
         }
+        rms = Math.sqrt(rms/SIZE);
+        if (rms<0.01) // not enough signal
+            return -1;
 
-        /*
-        * Simple Linear Regression
-        * Modified from https://gist.github.com/uhho/7228900#file-linear_regression-js-L7
-        * */
-        function regression(data) {
-            var sum_x = 0, sum_y = 0
-                , sum_xy = 0, sum_xx = 0
-                , count = 0
-                , m, b;
+        var r1=0, r2=SIZE-1, thres=0.2;
+        for (var i=0; i<SIZE/2; i++)
+            if (Math.abs(buf[i])<thres) { r1=i; break; }
+        for (var i=1; i<SIZE/2; i++)
+            if (Math.abs(buf[SIZE-i])<thres) { r2=SIZE-i; break; }
 
-            if (data.length === 0) {
-                throw new Error('Empty data');
+        buf = buf.slice(r1,r2);
+        SIZE = buf.length;
+
+        var c = new Array(SIZE).fill(0);
+        for (var i=0; i<SIZE; i++)
+            for (var j=0; j<SIZE-i; j++)
+                c[i] = c[i] + buf[j]*buf[j+i];
+
+        var d=0; while (c[d]>c[d+1]) d++;
+        var maxval=-1, maxpos=-1;
+        for (var i=d; i<SIZE; i++) {
+            if (c[i] > maxval) {
+                maxval = c[i];
+                maxpos = i;
             }
-
-            // calculate sums
-            for (var i = 0, len = data.length; i < len; i++) {
-                var point = data[i];
-                sum_x += point[0];
-                sum_y += point[1];
-                sum_xx += point[0] * point[0];
-                sum_xy += point[0] * point[1];
-                count++;
-            }
-
-            // calculate slope (m) and y-intercept (b) for f(x) = m * x + b
-            m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
-            // b = (sum_y / count) - (m * sum_x) / count;
-
-            return m;
         }
+        var T0 = maxpos;
 
+        var x1=c[T0-1], x2=c[T0], x3=c[T0+1];
+        a = (x1 + x3 - 2*x2)/2;
+        b = (x3 - x1)/2;
+        if (a) T0 = T0 - b/(2*a);
 
-        /*
-        *
-        * Simple Pitch Detection
-        * From: https://github.com/cwilso/PitchDetect
-        *
-        * */
-        function autoCorrelate( buf, sampleRate ) {
-            // Implements the ACF2+ algorithm
-            var SIZE = buf.length;
-            var rms = 0;
-
-            for (var i=0;i<SIZE;i++) {
-                var val = buf[i];
-                rms += val*val;
-            }
-            rms = Math.sqrt(rms/SIZE);
-            if (rms<0.01) // not enough signal
-                return -1;
-
-            var r1=0, r2=SIZE-1, thres=0.2;
-            for (var i=0; i<SIZE/2; i++)
-                if (Math.abs(buf[i])<thres) { r1=i; break; }
-            for (var i=1; i<SIZE/2; i++)
-                if (Math.abs(buf[SIZE-i])<thres) { r2=SIZE-i; break; }
-
-            buf = buf.slice(r1,r2);
-            SIZE = buf.length;
-
-            var c = new Array(SIZE).fill(0);
-            for (var i=0; i<SIZE; i++)
-                for (var j=0; j<SIZE-i; j++)
-                    c[i] = c[i] + buf[j]*buf[j+i];
-
-            var d=0; while (c[d]>c[d+1]) d++;
-            var maxval=-1, maxpos=-1;
-            for (var i=d; i<SIZE; i++) {
-                if (c[i] > maxval) {
-                    maxval = c[i];
-                    maxpos = i;
-                }
-            }
-            var T0 = maxpos;
-
-            var x1=c[T0-1], x2=c[T0], x3=c[T0+1];
-            a = (x1 + x3 - 2*x2)/2;
-            b = (x3 - x1)/2;
-            if (a) T0 = T0 - b/(2*a);
-
-            return sampleRate/T0;
-        }
+        return sampleRate/T0;
+    }
 
 
 
@@ -419,18 +541,63 @@
 
 
     var oscale = d3.scalePow()
-        .exponent(0.5)
+        .exponent(0.8)
         .domain([0, (num_of_bars)])
         .range([1, 0]);
+
+    function mood(){
+        if(tones.length <= 0){
+            return "neutral";
+        }
+        if(tones.length === 1){
+            switch(tones[0]){
+                case "R":
+                    return "interested";
+                case "N":
+                    return "neutral";
+                case "F":
+                    return "no";
+            }
+        }
+        if(tones.length > 1){
+            switch(tones[0]){
+                case "R":
+                    switch(tones[1]){
+                        case "R":
+                            return "excited";
+                        case "F":
+                            return "unsure";
+                    }
+                    break;
+                case "N":
+                    switch(tones[1]){
+                        case "R":
+                            return "questioning";
+                        case "N":
+                            return "sarcasm";
+                        case "F":
+                            return "umno";
+                    }
+                    break;
+                case "F":
+                    switch(tones[1]){
+                        case "R":
+                            return "right";
+                        case "F":
+                            return "bigno";
+                    }
+                    break;
+            }
+        }
+    }
+
+
 
 
 
     function addmessage(){
 
         var res = document.getElementById("textarea").value;
-        if(res === ""){
-            return 0;
-        }
 
         var side = 0;
         if(res.startsWith("~")){
@@ -438,38 +605,25 @@
             side = 1;
         }
 
+        if(res === ""){
+            return 0;
+        }
+
+        var md = mood();
+
+
         document.getElementById("textarea").value = "";
         messages.unshift(
             {
                 "message": res,
-                "trans": "slide",
+                "trans": md,
                 "id": uuidv4(),
                 "side": side,
             }
         );
 
+        tones = [];
 
-        // if(count % 2 === 0){
-        //     messages.unshift(
-        //         {
-        //             "message": res,
-        //             "trans": "slide",
-        //             "id": uuidv4(),
-        //             "side": 0,
-        //         }
-        //     );
-        //
-        // }
-        // else{
-        //     messages.unshift(
-        //         {
-        //             "message": res,
-        //             "trans": "expandtop",
-        //             "id": uuidv4(),
-        //             "side": 1,
-        //         }
-        //     );
-        // }
 
 
         if(messages.length > num_of_bars){
@@ -517,7 +671,23 @@
                         .attr("opacity", d => {
                             easebuf = tarray[d.trans].ease;
                             return tarray[d.trans].opacity})
-                        .style("fill", "blue")
+                        .style("stroke", d=>{
+                            if(d.side === 0){
+                                return palatte0[tarray[d.trans].color];
+                            }
+                            else{
+                                return palatte1[tarray[d.trans].color];
+                            }
+                        })
+                        .style("stroke-width", 7)
+                        .style("fill", d => {
+                            if(d.side ===0){
+                                return "#7794BF";
+                            }
+                            else{
+                                return "#C29981";
+                            }
+                        })
                         .call(
                             enter => enter.transition()
                                 .ease(eases[easebuf])
@@ -542,9 +712,19 @@
                             .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
                             .duration(2000)
                             .attr("y", function(d,i) {return (i*(baseheight+15)) + 10})
+                            .attr("x", d => {
+                                if(d.side === 0){
+                                    return w-300;
+                                }
+                                else{
+                                    return 0;
+                                }
+                            })
                             .attr("opacity", function (d,i) {
                                 return oscale(i)
                             })
+                            .attr("width", basewidth)
+                            .attr("height", baseheight)
                         ),
 
                 exit =>
@@ -566,11 +746,13 @@
                         .append('text')
                         .attr("class", "messagetext")
                         .text(d => {return d.message})
-                        .call(wrap)
+
                         .style("font-size", 16)
-                        .style("font", "Lato")
-                        // .style("font-style", "italic")
-                        .style("font-weight", 900)
+                        .style("font-family", "Roboto")
+                        .style("font-style", d => {return tarray[d.trans].fontstyle})
+                        .style("fill", "black")
+                        .style("font-weight", d => {return tarray[d.trans].fontw})
+                        .call(wrap)
                         .attr("x", d => {
                             if(d.side === 0){
                                 return tarray[d.trans].x + 7
@@ -608,6 +790,16 @@
                             .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
                             .duration(2000)
                             .attr("y", function(d,i) {return (i*(baseheight+15)) + 10 + 19})
+                            .attr("x", d => {
+                                if(d.side === 0){
+                                    return w-300 + 7;
+                                }
+                                else{
+                                    return 0 + 7;
+                                }
+                            })
+                            .attr("width", basewidth)
+                            .attr("height", baseheight)
                             .attr("opacity", function (d,i) {
                                 return oscale(i)
                             })
