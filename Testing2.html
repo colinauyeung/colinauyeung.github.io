@@ -19,16 +19,17 @@
             text-shadow:0px 1px 0px #2f6627;
         }
 
-        .myButton:active {
-            background-color:#5cbf2a;
-            position:relative;
-            top:1px;
-        }
+        /*.myButton:active {*/
+        /*    background-color:#5cbf2a;*/
+        /*    position:relative;*/
+        /*    top:1px;*/
+        /*}*/
     </style>
 </head>
 <body>
 
-<button type="button" onmousedown="beginRecording()"  onmouseup="endRecording()" class="myButton" onclick="">></button>
+<!--<button type="button" onmousedown="beginRecording()"  onmouseup="endRecording()" class="myButton" onclick="">></button>-->
+<button type="button" class="myButton" id="start" onclick="button1()">></button>
 <svg id="svg" viewBox="0 0 100 100" width="100%" height="900" preserveAspectRatio="xMidYMin meet"></svg>
 
 
@@ -36,6 +37,7 @@
 <!--polyfil for getfloattimedomaindata as it is not supported in safari-->
 <!--From: https://github.com/mohayonao/get-float-time-domain-data-->
 <script src="js/get-float-time-domain-data.js"></script>
+<script src="https://unpkg.com/simple-statistics@7.5.0/dist/simple-statistics.min.js"></script>
 
 <script>
 
@@ -46,6 +48,8 @@
         .attr("x", 50)
         .attr("y", 50)
         .text("Hello v9");
+
+    var recording = false;
 
     // window.addEventListener("load", (e) => {
     //     init();
@@ -113,6 +117,19 @@
     var audioon;
     var dataarray = [];
 
+    function button1(){
+        if(recording){
+            endRecording();
+            recording = false;
+            document.getElementById("start").style.background='#025544';
+        }
+        else{
+            beginRecording();
+            recording = true;
+            document.getElementById("start").style.background='#5cbf2a';
+        }
+    }
+
     function beginRecording(){
         analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
         var bufferlength = analyzer.fftsize;
@@ -136,17 +153,24 @@
         audioon = setInterval(checkAudio, 64);
     }
 
+    var noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    var intervals = ["FP", "Fm", "FM", "Fm", "FM", "FP", "FD", "FP", "Fm", "FM", "Fm", "FM", "N",
+                    "Rm", "RM", "Rm", "RM", "RP", "RD", "RP", "Rm", "RM", "Rm", "RM", "RP"];
     function  endRecording(){
-        var regressed1 = audioregress(spliceaudio(dataarray));
-        var regressed = toText(audioregress(spliceaudio(dataarray)));
+
+        var spliced = spliceaudio2(dataarray);
+        var mode = modeaudio(spliced);
+        var inter = intervalaudio(mode);
         var str = "";
-        for(var i = 0; i<regressed.length; i++){
-            str = str+regressed[i];
+        for(var i = 0; i<inter.length; i++){
+            str = str+intervals[inter[i] + 12]+",";
         }
-        // console.log(dataarray);
-        console.log(regressed1);
+
+        console.log(spliced);
+        console.log(mode);
+        console.log(inter);
         dataarray = [];
-        text.text(regressed);
+        text.text(str);
         clearInterval(audioon)
     }
 
@@ -178,6 +202,66 @@
         return res;
     }
 
+    function interval(n1, n2){
+        var inter = (n2-n1)%12;
+        if(inter===0){
+            if(n1>n2){
+                return -12
+            }
+            else{
+                if(n2>n1){
+                    return 12;
+                }
+                else{
+                    return 0;
+                }
+            }
+        }
+        return inter;
+
+    }
+
+    function spliceaudio2(data){
+        var inter = [];
+        var res = [];
+        for(var i = 0; i<data.length; i++){
+            if(data[i] === -1){
+                if(inter.length > 3){
+                    res.push(inter);
+                }
+                inter = [];
+            }
+            else{
+                inter.push(data[i]);
+            }
+        }
+        if(inter.length > 3){
+            res.push(inter);
+        }
+        return res;
+    }
+
+    function modeaudio(data){
+        var nm =[];
+        for(var row in data){
+            var x  = [];
+            for(var j in data[row]){
+                x.push(noteFromPitch(data[row][j]))
+            }
+            nm.push(ss.mode(x));
+        }
+        return nm;
+    }
+
+
+    function intervalaudio(data){
+        var res = [];
+        for(var i = 0; i<data.length-1; i++){
+            res.push(interval(data[i], data[i+1]));
+        }
+        return res;
+    }
+
     function toText(data){
         var res = [];
         for(var i = 0; i<data.length; i++){
@@ -196,6 +280,21 @@
         return res;
     }
 
+    function toNote(data){
+        var sum = 0;
+        for(var i in data){
+            sum = sum + data[i];
+        }
+        return (sum/data.length);
+    }
+
+    function audioaverage(data){
+        var res = [];
+        for(var i = 0; i<data.length; i++){
+            res.push(ss.mode(data[i]))
+        }
+        return res;
+    }
 
     /*
     * Simple Linear Regression
@@ -280,6 +379,17 @@
         if (a) T0 = T0 - b/(2*a);
 
         return sampleRate/T0;
+    }
+
+    /*
+
+    Simple note detection algorithm
+    from: https://github.com/cwilso/PitchDetect
+
+     */
+    function noteFromPitch( frequency ) {
+        var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
+        return Math.round( noteNum ) + 69;
     }
 
     // function getRMS(spectrum){
