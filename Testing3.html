@@ -1694,12 +1694,12 @@
         });
 
 
-        // document.body.addEventListener('click', init);
+        document.body.addEventListener('click', init);
         var analyzer;
         var sampleRate;
 
         function init(){
-            // document.body.removeEventListener('click', init);
+            document.body.removeEventListener('click', init);
             var AC = window.AudioContext || window.webkitAudioContext;
             var audioContext = new AC();
             var microphone;
@@ -2413,7 +2413,7 @@
                     document.getElementById("pro").style.background='grey';
                     document.getElementById("start").disabled = false;
                     document.getElementById("pro").disabled = false;
-                    init();
+                    // init();
                     checking = setInterval(checkmailbox, 3500)
 
                 }
@@ -2522,7 +2522,7 @@
 
         function infohandle(){
             alert("hello world\n" +
-                "whee3");
+                "whee4");
         }
 
 
