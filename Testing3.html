@@ -137,6 +137,10 @@
             position:relative;
         }
 
+        .button:disabled{
+            background-color: #39363c;
+        }
+
         textarea {
             outline: none;
             font-family: 'Lato', sans-serif;
@@ -167,7 +171,7 @@
 
 
         <button type="button" class="button" onclick="endRecording()">End</button>
-        <input type="button" class="button" id="b3" onclick="b3click()" value="Host"></input>
+        <button class="button" id="b3" onclick="b3click()" type="button">Host</button>
 
 
     </div>
@@ -175,6 +179,7 @@
 
     <script>
 
+        // document.getElementById("start").disabled = true;
         const w  = window.innerWidth || document.documentElement.clientWidth ||
             document.body.clientWidth;
         var h = window.innerHeight|| document.documentElement.clientHeight||
@@ -188,12 +193,16 @@
         const baseheight = 60;
         const num_of_intonations = 2;
 
-        var palatte1 = ["#FF5211", "#E64910", "#BF3D0D", "#802909", "#401404"];
-        var palatte0 = ["#017DFF", "#006FE6", "#005CBF", "#003E80", "#001F40"];
+        // var palatte1 = ["#FF5211", "#E64910", "#BF3D0D", "#802909", "#401404"];
+        // var palatte0 = ["#017DFF", "#006FE6", "#005CBF", "#003E80", "#001F40"];
+
+        var palatte0 = d3.scaleSequential(d3.interpolateViridis).domain([5,0]);
+        var palatte1 = d3.scaleSequential(d3.interpolateInferno).domain([5,0]);
 
         const cid = uuidv4();
         var host = "";
         var lastchecked;
+        var promode = false;
 
         var checking;
         var timeout = 0;
@@ -213,7 +222,8 @@
                 "ease": 0,
                 "color": 0,
                 "fontw": 500,
-                "fontstyle": "italic"
+                "fontstyle": "italic",
+                "stroke": 5
             },
 
             "interested":{
@@ -227,7 +237,8 @@
                 "ease": 1,
                 "color": 0,
                 "fontw": 400,
-                "fontstyle": "normal"
+                "fontstyle": "normal",
+                "stroke": 5
             },
 
             "questioning":{
@@ -241,7 +252,8 @@
                 "ease": 2,
                 "color": 1,
                 "fontw": 300,
-                "fontstyle": "normal"
+                "fontstyle": "normal",
+                "stroke": 5
             },
 
             "right":{
@@ -255,7 +267,8 @@
                 "ease": 3,
                 "color": 1,
                 "fontw": 100,
-                "fontstyle": "normal"
+                "fontstyle": "normal",
+                "stroke": 5
             },
 
             "unsure":{
@@ -269,7 +282,8 @@
                 "ease": 4,
                 "color": 1,
                 "fontw": 100,
-                "fontstyle": "normal"
+                "fontstyle": "normal",
+                "stroke": 5
             },
 
             "neutral":{
@@ -283,7 +297,8 @@
                 "ease": 5,
                 "color": 2,
                 "fontw": 400,
-                "fontstyle": "normal"
+                "fontstyle": "normal",
+                "stroke": 5
             },
 
             "sarcasm":{
@@ -297,7 +312,8 @@
                 "ease": 5,
                 "color": 2,
                 "fontw": 400,
-                "fontstyle": "italic"
+                "fontstyle": "italic",
+                "stroke": 5
             },
 
             "umno":{
@@ -311,7 +327,8 @@
                 "ease": 6,
                 "color": 3,
                 "fontw": 500,
-                "fontstyle": "regular"
+                "fontstyle": "regular",
+                "stroke": 5
             },
 
             "no":{
@@ -325,7 +342,8 @@
                 "ease": 7,
                 "color": 3,
                 "fontw": 700,
-                "fontstyle": "regular"
+                "fontstyle": "regular",
+                "stroke": 5
             },
 
             "bigno":{
@@ -339,496 +357,598 @@
                 "ease": 8,
                 "color": 4,
                 "fontw": 900,
-                "fontstyle": "italic"
+                "fontstyle": "italic",
+                "stroke": 5
             }
 
         };
 
-    var eases = [
-        d3.easePolyOut.exponent(0.7),
-        d3.easePolyOut.exponent(0.9),
-        d3.easePolyIn.exponent(2),
-        d3.easePolyInOut.exponent(0.3),
-        d3.easePolyInOut.exponent(4),
-        d3.easeLinear,
-        d3.easePolyInOut.exponent(2),
-        d3.easePolyIn.exponent(4),
-        d3.easePolyIn.exponent(6),
-    ];
+        var eases = [
+            d3.easePolyOut.exponent(0.7),
+            d3.easePolyOut.exponent(0.9),
+            d3.easePolyIn.exponent(2),
+            d3.easePolyInOut.exponent(0.3),
+            d3.easePolyInOut.exponent(4),
+            d3.easeLinear,
+            d3.easePolyInOut.exponent(2),
+            d3.easePolyIn.exponent(4),
+            d3.easePolyIn.exponent(6),
+        ];
 
-    var tones = [];
-
-
-    var messages = [
-        // {
-        //     "message": "blah blah blah",
-        //     "trans": "slide",
-        //     "id": 1
-        // }
-    ];
-
-    $("textarea").keydown(function(e){
-        if (e.keyCode == 13)
-        {
-            b3click();
-            e.preventDefault();
-        }
-    });
+        var tones = [];
 
 
-    // document.body.addEventListener('click', init);
-    var analyzer;
-    var sampleRate;
+        var messages = [
+            // {
+            //     "message": "blah blah blah",
+            //     "trans": "slide",
+            //     "id": 1
+            // }
+        ];
 
-    function init(){
-        // document.body.removeEventListener('click', init);
-        var AC = window.AudioContext || window.webkitAudioContext;
-        var audioContext = new AC();
-        var microphone;
-
-
-        if (navigator.mediaDevices.getUserMedia === undefined) {
-            navigator.mediaDevices.getUserMedia = function(constraints) {
-
-                // First get ahold of the legacy getUserMedia, if present
-                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-                // Some browsers just don't implement it - return a rejected promise with an error
-                // to keep a consistent interface
-                if (!getUserMedia) {
-                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-                }
-
-                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-                return new Promise(function(resolve, reject) {
-                    getUserMedia.call(navigator, constraints, resolve, reject);
-                });
+        $("textarea").keydown(function(e){
+            if (e.keyCode == 13)
+            {
+                b3click();
+                e.preventDefault();
             }
-        }
+        });
+
+
+        // document.body.addEventListener('click', init);
+        var analyzer;
+        var sampleRate;
+
+        function init(){
+            // document.body.removeEventListener('click', init);
+            var AC = window.AudioContext || window.webkitAudioContext;
+            var audioContext = new AC();
+            var microphone;
+
+
+            if (navigator.mediaDevices.getUserMedia === undefined) {
+                navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                    // First get ahold of the legacy getUserMedia, if present
+                    var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                    // Some browsers just don't implement it - return a rejected promise with an error
+                    // to keep a consistent interface
+                    if (!getUserMedia) {
+                        return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                    }
+
+                    // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                    return new Promise(function(resolve, reject) {
+                        getUserMedia.call(navigator, constraints, resolve, reject);
+                    });
+                }
+            }
 
 
 
-        analyzer = audioContext.createAnalyser();
-        const gainNode = audioContext.createGain();
-        if(navigator.mediaDevices.getUserMedia()){
-            console.log("getUserMedia Supported");
-            var constraints = {audio: true};
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then(
-                    function(stream){
-                        microphone = audioContext.createMediaStreamSource(stream);
-                        microphone.connect(gainNode);
-                        gainNode.gain.value = 1;
-                        gainNode.connect(analyzer);
-                        ;                       sampleRate = audioContext.sampleRate;
-                        // analyzer.connect(audioContext.destination);
+            analyzer = audioContext.createAnalyser();
+            const gainNode = audioContext.createGain();
+            if(navigator.mediaDevices.getUserMedia()){
+                console.log("getUserMedia Supported");
+                var constraints = {audio: true};
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(
+                        function(stream){
+                            microphone = audioContext.createMediaStreamSource(stream);
+                            microphone.connect(gainNode);
+                            gainNode.gain.value = 1;
+                            gainNode.connect(analyzer);
+                            ;                       sampleRate = audioContext.sampleRate;
+                            // analyzer.connect(audioContext.destination);
 
-                        // beginRecording(audioContext.sampleRate);
+                            // beginRecording(audioContext.sampleRate);
+                        })
+                    .catch(function(err){
+                        console.log("Error! "+err)
                     })
-                .catch(function(err){
-                    console.log("Error! "+err)
-                })
+            }
+            else{
+                console.log("getUserMedia is not supported");
+            }
+
+
         }
-        else{
-            console.log("getUserMedia is not supported");
+
+        var audioon;
+        var dataarray = [];
+
+        function beginRecording(){
+            document.getElementById("start").style.background='#3a4a59';
+            analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+            var bufferlength = analyzer.fftsize;
+            var freqBinDataArray = new Float32Array( bufferlength );
+            // var freqBinDataArray = new Uint8Array(bufferlength);
+
+            var checkAudio = function (){
+                analyzer.getFloatTimeDomainData( freqBinDataArray );
+                var ac = autoCorrelate( freqBinDataArray ,sampleRate);
+                // text.text(ac);
+
+                dataarray.push(ac);
+
+
+                // analyzer.getByteTimeDomainData(freqBinDataArray);
+                // console.log(freqBinDataArray);
+                // console.log(ac);
+                // console.log("RMS: "+ getRMS(freqBinDataArray));
+                // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+            }
+            audioon = setInterval(checkAudio, 64);
         }
 
-
-    }
-
-    var audioon;
-    var dataarray = [];
-
-    function beginRecording(){
-        document.getElementById("start").style.background='#3a4a59';
-        analyzer.fftsize = 2048; //needs to be a power of 2, between 32 and MAX UNSIGNED INT
-        var bufferlength = analyzer.fftsize;
-        var freqBinDataArray = new Float32Array( bufferlength );
-        // var freqBinDataArray = new Uint8Array(bufferlength);
-
-        var checkAudio = function (){
-            analyzer.getFloatTimeDomainData( freqBinDataArray );
-            var ac = autoCorrelate( freqBinDataArray ,sampleRate);
-            // text.text(ac);
-
-            dataarray.push(ac);
-
-
-            // analyzer.getByteTimeDomainData(freqBinDataArray);
-            // console.log(freqBinDataArray);
-            // console.log(ac);
-            // console.log("RMS: "+ getRMS(freqBinDataArray));
-            // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
-        }
-        audioon = setInterval(checkAudio, 64);
-    }
-
-    function  endRecording(){
-        document.getElementById("start").style.background='grey';
-        var regressed = toText(audioregress(spliceaudio(dataarray)));
-        var str = "";
-        for(var i = 0; i<regressed.length; i++){
-            str = str+regressed[i];
-        }
-        // console.log(dataarray);
-        console.log(regressed);
-        tones = regressed;
-        dataarray = [];
-        clearInterval(audioon)
-    }
-
-    function spliceaudio(data){
-        var inter = [];
-        var res = [];
-        for(var i = 0; i<data.length; i++){
-            if(data[i] === -1){
-                if(inter.length > 3){
-                    res.push(inter);
+        var intervals = ["FP", "Fm", "FM", "Fm", "FM", "FP", "FD", "FP", "Fm", "FM", "Fm", "FM", "N",
+            "Rm", "RM", "Rm", "RM", "RP", "RD", "RP", "Rm", "RM", "Rm", "RM", "RP"];
+        function  endRecording(){
+            document.getElementById("start").style.background='grey';
+            if(!promode){
+                var regressed = toText(audioregress(spliceaudio(dataarray)));
+                console.log(dataarray);
+                console.log(regressed);
+                tones = regressed;
+            }
+            else{
+                var spliced = spliceaudio2(dataarray);
+                var mode = modeaudio(spliced);
+                var inter = intervalaudio(mode);
+                var str = [];
+                for(var i = 0; i<inter.length; i++){
+                    str = str.push(intervals[inter[i] + 12]);
                 }
-                inter = [];
-            }
-            else{
-                inter.push([i, data[i]]);
-            }
-        }
-        if(inter.length > 3){
-            res.push(inter);
-        }
-        return res;
-    }
 
-    function audioregress(data){
-        var res = [];
-        for(var i = 0; i<data.length; i++){
-            res.push(regression(data[i]))
-        }
-        return res;
-    }
-
-    function toText(data){
-        var res = [];
-        var lens = num_of_intonations;
-        if(data.length < num_of_intonations){
-            lens = data.length
-        }
-        for(var i = 0; i<lens; i++){
-            if(data[i] > 2.5){
-                res.push("R")
+                console.log(str);
             }
-            else{
-                if(data[i] < -2.5){
-                    res.push("F")
+
+            dataarray = [];
+            clearInterval(audioon)
+        }
+
+        // Simple note detection algorithm
+        // from: https://github.com/cwilso/PitchDetect
+        function noteFromPitch( frequency ) {
+            var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
+            return Math.round( noteNum ) + 69;
+        }
+
+        function interval(n1, n2){
+            var inter = (n2-n1)%12;
+            if(inter===0){
+                if(n1>n2){
+                    return -12
                 }
                 else{
-                    res.push("N")
+                    if(n2>n1){
+                        return 12;
+                    }
+                    else{
+                        return 0;
+                    }
                 }
             }
-        }
-        return res;
-    }
+            return inter;
 
-    /*
-    * Simple Linear Regression
-    * Modified from https://gist.github.com/uhho/7228900#file-linear_regression-js-L7
-    * */
-    function regression(data) {
-        var sum_x = 0, sum_y = 0
-            , sum_xy = 0, sum_xx = 0
-            , count = 0
-            , m, b;
-
-        if (data.length === 0) {
-            throw new Error('Empty data');
         }
 
-        // calculate sums
-        for (var i = 0, len = data.length; i < len; i++) {
-            var point = data[i];
-            sum_x += point[0];
-            sum_y += point[1];
-            sum_xx += point[0] * point[0];
-            sum_xy += point[0] * point[1];
-            count++;
-        }
-
-        // calculate slope (m) and y-intercept (b) for f(x) = m * x + b
-        m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
-        // b = (sum_y / count) - (m * sum_x) / count;
-
-        return m;
-    }
-
-
-    /*
-    *
-    * Simple Pitch Detection
-    * From: https://github.com/cwilso/PitchDetect
-    *
-    * */
-    function autoCorrelate( buf, sampleRate ) {
-        // Implements the ACF2+ algorithm
-        var SIZE = buf.length;
-        var rms = 0;
-
-        for (var i=0;i<SIZE;i++) {
-            var val = buf[i];
-            rms += val*val;
-        }
-        rms = Math.sqrt(rms/SIZE);
-        if (rms<0.01) // not enough signal
-            return -1;
-
-        var r1=0, r2=SIZE-1, thres=0.2;
-        for (var i=0; i<SIZE/2; i++)
-            if (Math.abs(buf[i])<thres) { r1=i; break; }
-        for (var i=1; i<SIZE/2; i++)
-            if (Math.abs(buf[SIZE-i])<thres) { r2=SIZE-i; break; }
-
-        buf = buf.slice(r1,r2);
-        SIZE = buf.length;
-
-        var c = new Array(SIZE).fill(0);
-        for (var i=0; i<SIZE; i++)
-            for (var j=0; j<SIZE-i; j++)
-                c[i] = c[i] + buf[j]*buf[j+i];
-
-        var d=0; while (c[d]>c[d+1]) d++;
-        var maxval=-1, maxpos=-1;
-        for (var i=d; i<SIZE; i++) {
-            if (c[i] > maxval) {
-                maxval = c[i];
-                maxpos = i;
+        function spliceaudio2(data){
+            var inter = [];
+            var res = [];
+            for(var i = 0; i<data.length; i++){
+                if(data[i] === -1){
+                    if(inter.length > 3){
+                        res.push(inter);
+                    }
+                    inter = [];
+                }
+                else{
+                    inter.push(data[i]);
+                }
             }
+            if(inter.length > 3){
+                res.push(inter);
+            }
+            return res;
         }
-        var T0 = maxpos;
 
-        var x1=c[T0-1], x2=c[T0], x3=c[T0+1];
-        a = (x1 + x3 - 2*x2)/2;
-        b = (x3 - x1)/2;
-        if (a) T0 = T0 - b/(2*a);
-
-        return sampleRate/T0;
-    }
-
-
-
-    const viewbox = d3.select("#chatcontainer")
-        .append("svg")
-        .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", "0 0 " + w + " " + h);
-        // .style("background", "#c9e8fd");
-
-    const svg = viewbox.append("g")
-        .attr("id", "svgcontainer");
-
-    // svg.append('rect')
-    //     .attr("rx", 6)
-    //     .attr("ry", 6)
-    //     .attr("width", 300)
-    //     .attr("height", 60)
-    //     .attr("x", w - 300)
-    //     .attr("y", 5)
-    //     .style("fill", "blue");
-
-    var num_of_bars = Math.floor((h-10)/75);
-
-
-    var oscale = d3.scalePow()
-        .exponent(0.8)
-        .domain([0, (num_of_bars)])
-        .range([1, 0]);
-
-    function mood(){
-        if(tones.length <= 0){
-            return "neutral";
+        function modeaudio(data){
+            var nm =[];
+            for(var row in data){
+                var x  = [];
+                for(var j in data[row]){
+                    x.push(noteFromPitch(data[row][j]))
+                }
+                nm.push(ss.mode(x));
+            }
+            return nm;
         }
-        if(tones.length === 1){
-            switch(tones[0]){
-                case "R":
-                    return "interested";
-                case "N":
+
+
+        function intervalaudio(data){
+            var res = [];
+            for(var i = 0; i<data.length-1; i++){
+                res.push(interval(data[i], data[i+1]));
+            }
+            return res;
+        }
+
+        function spliceaudio(data){
+            var inter = [];
+            var res = [];
+            for(var i = 0; i<data.length; i++){
+                if(data[i] === -1){
+                    if(inter.length > 3){
+                        res.push(inter);
+                    }
+                    inter = [];
+                }
+                else{
+                    inter.push([i, data[i]]);
+                }
+            }
+            if(inter.length > 3){
+                res.push(inter);
+            }
+            return res;
+        }
+
+        function audioregress(data){
+            var res = [];
+            for(var i = 0; i<data.length; i++){
+                res.push(regression(data[i]))
+            }
+            return res;
+        }
+
+        function toText(data){
+            var res = [];
+            var lens = num_of_intonations;
+            if(data.length < num_of_intonations){
+                lens = data.length
+            }
+            for(var i = 0; i<lens; i++){
+                if(data[i] > 2.5){
+                    res.push("R")
+                }
+                else{
+                    if(data[i] < -2.5){
+                        res.push("F")
+                    }
+                    else{
+                        res.push("N")
+                    }
+                }
+            }
+            return res;
+        }
+
+        /*
+        * Simple Linear Regression
+        * Modified from https://gist.github.com/uhho/7228900#file-linear_regression-js-L7
+        * */
+        function regression(data) {
+            var sum_x = 0, sum_y = 0
+                , sum_xy = 0, sum_xx = 0
+                , count = 0
+                , m, b;
+
+            if (data.length === 0) {
+                throw new Error('Empty data');
+            }
+
+            // calculate sums
+            for (var i = 0, len = data.length; i < len; i++) {
+                var point = data[i];
+                sum_x += point[0];
+                sum_y += point[1];
+                sum_xx += point[0] * point[0];
+                sum_xy += point[0] * point[1];
+                count++;
+            }
+
+            // calculate slope (m) and y-intercept (b) for f(x) = m * x + b
+            m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
+            // b = (sum_y / count) - (m * sum_x) / count;
+
+            return m;
+        }
+
+
+        /*
+        *
+        * Simple Pitch Detection
+        * From: https://github.com/cwilso/PitchDetect
+        *
+        * */
+        function autoCorrelate( buf, sampleRate ) {
+            // Implements the ACF2+ algorithm
+            var SIZE = buf.length;
+            var rms = 0;
+
+            for (var i=0;i<SIZE;i++) {
+                var val = buf[i];
+                rms += val*val;
+            }
+            rms = Math.sqrt(rms/SIZE);
+            if (rms<0.01) // not enough signal
+                return -1;
+
+            var r1=0, r2=SIZE-1, thres=0.2;
+            for (var i=0; i<SIZE/2; i++)
+                if (Math.abs(buf[i])<thres) { r1=i; break; }
+            for (var i=1; i<SIZE/2; i++)
+                if (Math.abs(buf[SIZE-i])<thres) { r2=SIZE-i; break; }
+
+            buf = buf.slice(r1,r2);
+            SIZE = buf.length;
+
+            var c = new Array(SIZE).fill(0);
+            for (var i=0; i<SIZE; i++)
+                for (var j=0; j<SIZE-i; j++)
+                    c[i] = c[i] + buf[j]*buf[j+i];
+
+            var d=0; while (c[d]>c[d+1]) d++;
+            var maxval=-1, maxpos=-1;
+            for (var i=d; i<SIZE; i++) {
+                if (c[i] > maxval) {
+                    maxval = c[i];
+                    maxpos = i;
+                }
+            }
+            var T0 = maxpos;
+
+            var x1=c[T0-1], x2=c[T0], x3=c[T0+1];
+            a = (x1 + x3 - 2*x2)/2;
+            b = (x3 - x1)/2;
+            if (a) T0 = T0 - b/(2*a);
+
+            return sampleRate/T0;
+        }
+
+        const viewbox = d3.select("#chatcontainer")
+            .append("svg")
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 " + w + " " + h);
+            // .style("background", "#c9e8fd");
+
+        const svg = viewbox.append("g")
+            .attr("id", "svgcontainer");
+
+
+        var num_of_bars = Math.floor((h-10)/75);
+
+        var oscale = d3.scalePow()
+            .exponent(0.8)
+            .domain([0, (num_of_bars)])
+            .range([1, 0]);
+
+        function mood(){
+            if(promode){
+                return "bigno";
+            }
+            else{
+                if(tones.length <= 0){
                     return "neutral";
-                case "F":
-                    return "no";
-            }
-        }
-        if(tones.length > 1){
-            switch(tones[0]){
-                case "R":
-                    switch(tones[1]){
+                }
+                if(tones.length === 1){
+                    switch(tones[0]){
                         case "R":
-                            return "excited";
-                        case "F":
-                            return "unsure";
-                        case "N":
                             return "interested";
-                    }
-                    break;
-                case "N":
-                    switch(tones[1]){
-                        case "R":
-                            return "questioning";
                         case "N":
-                            return "sarcasm";
+                            return "neutral";
                         case "F":
-                            return "umno";
-                    }
-                    break;
-                case "F":
-                    switch(tones[1]){
-                        case "R":
-                            return "right";
-                        case "F":
-                            return "bigno";
-                        case "N":
                             return "no";
                     }
-                    break;
+                }
+                if(tones.length > 1){
+                    switch(tones[0]){
+                        case "R":
+                            switch(tones[1]){
+                                case "R":
+                                    return "excited";
+                                case "F":
+                                    return "unsure";
+                                case "N":
+                                    return "interested";
+                            }
+                            break;
+                        case "N":
+                            switch(tones[1]){
+                                case "R":
+                                    return "questioning";
+                                case "N":
+                                    return "sarcasm";
+                                case "F":
+                                    return "umno";
+                            }
+                            break;
+                        case "F":
+                            switch(tones[1]){
+                                case "R":
+                                    return "right";
+                                case "F":
+                                    return "bigno";
+                                case "N":
+                                    return "no";
+                            }
+                            break;
+                    }
+                }
             }
-        }
-    }
 
 
-    function showmessage(body, moood){
-        side = 1;
-
-        messages.unshift({
-            "message": body,
-            "trans": moood,
-            "id": uuidv4(),
-            "side": side,
-        })
-        if (messages.length > num_of_bars) {
-            messages.pop();
-        }
-        console.log(messages);
-        updatemessages();
-    }
-
-
-    function addmessage() {
-
-        var res = document.getElementById("textarea").value;
-        timeout = 0;
-
-        var side = 0;
-        // if (res.startsWith("~")) {
-        //     res = res.substring(1);
-        //     side = 1;
-        // }
-
-        if (res === "") {
-            return 0;
         }
 
-        var md = mood();
+        function togglepromode(){
+            tones = [];
+            promode = !promode;
+
+        }
 
 
-        document.getElementById("textarea").value = "";
-        messages.unshift(
-            {
-                "message": res,
-                "trans": md,
+        function showmessage(body, moood){
+            side = 1;
+
+            messages.unshift({
+                "message": body,
+                "trans": moood,
                 "id": uuidv4(),
                 "side": side,
+            })
+            if (messages.length > num_of_bars) {
+                messages.pop();
             }
-        );
-
-        tones = [];
-
-
-        if (messages.length > num_of_bars) {
-            messages.pop();
+            console.log(messages);
+            updatemessages();
         }
-        count++;
-        console.log(messages);
-        updatemessages();
-        var request = {
-            "uuid": cid,
-            "host": host,
-            "emotion": md,
-            "message": res
-        };
-        fetch("https://colinauyeung-portfolio.herokuapp.com/api/messages", {
-            method: 'POST',
-            mode: 'cors',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(request)
-        })
-            .then(response => response.json())
-            // .then(data => {
-            //     var res = data;
-            //     if(res.message === "success"){
-            //         pass;
-            //
-            //     }
-            //
-            // })
-    }
-
-    function updatemessages(){
-
-        let t = d3.transition()
-            .ease(d3.easeLinear)
-            .duration(1000);
-
-        var wrap;
-        wrap = d3.textwrap()
-            .bounds({height: baseheight, width: basewidth})
-            .padding(10)
-            .method('tspans');;
 
 
-        var easebuf = 0;
+        function addmessage() {
+
+            var res = document.getElementById("textarea").value;
+            timeout = 0;
+
+            var side = 0;
+            // if (res.startsWith("~")) {
+            //     res = res.substring(1);
+            //     side = 1;
+            // }
+
+            if (res === "") {
+                return 0;
+            }
+
+            var md = mood();
 
 
-        svg
-            .selectAll(".message")
-            .data(messages, function (d){ return d.id})
-            .join(
-                enter =>
-                    enter
-                        .append('rect')
-                        .attr("class", "message")
-                        .attr("rx", 6)
-                        .attr("ry", 6)
-                        .attr("width", d => {return d.width})
-                        .attr("height", d=> {return d.height})
-                        .attr("x", d => {
-                            if(d.side === 0){
-                                return tarray[d.trans].x
-                            }
-                            else{
-                                return tarray[d.trans].xr
-                            }
-                        })
-                        .attr("y", d => {return tarray[d.trans].y})
-                        .attr("opacity", d => {
-                            easebuf = tarray[d.trans].ease;
-                            return tarray[d.trans].opacity})
-                        .style("stroke", d=>{
-                            if(d.side === 0){
-                                return palatte0[tarray[d.trans].color];
-                            }
-                            else{
-                                return palatte1[tarray[d.trans].color];
-                            }
-                        })
-                        .style("stroke-width", 7)
-                        .style("fill", d => {
-                            if(d.side ===0){
-                                return "#7794BF";
-                            }
-                            else{
-                                return "#C29981";
-                            }
-                        })
-                        .call(
-                            enter => enter.transition()
-                                .ease(eases[easebuf])
-                                .duration(d => {return tarray[d.trans].duration})
+            document.getElementById("textarea").value = "";
+            messages.unshift(
+                {
+                    "message": res,
+                    "trans": md,
+                    "id": uuidv4(),
+                    "side": side,
+                }
+            );
+
+            tones = [];
+
+
+            if (messages.length > num_of_bars) {
+                messages.pop();
+            }
+            count++;
+            console.log(messages);
+            updatemessages();
+            var request = {
+                "uuid": cid,
+                "host": host,
+                "emotion": md,
+                "message": res
+            };
+            fetch("https://colinauyeung-portfolio.herokuapp.com/api/messages", {
+                method: 'POST',
+                mode: 'cors',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+            })
+                .then(response => response.json())
+                // .then(data => {
+                //     var res = data;
+                //     if(res.message === "success"){
+                //         pass;
+                //
+                //     }
+                //
+                // })
+        }
+
+        function updatemessages(){
+
+            let t = d3.transition()
+                .ease(d3.easeLinear)
+                .duration(1000);
+
+            var wrap;
+            wrap = d3.textwrap()
+                .bounds({height: baseheight, width: basewidth})
+                .padding(10)
+                .method('tspans');;
+
+
+            var easebuf = 0;
+
+
+            svg
+                .selectAll(".message")
+                .data(messages, function (d){ return d.id})
+                .join(
+                    enter =>
+                        enter
+                            .append('rect')
+                            .attr("class", "message")
+                            .attr("rx", 6)
+                            .attr("ry", 6)
+                            .attr("width", d => {return d.width})
+                            .attr("height", d=> {return d.height})
+                            .attr("x", d => {
+                                if(d.side === 0){
+                                    return tarray[d.trans].x
+                                }
+                                else{
+                                    return tarray[d.trans].xr
+                                }
+                            })
+                            .attr("y", d => {return tarray[d.trans].y})
+                            .attr("opacity", d => {
+                                easebuf = tarray[d.trans].ease;
+                                return tarray[d.trans].opacity})
+                            .style("stroke", d=>{
+                                if(d.side === 0){
+                                    return palatte0(tarray[d.trans].color);
+                                }
+                                else{
+                                    return palatte1(tarray[d.trans].color);
+                                }
+                            })
+                            .style("stroke-width", d => {return tarray[d.trans].stroke})
+                            .style("fill", d => {
+                                if(d.side ===0){
+                                    return "#c2c4d6";
+                                }
+                                else{
+                                    return "#d1c6bc";
+                                }
+                            })
+                            .call(
+                                enter => enter.transition()
+                                    .ease(eases[easebuf])
+                                    .duration(d => {return tarray[d.trans].duration})
+                                    .attr("x", d => {
+                                        if(d.side === 0){
+                                            return w-300;
+                                        }
+                                        else{
+                                            return 0;
+                                        }
+                                    })
+                                    .attr("y", function(d,i) {return (i*(baseheight+15)) + 10})
+                                    .attr("opacity", 1)
+                                    .attr("width", basewidth)
+                                    .attr("height", baseheight)
+                            ),
+
+                    update =>
+                        update
+                            .call(update => update.transition(t)
+                                .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
+                                .duration(2000)
+                                .attr("y", function(d,i) {return (i*(baseheight+15)) + 10})
                                 .attr("x", d => {
                                     if(d.side === 0){
                                         return w-300;
@@ -837,76 +957,76 @@
                                         return 0;
                                     }
                                 })
-                                .attr("y", function(d,i) {return (i*(baseheight+15)) + 10})
-                                .attr("opacity", 1)
+                                .attr("opacity", function (d,i) {
+                                    return oscale(i)
+                                })
                                 .attr("width", basewidth)
                                 .attr("height", baseheight)
-                        ),
+                            ),
 
-                update =>
-                    update
-                        .call(update => update.transition(t)
-                            .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
-                            .duration(2000)
-                            .attr("y", function(d,i) {return (i*(baseheight+15)) + 10})
+                    exit =>
+                        exit
+                            .call(exit => exit.transition(t)
+                                .attr("opacity", 0)
+                             )
+
+
+                )
+
+
+            svg
+                .selectAll(".messagetext")
+                .data(messages, function (d){ return d.id})
+                .join(
+                    enter =>
+                        enter
+                            .append('text')
+                            .attr("class", "messagetext")
+                            .text(d => {return d.message})
+
+                            .style("font-size", 16)
+                            .style("font-family", "Roboto")
+                            .style("font-style", d => {return tarray[d.trans].fontstyle})
+                            .style("fill", "black")
+                            .style("font-weight", d => {return tarray[d.trans].fontw})
+                            .call(wrap)
                             .attr("x", d => {
                                 if(d.side === 0){
-                                    return w-300;
+                                    return tarray[d.trans].x + 7
                                 }
                                 else{
-                                    return 0;
+                                    return tarray[d.trans].xr + 7
                                 }
                             })
-                            .attr("opacity", function (d,i) {
-                                return oscale(i)
-                            })
-                            .attr("width", basewidth)
-                            .attr("height", baseheight)
-                        ),
+                            .attr("y", d => {return tarray[d.trans].y + 19})
+                            .attr("opacity", d => {
+                                easebuf = tarray[d.trans].ease;
+                                return tarray[d.trans].opacity})
 
-                exit =>
-                    exit
-                        .call(exit => exit.transition(t)
-                            .attr("opacity", 0)
-                         )
+                            .call(
+                                enter => enter.transition()
+                                    .ease(eases[easebuf])
+                                    .duration(d => {return tarray[d.trans].duration})
+                                    .attr("x", d => {
+                                        if(d.side === 0){
+                                            return w-300 + 7;
+                                        }
+                                        else{
+                                            return 0 + 7;
+                                        }
+                                    })
+                                    .attr("y", function(d,i) {return (i*(baseheight+15)) + 10 + 19})
+                                    .attr("opacity", 1)
+                                    .attr("width", basewidth)
+                                    .attr("height", baseheight)
+                            ),
 
-
-            )
-
-
-        svg
-            .selectAll(".messagetext")
-            .data(messages, function (d){ return d.id})
-            .join(
-                enter =>
-                    enter
-                        .append('text')
-                        .attr("class", "messagetext")
-                        .text(d => {return d.message})
-
-                        .style("font-size", 16)
-                        .style("font-family", "Roboto")
-                        .style("font-style", d => {return tarray[d.trans].fontstyle})
-                        .style("fill", "black")
-                        .style("font-weight", d => {return tarray[d.trans].fontw})
-                        .call(wrap)
-                        .attr("x", d => {
-                            if(d.side === 0){
-                                return tarray[d.trans].x + 7
-                            }
-                            else{
-                                return tarray[d.trans].xr + 7
-                            }
-                        })
-                        .attr("y", d => {return tarray[d.trans].y + 19})
-                        .attr("opacity", d => {
-                            easebuf = tarray[d.trans].ease;
-                            return tarray[d.trans].opacity})
-
-                        .call(
-                            enter => enter.transition()
-                                .ease(eases[easebuf])
-                                .duration(d => {return tarray[d.trans].duration})
+                    update =>
+                        update
+                            .call(update => update.transition(t)
+                                .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
+                                .duration(2000)
+                                .attr("y", function(d,i) {return (i*(baseheight+15)) + 10 + 19})
                                 .attr("x", d => {
                                     if(d.side === 0){
                                         return w-300 + 7;
@@ -915,143 +1035,123 @@
                                         return 0 + 7;
                                     }
                                 })
-                                .attr("y", function(d,i) {return (i*(baseheight+15)) + 10 + 19})
-                                .attr("opacity", 1)
                                 .attr("width", basewidth)
                                 .attr("height", baseheight)
-                        ),
+                                .attr("opacity", function (d,i) {
+                                    return oscale(i)
+                                })
+                            ),
 
-                update =>
-                    update
-                        .call(update => update.transition(t)
-                            .ease(d3.easeElasticOut.amplitude(0.50).period(0.5))
-                            .duration(2000)
-                            .attr("y", function(d,i) {return (i*(baseheight+15)) + 10 + 19})
-                            .attr("x", d => {
-                                if(d.side === 0){
-                                    return w-300 + 7;
-                                }
-                                else{
-                                    return 0 + 7;
-                                }
-                            })
-                            .attr("width", basewidth)
-                            .attr("height", baseheight)
-                            .attr("opacity", function (d,i) {
-                                return oscale(i)
-                            })
-                        ),
-
-                exit =>
-                    exit
-                        .call(exit => exit.transition(t)
-                            .attr("opacity", 0)
-                        )
+                    exit =>
+                        exit
+                            .call(exit => exit.transition(t)
+                                .attr("opacity", 0)
+                            )
 
 
-            )
+                )
 
-    }
-    // addmessage();
-    //
-    // var set = setInterval(addmessage, 3000);
+        }
+        // addmessage();
+        //
+        // var set = setInterval(addmessage, 3000);
 
-    function inithost(){
-        var temphost = document.getElementById("textarea").value;
-        var request = {
-            "uuid": cid,
-            "host": temphost
-        };
-        fetch("https://colinauyeung-portfolio.herokuapp.com/api/initping", {
-            method: 'POST',
-            mode: 'cors',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(request)
-        });
-        fetch("https://colinauyeung-portfolio.herokuapp.com/api/host", {
-            method: 'POST',
-            mode: 'cors',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(request)
-        })
-        .then(response => response.json())
-        .then(data => {
-            var res = data;
-            if(res.message === "success"){
-                host = temphost;
-                document.getElementById("b3").value = "Send";
-                document.getElementById("textarea").value = "";
-                lastchecked = new Date(Date.now());
-                init();
-                checking = setInterval(checkmailbox, 1000)
+        function inithost(){
+            var temphost = document.getElementById("textarea").value;
+            var request = {
+                "uuid": cid,
+                "host": temphost
+            };
+            fetch("https://colinauyeung-portfolio.herokuapp.com/api/initping", {
+                method: 'POST',
+                mode: 'cors',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+            });
+            fetch("https://colinauyeung-portfolio.herokuapp.com/api/host", {
+                method: 'POST',
+                mode: 'cors',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+            })
+            .then(response => response.json())
+            .then(data => {
+                var res = data;
+                if(res.message === "success"){
+                    host = temphost;
+                    document.getElementById("b3").textContent = "Send";
+                    document.getElementById("textarea").value = "";
+                    lastchecked = new Date(Date.now());
+                    init();
+                    checking = setInterval(checkmailbox, 3500)
 
-            }
-        })
+                }
+            })
 
-    }
+        }
 
-    function reset(){
-        clearInterval(checking);
-        host = "";
-        document.getElementById("b3").value = "Host";
-        document.getElementById("textarea").value = "";
-        messages = [];
-        updatemessages();
-    }
+        function reset(){
+            clearInterval(checking);
+            host = "";
+            document.getElementById("b3").textContent = "Host";
+            document.getElementById("textarea").value = "";
+            messages = [];
+            updatemessages();
+        }
 
-    function b3click(){
-        if(host === ""){
-            temphost = document.getElementById("textarea").value;
-            if(temphost === ""){
-                return 0;
+        function b3click(){
+            if(host === ""){
+                temphost = document.getElementById("textarea").value;
+                if(temphost === ""){
+                    return 0;
+                }
+                else{
+                    inithost();
+
+                }
             }
             else{
-                inithost();
-
+                addmessage();
             }
         }
-        else{
-            addmessage();
-        }
-    }
 
 
-     function checkmailbox(){
-         var request = {
-             "uuid": cid,
-             "host": host,
-             "time": lastchecked.toISOString()
-         };
-         fetch("https://colinauyeung-portfolio.herokuapp.com/api/getmessages", {
-             method: 'POST',
-             mode: 'cors',
-             headers:{
-                 'Content-Type': 'application/json'
-             },
-             body: JSON.stringify(request)
-         })
-             .then(response => response.json())
-             .then(data => {
-                 lastchecked = new Date(Date.now());
-                 var res = data;
-                 for(let mg of res.message){
-                     showmessage(mg.body, mg.emotion);
-                 }
-                 if(res.message.length <= 0){
-                     timeout++;
-                     if(timeout >= 1000){
-                         reset();
-                         timeout = 0;
-                     }
-                 }
-                 console.log(res);
-
+         function checkmailbox(){
+             var request = {
+                 "uuid": cid,
+                 "host": host,
+                 "time": lastchecked.toISOString()
+             };
+             fetch("https://colinauyeung-portfolio.herokuapp.com/api/getmessages", {
+                 method: 'POST',
+                 mode: 'cors',
+                 headers:{
+                     'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify(request)
              })
-     }
+                 .then(response => response.json())
+                 .then(data => {
+                     lastchecked = new Date(Date.now());
+                     var res = data;
+                     for(let mg of res.message){
+                         showmessage(mg.body, mg.emotion);
+                     }
+                     if(res.message.length <= 0){
+                         timeout++;
+                         if(timeout >= 1000){
+                             reset();
+                             timeout = 0;
+                         }
+                     }
+                     console.log(res);
+
+                 })
+         }
 
 
 
