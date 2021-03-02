@@ -157,7 +157,7 @@
     <div id='stars3'></div>
     <div class="flex-container">
 
-        <textarea name="text" class="fill-width" id="textarea" rows="2" cols="10" wrap="soft" maxlength="100" style="overflow:hidden; resize:none;">  </textarea>
+        <textarea name="text" class="fill-width" id="textarea" rows="2" cols="10" wrap="soft" maxlength="100" style="overflow:hidden; resize:none;"></textarea>
         <!--        <input type="textarea" class="fill-width" id="fname" name="fname" wrap="soft">-->
 
 
@@ -198,7 +198,7 @@
         var host = "";
         var lastchecked;
         var recording = false;
-        var promode = false;
+        var promode  = false;
 
         var checking;
         var timeout = 0;
@@ -2521,11 +2521,55 @@
             .text("Info");
 
         function infohandle(){
-            alert("hello world\n" +
-                "whee4");
+            alert("Welcome to  Intonation Incantation\n" +
+                "To begin, enter a host code and hit the host button!\n" +
+                "Everyone connected using the same host code will see each other’s messages.\n" +
+                "This host code is case sensitive!\n" +
+                "\n" +
+                "Use the textfield to start sending messages!\n" +
+                "You can use the Tone button to use your voice to add tonality to your messages!\n" +
+                "In normal mode, the system accepts three types of sounds: rising, fall and neutral sounds\n" +
+                "There are 10 different emotions you can add can to your messages using combinations of 1 and 2 sounds. \n" +
+                "\n" +
+                "To switch to Pro mode, use the pro mode button.\n" +
+                "In Pro mode, the system instead accepts combinations of two or three notes, divided by silence.\n" +
+                "The system uses the musical interval between notes and whether the  notes are higher  or lower than each other to generate the tone of the message.\n" +
+                "\n" +
+                "Pro mode legend:\n" +
+                "FP: Failing Perfect Interval\n" +
+                "FM: Failing Major Interval\n" +
+                "Fm: Failing Minor Interval\n" +
+                "FD: Failing Diminished/Augmented Interval\n" +
+                "N: Neutral \n" +
+                "RP: Rising Perfect Interval\n" +
+                "RM: Rising Major Interval\n" +
+                "Rm: Rising Minor Interval\n" +
+                "RD: Rising Diminished/Augmented Interval\n");
         }
 
-
+        // var testi = 0;
+        // var testj = 0;
+        // var testval;
+        // var testarry = ["FP", "FM", "Fm", "FD", "N", "RD", "Rm", "RM", "RP"];
+        // function testing(){
+        //     promode = true;
+        //     if(testj>=testarry.length){
+        //         testi++;
+        //         testj = 0;
+        //     }
+        //     if(testi>=testarry.length){
+        //         clearInterval(testval);
+        //     }
+        //
+        //     document.getElementById("textarea").value = "test";
+        //     tones[0] = testarry[testi];
+        //     tones[1] = testarry[testj];
+        //     testj++;
+        //     addmessage();
+        //
+        // }
+        //
+        // testval = setInterval(testing, 3000);
 
 
 
