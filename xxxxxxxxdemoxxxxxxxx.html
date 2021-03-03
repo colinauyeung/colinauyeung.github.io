@@ -2547,29 +2547,36 @@
                 "RD: Rising Diminished/Augmented Interval\n");
         }
 
-        // var testi = 0;
-        // var testj = 0;
-        // var testval;
-        // var testarry = ["FP", "FM", "Fm", "FD", "N", "RD", "Rm", "RM", "RP"];
-        // function testing(){
-        //     promode = true;
-        //     if(testj>=testarry.length){
-        //         testi++;
-        //         testj = 0;
-        //     }
-        //     if(testi>=testarry.length){
-        //         clearInterval(testval);
-        //     }
-        //
-        //     document.getElementById("textarea").value = "test";
-        //     tones[0] = testarry[testi];
-        //     tones[1] = testarry[testj];
-        //     testj++;
-        //     addmessage();
-        //
-        // }
-        //
-        // testval = setInterval(testing, 3000);
+        var testi = 0;
+        var testj = 0;
+        var testval;
+        var testarry = ["FP", "FM", "Fm", "FD", "N", "RD", "Rm", "RM", "RP"];
+        document.getElementById("textarea").value = "500";
+        inithost();
+
+
+        function testing(){
+            promode = true;
+            if(testi>=testarry.length){
+                clearInterval(testval);
+            }
+            if(testj>=testarry.length){
+                testi++;
+                testj = 0;
+            }
+
+
+            document.getElementById("textarea").value = "Hello";
+            tones[0] = testarry[testi];
+            tones[1] = testarry[testj];
+
+            testj++;
+
+            addmessage();
+
+        }
+
+        testval = setInterval(testing, 3000);
 
 
 
