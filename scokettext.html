@@ -14,6 +14,15 @@
 
     var msgDiv = $("#msgDiv");
 
+    var base_vales = {
+         setup: false,
+         alpha: 0,
+         beta: 0,
+         gamma: 0
+    };
+
+    var setup = false;
+
     //https://developer.apple.com/forums/thread/128376
     function requestDeviceOrientation () {
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -29,6 +38,19 @@
             console.log ("not iOS");
             window.addEventListener('deviceorientation', handleOrientation, true)
         }
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            DeviceMotionEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('devicemotion', handleMotion, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('devicemotion', handleMotion, true)
+        }
     }
 
     function handleOrientation(event) {
@@ -37,8 +59,24 @@
         var beta     = event.beta;
         var gamma    = event.gamma;
 
-        console.log(event);
-        msgDiv.html(alpha);
+        if(!base_vales["setup"]){
+            base_vales["alpha"] = alpha;
+            base_vales["beta"] = beta;
+            base_vales["gamma"] = gamma;
+            base_vales["setup"] = true;
+        }
+
+        diff_alpha = alpha - base_vales["alpha"];
+        diff_beta = beta - base_vales["beta"];
+        diff_gamma = gamma - base_vales["gamma"];
+
+        console.log(diff_alpha);
+        msgDiv.html(diff_alpha);
+
+    }
+
+    function handleMotion(event){
+        msgDiv.html(event.acceleration.x);
     }
 
 
