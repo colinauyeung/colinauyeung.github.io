@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V3</div>
+<div>V4</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 
@@ -78,7 +78,7 @@
     }
 
     function handleMotion(event){
-        if(abs(event.acceleration.x) > max)
+        if(abs(event.acceleration.x) > abs(max))
         msgDiv.html(max);
     }
 
