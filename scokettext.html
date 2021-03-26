@@ -6,13 +6,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V4</div>
+<div>V5</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
+<div id="msgDiv2"></div>
 
 <script>
 
     var msgDiv = $("#msgDiv");
+    var msgDiv2 = $("#msgDiv2");
 
     var base_vales = {
          setup: false,
@@ -80,6 +82,7 @@
     function handleMotion(event){
         if(abs(event.acceleration.x) > abs(max))
         msgDiv.html(max);
+        msgDiv2.html(event.acceleration.x);
     }
 
 
