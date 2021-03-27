@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V12</div>
+<div>V13</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -94,6 +94,7 @@
             diff_a = Math.abs(last_values["alpha"] - base_vales["alpha"]);
             diff_b = Math.abs(last_values["beta"] - base_vales["beta"]);
             diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"]);
+
             if(peak_acc >= 60){
                 if(diff_a >= diff_b && diff_a >= diff_c){
                     msgDiv.html("Fast Alpha");
@@ -122,7 +123,7 @@
                     }
                 }
                 else{
-                    msgDiv.html("You haven't gone")
+                    // msgDiv.html("You haven't gone")
                 }
             }
             peak_acc = 0;
@@ -138,6 +139,68 @@
         //     max = event.acceleration.x;
         // }
         msgDiv2.html(event.acceleration.x);
+    }
+
+
+
+    document.body.addEventListener('click', init);
+    var analyzer;
+    var sampleRate;
+
+    function init(){
+        document.body.removeEventListener('click', init);
+        var AC = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AC();
+        var microphone;
+
+
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+
+
+
+        analyzer = audioContext.createAnalyser();
+        const gainNode = audioContext.createGain();
+        if(navigator.mediaDevices.getUserMedia()){
+            console.log("getUserMedia Supported");
+            var constraints = {audio: true};
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(
+                    function(stream){
+                        microphone = audioContext.createMediaStreamSource(stream);
+                        microphone.connect(gainNode);
+                        gainNode.gain.value = 1;
+                        gainNode.connect(analyzer);
+                        sampleRate = audioContext.sampleRate;
+                        // analyzer.connect(audioContext.destination);
+
+                        // beginRecording(audioContext.sampleRate);
+                    })
+                .catch(function(err){
+                    console.log("Error! "+err)
+                })
+        }
+        else{
+            console.log("getUserMedia is not supported");
+        }
+
+
     }
 
 
