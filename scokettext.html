@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V10</div>
+<div>V11</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -92,6 +92,10 @@
         if(acc < 5){
             if(peak_acc >= 60){
                 msgDiv.html("You were going really fast");
+
+                diff_a = Math.abs(last_values["alpha"] - base_vales["alpha"]);
+                diff_b = Math.abs(last_values["beta"] - base_vales["beta"]);
+                diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"]);
             }
             else{
                 if(peak_acc >= 20){
@@ -104,7 +108,10 @@
             peak_acc = 0;
         }
         else{
-            peak_acc = acc;
+            if(acc > peak_acc){
+                peak_acc = acc;
+            }
+
         }
 
         // if(Math.abs(event.acceleration.x) > Math.abs(max)){
