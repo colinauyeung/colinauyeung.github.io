@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V20</div>
+<div>V21</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -195,7 +195,7 @@
                         sampleRate = audioContext.sampleRate;
                         // analyzer.connect(audioContext.destination);
 
-                        beginRecording(audioContext.sampleRate);
+                        beginRecording(analyzer);
                     })
                 .catch(function(err){
                     console.log("Error! "+err)
@@ -218,7 +218,7 @@
             console.log(freqBinDataArray);
             console.log("RMS: "+ getRMS(freqBinDataArray));
             console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
-        }
+        };
         setInterval(checkAudio, 64);
     }
 
