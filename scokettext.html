@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V11</div>
+<div>V12</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -90,16 +90,36 @@
         var acc = Math.max(Math.abs(event.acceleration.x), Math.abs(event.acceleration.y), Math.abs(event.acceleration.z));
 
         if(acc < 5){
+            console.log(peak_acc);
+            diff_a = Math.abs(last_values["alpha"] - base_vales["alpha"]);
+            diff_b = Math.abs(last_values["beta"] - base_vales["beta"]);
+            diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"]);
             if(peak_acc >= 60){
-                msgDiv.html("You were going really fast");
-
-                diff_a = Math.abs(last_values["alpha"] - base_vales["alpha"]);
-                diff_b = Math.abs(last_values["beta"] - base_vales["beta"]);
-                diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"]);
+                if(diff_a >= diff_b && diff_a >= diff_c){
+                    msgDiv.html("Fast Alpha");
+                }
+                else{
+                    if(diff_b >= diff_c){
+                        msgDiv.html("Fast Beta")
+                    }
+                    else{
+                        msgDiv.html("Fast Gamma")
+                    }
+                }
             }
             else{
                 if(peak_acc >= 20){
-                    msgDiv.html("You were going fast")
+                    if(diff_a >= diff_b && diff_a >= diff_c){
+                        msgDiv.html("Alpha");
+                    }
+                    else{
+                        if(diff_b >= diff_c){
+                            msgDiv.html("Beta")
+                        }
+                        else{
+                            msgDiv.html("Gamma")
+                        }
+                    }
                 }
                 else{
                     msgDiv.html("You haven't gone")
