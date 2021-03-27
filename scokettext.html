@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V25</div>
+<div>V26</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -220,7 +220,7 @@
 
         var checkAudio = function (){
             analyzer.getByteFrequencyData(freqBinDataArray);
-            console.log(freqBinDataArray);
+            // console.log(freqBinDataArray);
             rms = getRMS(freqBinDataArray);
             if(rms <  50){
                 if(peak_sound > rms){
