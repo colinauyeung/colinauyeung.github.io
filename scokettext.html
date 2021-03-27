@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V13</div>
+<div>V14</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -91,11 +91,12 @@
 
         if(acc < 5){
             console.log(peak_acc);
+            console.log({"a": diff_a, "b":diff_b, "c":diff_c});
             diff_a = Math.abs(last_values["alpha"] - base_vales["alpha"]);
             diff_b = Math.abs(last_values["beta"] - base_vales["beta"]);
             diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"]);
 
-            if(peak_acc >= 60){
+            if(peak_acc >= 30){
                 if(diff_a >= diff_b && diff_a >= diff_c){
                     msgDiv.html("Fast Alpha");
                 }
@@ -109,7 +110,7 @@
                 }
             }
             else{
-                if(peak_acc >= 20){
+                if(peak_acc >= 15){
                     if(diff_a >= diff_b && diff_a >= diff_c){
                         msgDiv.html("Alpha");
                     }
