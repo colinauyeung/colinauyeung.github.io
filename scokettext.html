@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V9/div>
+<div>V10</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -23,7 +23,15 @@
          gamma: 0
     };
 
+    var last_values = {
+        alpha: 0,
+        beta: 0,
+        gamma: 0
+    };
+
     var max = 0;
+
+    var peak_acc = 0;
 
     var setup = false;
 
@@ -70,20 +78,38 @@
             base_vales["setup"] = true;
         }
 
-        diff_alpha = alpha - base_vales["alpha"];
-        diff_beta = beta - base_vales["beta"];
-        diff_gamma = gamma - base_vales["gamma"];
+        last_values["alpha"] = alpha;
+        last_values["beta"] = beta;
+        last_values["gamma"] = gamma;
 
-        console.log(diff_alpha);
         // msgDiv.html(diff_alpha);
 
     }
 
     function handleMotion(event){
-        if(Math.abs(event.acceleration.x) > Math.abs(max)){
-            max = event.acceleration.x;
+        var acc = Math.max(Math.abs(event.acceleration.x), Math.abs(event.acceleration.y), Math.abs(event.acceleration.z));
+
+        if(acc < 5){
+            if(peak_acc >= 60){
+                msgDiv.html("You were going really fast");
+            }
+            else{
+                if(peak_acc >= 20){
+                    msgDiv.html("You were going fast")
+                }
+                else{
+                    msgDiv.html("You haven't gone")
+                }
+            }
+            peak_acc = 0;
         }
-        msgDiv.html(max);
+        else{
+            peak_acc = acc;
+        }
+
+        // if(Math.abs(event.acceleration.x) > Math.abs(max)){
+        //     max = event.acceleration.x;
+        // }
         msgDiv2.html(event.acceleration.x);
     }
 
