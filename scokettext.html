@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div>V24</div>
+<div>V25</div>
 <button type="button" onclick="requestDeviceOrientation()">Access Orientation</button>
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -109,12 +109,12 @@
                     msgDiv.html("Fast Alpha");
                 }
                 else{
-                    if(diff_b >= diff_c){
+                    // if(diff_b >= diff_c){
                         msgDiv.html("Fast Beta")
-                    }
-                    else{
-                        msgDiv.html("Fast Gamma")
-                    }
+                    // }
+                    // else{
+                    //     msgDiv.html("Fast Gamma")
+                    // }
                 }
             }
             else{
@@ -124,12 +124,12 @@
                         msgDiv.html("Alpha");
                     }
                     else{
-                        if(diff_b >= diff_c){
+                        // if(diff_b >= diff_c){
                             msgDiv.html("Beta")
-                        }
-                        else{
-                            msgDiv.html("Gamma")
-                        }
+                        // }
+                        // else{
+                        //     msgDiv.html("Gamma")
+                        // }
                     }
                 }
                 else{
