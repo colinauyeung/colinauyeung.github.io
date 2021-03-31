@@ -11,6 +11,87 @@
 <button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
 <button type="button" id="btn-client1">Connect Phone</button>
 <button type="button" id="btn-client2">Connect Desktop</button>
+<div id="Config">
+
+    <label>Fast Alpha</label>
+    <select id="ddFA" name="ddFA">
+        <optgroup label="Sounds">
+            <option value="cat" selected>Cat</option>
+            <option value="pop" >Pop</option>
+            <option value="camera">Camera</option>
+            <option value="water">Water</option>
+            <option value="bell">Bell</option>
+            <option value="phone">Phone</option>
+            <option value="whoosh">Whoosh</option>
+        </optgroup>
+        <optgroup label="Other">
+            <option value="vibrate">Vibrate</option>
+        </optgroup>
+    </select>
+    <label>Alpha</label>
+    <select id="ddA" name="ddA">
+        <optgroup label="Sounds">
+            <option value="cat">Cat</option>
+            <option value="pop" selected>Pop</option>
+            <option value="camera">Camera</option>
+            <option value="water">Water</option>
+            <option value="bell">Bell</option>
+            <option value="phone">Phone</option>
+            <option value="whoosh">Whoosh</option>
+        </optgroup>
+        <optgroup label="Other">
+            <option value="vibrate">Vibrate</option>
+        </optgroup>
+    </select>
+    <label>Fast Beta</label>
+    <select id="ddFB" name="ddFB">
+        <optgroup label="Sounds">
+            <option value="cat">Cat</option>
+            <option value="pop">Pop</option>
+            <option value="camera" selected>Camera</option>
+            <option value="water">Water</option>
+            <option value="bell">Bell</option>
+            <option value="phone">Phone</option>
+            <option value="whoosh">Whoosh</option>
+        </optgroup>
+        <optgroup label="Other">
+            <option value="vibrate">Vibrate</option>
+        </optgroup>
+    </select>
+    <label>Beta</label>
+    <select id="ddB" name="ddB">
+        <optgroup label="Sounds">
+            <option value="cat">Cat</option>
+            <option value="pop">Pop</option>
+            <option value="camera">Camera</option>
+            <option value="water" selected>Water</option>
+            <option value="bell">Bell</option>
+            <option value="phone">Phone</option>
+            <option value="whoosh">Whoosh</option>
+        </optgroup>
+        <optgroup label="Other">
+            <option value="vibrate">Vibrate</option>
+        </optgroup>
+    </select>
+    <label>Sound</label>
+    <select id="ddS" name="ddS">
+        <optgroup label="Sounds">
+            <option value="cat">Cat</option>
+            <option value="pop">Pop</option>
+            <option value="camera">Camera</option>
+            <option value="water">Water</option>
+            <option value="bell">Bell</option>
+            <option value="phone">Phone</option>
+            <option value="whoosh">Whoosh</option>
+        </optgroup>
+        <optgroup label="Other">
+            <option value="vibrate" selected>Vibrate</option>
+        </optgroup>
+    </select>
+    <button type="button" id="mappingset">Set Map</button>
+
+</div>
+
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
 
@@ -32,6 +113,7 @@
 
     var btn1 = $("#btn-client1");
     var btn2 = $("#btn-client2");
+    var mapset = $("#mappingset");
 
     var msgDiv = $("#msgDiv");
     var msgDiv2 = $("#msgDiv2");
@@ -67,14 +149,64 @@
         loop: false
     });
 
+    var pop = new Howl({
+        src: ["sounds/WeLabo/pop.mp3"],
+        loop: false
+    });
+
+    var camera = new Howl({
+        src: ["sounds/WeLabo/camera.mp3"],
+        loop: false
+    });
+
+    var water = new Howl({
+        src: ["sounds/WeLabo/water.mp3"],
+        loop: false
+    });
+
+    var bell = new Howl({
+        src: ["sounds/WeLabo/bell.mp3"],
+        loop: false
+    });
+    var phone = new Howl({
+        src: ["sounds/WeLabo/phone.mp3"],
+        loop: false
+    });
+    var whoosh = new Howl({
+        src: ["sounds/WeLabo/whoosh.mp3"],
+        loop: false
+    });
+    var vibrate = new Howl({
+        src: ["sounds/WeLabo/vibrate.mp3"],
+        loop: false
+    });
+
+    var mapping = {
+        "Fast Alpha": "cat",
+        "Alpha": "pop",
+        "Fast Beta": "camera",
+        "Beta": "water",
+        "Sound": "vibrate"
+    };
+
+
 
     sounds["cat"] = cat;
+    sounds["pop"] = pop;
+    sounds["camera"] = camera;
+    sounds["water"] = water;
+    sounds["bell"] = bell;
+    sounds["phone"] = phone;
+    sounds["whoosh"] = whoosh;
+    sounds["vibrate"] = vibrate;
+
 
     btn1.on("click", () => {
         btn2.prop("disabled", true);
         destination = "wss://colinauyeung-portfolio.herokuapp.com/client1";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
+        serverConnection.onclose = handleClose;
         client = 1;
     });
 
@@ -83,8 +215,26 @@
         destination = "wss://colinauyeung-portfolio.herokuapp.com/client2";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
+        serverConnection.onclose = handleClose;
+        // $("#Config").remove();
         client = 2;
     });
+
+    mapset.on("click", () => {
+        mapping["Fast Alpha"] = $("#ddFA :selected").val();
+        mapping["Alpha"] = $("#ddA :selected").val();
+        mapping["Fast Beta"] = $("#ddFB :selected").val();
+        mapping["Beta"] = $("#ddB :selected").val();
+        mapping["Sound"] = $("#ddS :selected").val();
+    })
+
+    function handleClose(){
+        serverConnection = undefined;
+        btn2.prop("disabled", false);
+        btn1.prop("disabled", false);
+        msgDiv.html("Peer Disconnected: Connection Closed");
+
+    }
 
     function handleMessage(mEvent) {
         var msg = JSON.parse(mEvent.data);
@@ -96,11 +246,28 @@
             case MessageType.CLIENT1:
                 if(msg.event === Eventtype.SOUND){
                     msgDiv.html("Sound");
+                    sounds[mapping["Sound"]].play();
 
                 }
                 else{
                     msgDiv.html("Motion");
+                    sounds[mapping[msg.value]].play();
+                    // switch(msg.value) {
+                    //     case "Alpha":
+                    //         sounds["camera"].play();
+                    //         break;
+                    //     case "Fast Alpha":
+                    //         sounds["pop"].play();
+                    //         break;
+                    //     case "Beta":
+                    //         sounds["water"].play();
+                    //         break;
+                    //     case "Fast Beta":
+                    //         sounds["bell"].play();
+                    //         break;
+                    // }
                 };
+
                 msgDiv2.html(msg.value);
                 break;
             case MessageType.CLIENT2:
@@ -197,7 +364,6 @@
                     if(serverConnection != undefined){
                         serverConnection.send(JSON.stringify(data));
                     }
-                    sounds["cat"].play();
                 }
                 else{
                     // if(diff_b >= diff_c){
