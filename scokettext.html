@@ -70,14 +70,14 @@
 
     btn1.on("click", () => {
         btn2.prop("disabled", true);
-        destination = "ws://localhost:5000/client1";
+        destination = "ws://colinauyeung-portfolio.herokuapp.com/client1";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
     });
 
     btn2.on("click", () => {
         btn1.prop("disabled", true);
-        destination = "ws://localhost:5000/client2";
+        destination = "ws://colinauyeung-portfolio.herokuapp.com/client2";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
     });
