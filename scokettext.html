@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
 </head>
 <body>
-<div>Socket 3</div>
+<div>Socket 4</div>
 <button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
 <button type="button" id="btn-client1">Connect Phone</button>
 <button type="button" id="btn-client2">Connect Desktop</button>
@@ -194,11 +194,17 @@
                 console.log({"a": diff_a, "b":diff_b, "c":diff_c});
                 if(diff_a >= diff_b && diff_a >= diff_c){
                     data.value = "Fast Alpha";
+                    if(serverConnection != undefined){
+                        serverConnection.send(JSON.stringify(data));
+                    }
                     sounds["cat"].play();
                 }
                 else{
                     // if(diff_b >= diff_c){
                         data.value = "Fast Beta"
+                        if(serverConnection != undefined){
+                            serverConnection.send(JSON.stringify(data));
+                        }
                     // }
                     // else{
                     //     msgDiv.html("Fast Gamma")
@@ -210,10 +216,16 @@
                     console.log({"a": diff_a, "b":diff_b, "c":diff_c});
                     if(diff_a >= diff_b && diff_a >= diff_c){
                         data.value = "Alpha";
+                        if(serverConnection != undefined){
+                            serverConnection.send(JSON.stringify(data));
+                        }
                     }
                     else{
                         // if(diff_b >= diff_c){
                             data.value = "Beta";
+                            if(serverConnection != undefined){
+                                serverConnection.send(JSON.stringify(data));
+                            }
                         // }
                         // else{
                         //     msgDiv.html("Gamma")
@@ -225,9 +237,7 @@
                 }
             }
             peak_acc = 0;
-            if(serverConnection != undefined){
-                serverConnection.send(JSON.stringify(data));
-            }
+
 
         }
         else{
