@@ -27,6 +27,8 @@
         MOTION: 1
     };
 
+    var client = 0;
+
 
     var btn1 = $("#btn-client1");
     var btn2 = $("#btn-client2");
@@ -73,6 +75,7 @@
         destination = "wss://colinauyeung-portfolio.herokuapp.com/client1";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
+        client = 1;
     });
 
     btn2.on("click", () => {
@@ -80,6 +83,7 @@
         destination = "wss://colinauyeung-portfolio.herokuapp.com/client2";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
+        client = 2;
     });
 
     function handleMessage(mEvent) {
@@ -90,7 +94,7 @@
                 msgDiv.html(msg.message);
                 break;
             case MessageType.CLIENT1:
-                if(msg.type === Eventtype.SOUND){
+                if(msg.event === Eventtype.SOUND){
                     msgDiv.html("Sound");
 
                 }
@@ -172,8 +176,14 @@
             diff_b = Math.abs(last_values["beta"] - base_vales["beta"])/360;
             diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"])/180;
 
+            var c = MessageType.CLIENT1;
+            if(client === 2){
+                c = MessageType.CLIENT2;
+            }
+
             data = {
-                type: Eventtype.MOTION,
+                type: c,
+                event: Eventtype.MOTION,
                 value: "None"
             };
             if(diff_c > 0.70){
@@ -308,9 +318,15 @@
             rms = getRMS(freqBinDataArray);
             if(rms <  50){
                 if(peak_sound > rms){
+
+                    var c = MessageType.CLIENT1;
+                    if(client === 2){
+                        c = MessageType.CLIENT2;
+                    }
                     data = {
-                        type: Eventtype.SOUND,
-                        value: rms
+                        type: c,
+                        event: Eventtype.SOUND,
+                        value: peak_sound
                     }
                     if(serverConnection != undefined){
                         serverConnection.send(JSON.stringify(data));
