@@ -394,7 +394,7 @@
             navigator.mediaDevices.getUserMedia(constraints)
                 .then(
                     function(stream){
-                        recorder = new MediaRecorder(stream);
+                        recorder = new MediaRecorder(stream, {"mimeType": 'audio/webm;codecs=opus'});
                         audioChunks = [];
                         recorder.addEventListener("dataavailable", event => {
                             audioChunks.push(event.data);
