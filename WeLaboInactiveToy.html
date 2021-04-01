@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
 </head>
 <body>
-<div>Toy 3</div>
+<div>Toy 4</div>
 <button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
 <button type="button" id="resetbtn">Reset Orientation</button>
 <button type="button" id="btn-client1">Connect</button>
@@ -234,14 +234,15 @@
                     id: uuidv4()
                 };
                 if(ptime != undefined){
-                    serverConnection.send(JSON.stringify(data));
-                }
-                else{
                     if(t - ptime >= 60000){
                         serverConnection.send(JSON.stringify(data));
                         msgDiv.html("Send Signla");
                         ptime = t;
                     }
+                }
+                else{
+                    serverConnection.send(JSON.stringify(data));
+                    ptime = t;
                 }
 
             }
