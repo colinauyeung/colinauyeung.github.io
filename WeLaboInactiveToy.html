@@ -154,20 +154,20 @@
         fetch(url).then(res => res.blob());
 
 
-    function Base64toplay(url){
-        var pblob = b64toBlob(url);
-        pblob.then((e) => {
-            const audioUrl = URL.createObjectURL(e);
-            const audioout = new Audio(audioUrl);
-            audioout.play();
-        })
-    }
-
-    $("#Play").click(() => {
-        if(audiourl != undefined){
-            Base64toplay(audiourl);
-        }
-    });
+    // function Base64toplay(url){
+    //     var pblob = b64toBlob(url);
+    //     pblob.then((e) => {
+    //         const audioUrl = URL.createObjectURL(e);
+    //         const audioout = new Audio(audioUrl);
+    //         audioout.play();
+    //     })
+    // }
+    //
+    // $("#Play").click(() => {
+    //     if(audiourl != undefined){
+    //         Base64toplay(audiourl);
+    //     }
+    // });
 
 
 
@@ -183,7 +183,7 @@
             case MessageType.GRANDPARENT:
                 if(msg.event === Eventtype.VOICE){
                     audiourl = msg.data;
-                    $("#Play").prop("disabled", false);
+                    // $("#Play").prop("disabled", false);
                 }
                 break;
             case MessageType.LORA:
@@ -258,6 +258,13 @@
             var t = new Date(Date.now());
 
             if(peak_acc >= 10){
+
+                var voice  = new Howl({
+                    src: [audiourl],
+                    loop: false
+                });
+
+                voice.play();
 
                 data = {
                     type: MessageType.TOY,
