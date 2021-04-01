@@ -12,6 +12,7 @@
 <button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
 <button type="button" id="resetbtn">Reset Orientation</button>
 <button type="button" id="btn-client1">Connect</button>
+<button type="button" disabled="true" id="Play">Play Voice</button>
 
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -162,6 +163,16 @@
         })
     }
 
+    $("#Play").click(() => {
+        if(audiourl != undefined){
+            Base64toplay(audiourl);
+        }
+    });
+
+
+
+
+
     function handleMessage(mEvent) {
         var msg = JSON.parse(mEvent.data);
 
@@ -172,6 +183,7 @@
             case MessageType.GRANDPARENT:
                 if(msg.event === Eventtype.VOICE){
                     audiourl = msg.data;
+                    $("#Play").prop("disabled", false);
                 }
                 break;
             case MessageType.LORA:
@@ -246,9 +258,7 @@
             var t = new Date(Date.now());
 
             if(peak_acc >= 10){
-                if(audiourl != undefined){
-                    Base64toplay(audiourl);
-                }
+
                 data = {
                     type: MessageType.TOY,
                     event: Eventtype.MOTION,

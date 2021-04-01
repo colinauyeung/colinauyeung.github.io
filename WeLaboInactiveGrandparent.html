@@ -439,13 +439,17 @@
     })
 
     $('#Send').click(() => {
-        var url = blobToBase64(audioBlob);
-        var data = {
-            type: MessageType.GRANDPARENT,
-            event: Eventtype.VOICE,
-            data: url
-        };
-        serverConnection.send(JSON.stringify(data))
+        var url;
+        blobToBase64(audioBlob, (e) => {
+            url = e;
+            var data = {
+                type: MessageType.GRANDPARENT,
+                event: Eventtype.VOICE,
+                data: url
+            };
+            serverConnection.send(JSON.stringify(data))
+        });
+
     });
 
 
