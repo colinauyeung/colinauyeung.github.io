@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
+</head>
+<body>
+<div>Toy 1</div>
+<button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
+<button type="button" id="resetbtn">Reset Orientation</button>
+<button type="button" id="btn-client1">Connect</button>
+
+<div id="msgDiv"></div>
+<div id="msgDiv2"></div>
+<div id="msgcontainer"></div>
+
+<script>
+
+    const MessageType = {
+        SERVER_INFO: 0,
+        CLIENT1: 1,
+        CLIENT2: 2,
+        TOY: 3,
+        GRANDPARENT: 4,
+        LORA: 5
+
+    };
+
+    const Eventtype = {
+        SOUND: 0,
+        MOTION: 1,
+        MESSAGE: 2
+    };
+
+    var client = 0;
+
+
+    var btn1 = $("#btn-client1");
+    var rsbtn = $("#resetbtn");
+
+    var msgDiv = $("#msgDiv");
+    var msgDiv2 = $("#msgDiv2");
+    var serverConnection = undefined;
+
+    var sounds = {};
+
+    var base_vales = {
+         setup: false,
+         alpha: 0,
+         beta: 0,
+         gamma: 0
+    };
+
+    var last_values = {
+        alpha: 0,
+        beta: 0,
+        gamma: 0
+    };
+
+    var data;
+
+    var max = 0;
+
+    var peak_acc = 0;
+
+    var setup = false;
+
+    var cat = new Howl({
+        src: ["sounds/WeLabo/cat.mp3"],
+        loop: false
+    });
+
+    var pop = new Howl({
+        src: ["sounds/WeLabo/pop.mp3"],
+        loop: false
+    });
+
+    var camera = new Howl({
+        src: ["sounds/WeLabo/camera.mp3"],
+        loop: false
+    });
+
+    var water = new Howl({
+        src: ["sounds/WeLabo/water.mp3"],
+        loop: false
+    });
+
+    var bell = new Howl({
+        src: ["sounds/WeLabo/bell.mp3"],
+        loop: false
+    });
+    var phone = new Howl({
+        src: ["sounds/WeLabo/phone.mp3"],
+        loop: false
+    });
+    var whoosh = new Howl({
+        src: ["sounds/WeLabo/whoosh.mp3"],
+        loop: false
+    });
+    var vibrate = new Howl({
+        src: ["sounds/WeLabo/vibrate.mp3"],
+        loop: false
+    });
+
+    var mapping = {
+        "Fast Alpha": "cat",
+        "Alpha": "pop",
+        "Fast Beta": "camera",
+        "Beta": "water",
+        "Sound": "vibrate"
+    };
+
+
+
+    sounds["cat"] = cat;
+    sounds["pop"] = pop;
+    sounds["camera"] = camera;
+    sounds["water"] = water;
+    sounds["bell"] = bell;
+    sounds["phone"] = phone;
+    sounds["whoosh"] = whoosh;
+    sounds["vibrate"] = vibrate;
+
+
+    btn1.on("click", () => {
+        btn1.prop("disabled", true);
+        destination = "wss://colinauyeung-portfolio.herokuapp.com/toy";
+        serverConnection = new WebSocket(destination);
+        serverConnection.onmessage = handleMessage;
+        serverConnection.onclose = handleClose;
+        client = 1;
+    });
+
+
+    rsbtn.on("click", ()=> {
+       base_vales.setup = false;
+    });
+
+    function handleClose(){
+        serverConnection = undefined;
+        btn1.prop("disabled", false);
+        msgDiv.html("Peer Disconnected: Connection Closed");
+
+    }
+
+    function handleMessage(mEvent) {
+        var msg = JSON.parse(mEvent.data);
+
+        switch (msg.type){
+            case MessageType.SERVER_INFO:
+                msgDiv.html(msg.message);
+                break;
+            case MessageType.GRANDPARENT:
+                break;
+            case MessageType.LORA:
+                break;
+            case MessageType.TOY:
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
+    //https://developer.apple.com/forums/thread/128376
+    function requestDeviceOrientation () {
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('deviceorientation', handleOrientation, true)
+        }
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            DeviceMotionEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('devicemotion', handleMotion, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('devicemotion', handleMotion, true)
+        }
+    }
+
+    function handleOrientation(event) {
+        var absolute = event.absolute;
+        var alpha    = event.alpha;
+        var beta     = event.beta;
+        var gamma    = event.gamma;
+
+        if(!base_vales["setup"]){
+            base_vales["alpha"] = alpha;
+            base_vales["beta"] = beta;
+            base_vales["gamma"] = gamma;
+            base_vales["setup"] = true;
+        }
+
+        last_values["alpha"] = alpha;
+        last_values["beta"] = beta;
+        last_values["gamma"] = gamma;
+
+        // msgDiv.html(diff_alpha);
+
+    }
+    var ptime = undefined;
+    function handleMotion(event){
+        var acc = Math.max(Math.abs(event.acceleration.x), Math.abs(event.acceleration.y), Math.abs(event.acceleration.z));
+
+        if(acc < 5){
+            console.log(peak_acc);
+
+            var now = Date.now();
+
+            if(peak_acc >= 10){
+                data = {
+                    type: MessageType.TOY,
+                    event: Eventtype.MOTION,
+                    time: now.toISOString(),
+                    id: uuidv4()
+                };
+                if(ptime != undefined){
+                    serverConnection.send(JSON.stringify(data));
+                }
+                else{
+                    if(now - ptime >= 60000){
+                        serverConnection.send(JSON.stringify(data));
+                        msgDiv.html("Send Signla");
+                        ptime = now;
+                    }
+                }
+
+            }
+            peak_acc = 0;
+
+
+        }
+        else{
+            if(acc > peak_acc){
+                peak_acc = acc;
+            }
+
+        }
+
+
+
+        // if(Math.abs(event.acceleration.x) > Math.abs(max)){
+        //     max = event.acceleration.x;
+        // }
+        // msgDiv2.html(event.acceleration.x);
+    }
+
+
+    //
+    // document.body.addEventListener('click', init);
+    // var analyzer;
+    // var sampleRate;
+    //
+    // function init(){
+    //     document.body.removeEventListener('click', init);
+    //     var AC = window.AudioContext || window.webkitAudioContext;
+    //     var audioContext = new AC();
+    //     var microphone;
+    //
+    //
+    //     if (navigator.mediaDevices.getUserMedia === undefined) {
+    //         navigator.mediaDevices.getUserMedia = function(constraints) {
+    //
+    //             // First get ahold of the legacy getUserMedia, if present
+    //             var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+    //
+    //             // Some browsers just don't implement it - return a rejected promise with an error
+    //             // to keep a consistent interface
+    //             if (!getUserMedia) {
+    //                 return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+    //             }
+    //
+    //             // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+    //             return new Promise(function(resolve, reject) {
+    //                 getUserMedia.call(navigator, constraints, resolve, reject);
+    //             });
+    //         }
+    //     }
+    //
+    //
+    //
+    //     analyzer = audioContext.createAnalyser();
+    //     const gainNode = audioContext.createGain();
+    //     if(navigator.mediaDevices.getUserMedia()){
+    //         console.log("getUserMedia Supported");
+    //         var constraints = {audio: true};
+    //         navigator.mediaDevices.getUserMedia(constraints)
+    //             .then(
+    //                 function(stream){
+    //                     microphone = audioContext.createMediaStreamSource(stream);
+    //                     microphone.connect(gainNode);
+    //                     gainNode.gain.value = 1;
+    //                     gainNode.connect(analyzer);
+    //                     sampleRate = audioContext.sampleRate;
+    //                     // analyzer.connect(audioContext.destination);
+    //
+    //                     beginRecording(analyzer);
+    //                 })
+    //             .catch(function(err){
+    //                 console.log("Error! "+err)
+    //             })
+    //     }
+    //     else{
+    //         console.log("getUserMedia is not supported");
+    //     }
+    //
+    //
+    // }
+    //
+    // function beginRecording(analyzer){
+    //     analyzer.fftsize = 512 //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+    //     var bufferlength = analyzer.fftsize;
+    //     var freqBinDataArray = new Uint8Array(bufferlength);
+    //
+    //     var checkAudio = function (){
+    //         analyzer.getByteFrequencyData(freqBinDataArray);
+    //         // console.log(freqBinDataArray);
+    //         rms = getRMS(freqBinDataArray);
+    //         if(rms <  50){
+    //             if(peak_sound > rms){
+    //
+    //                 var c = MessageType.CLIENT1;
+    //                 if(client === 2){
+    //                     c = MessageType.CLIENT2;
+    //                 }
+    //                 data = {
+    //                     type: c,
+    //                     event: Eventtype.SOUND,
+    //                     value: peak_sound
+    //                 }
+    //                 if(serverConnection != undefined){
+    //                     serverConnection.send(JSON.stringify(data));
+    //                 }
+    //             }
+    //             peak_sound = 0;
+    //         }
+    //         else{
+    //             if(rms > peak_sound){
+    //                 peak_sound = rms;
+    //             }
+    //         }
+    //         // console.log("RMS: "+ getRMS(freqBinDataArray));
+    //         // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+    //     };
+    //     setInterval(checkAudio, 64);
+    // }
+    //
+    // function getRMS(spectrum){
+    //     var rms = 0;
+    //     for (var i = 0; i < spectrum.length; i++){
+    //         rms += spectrum[i] * spectrum[i];
+    //     }
+    //     rms /= spectrum.length;
+    //     rms = Math.sqrt(rms);
+    //     return rms
+    // }
+    //
+    // function  getIndexofMax(array) {
+    //     return array.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0
+    //     )
+    // }
+
+
+
+
+</script>
+
+</body>
+</html>
