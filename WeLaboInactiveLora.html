@@ -164,7 +164,7 @@
                 if(msg.event === Eventtype.MESSAGE){
                     ids.forEach((d) => {
                         if(d.id === msg.id){
-                            $("<p>" + msg.body + "</p>").appendTo("#" + activeid);
+                            $("<p>" + msg.body + "</p>").appendTo("#" + d.id);
                             // $("#" + activeid);
                         }
                     });
@@ -174,7 +174,7 @@
                 if(msg.event === Eventtype.MESSAGE){
                     ids.forEach((d) => {
                         if(d.id === msg.id){
-                            $("<p>" + msg.body + "</p>").appendTo("#" + activeid);
+                            $("<p>" + msg.body + "</p>").appendTo("#" + d.id);
                             // $("#" + activeid);
                         }
                     });
@@ -182,7 +182,8 @@
                 break;
             case MessageType.TOY:
                 if(msg.event === Eventtype.MOTION){
-                    addEvent(msg.id, msg.time, "");
+                    addEvent(msg.id, "",msg.time);
+                    sounds["vibrate"].play()
                 }
 
 
@@ -230,7 +231,7 @@
                     var text = $("textarea").val();
                     $("<p>" + text + "</p>").appendTo("#" + activeid);
                     data = {
-                        type: MessageType.GRANDPARENT,
+                        type: MessageType.LORA,
                         event: Eventtype.MESSAGE,
                         id: activeid,
                         body: text

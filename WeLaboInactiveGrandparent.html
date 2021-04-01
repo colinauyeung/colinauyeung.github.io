@@ -12,6 +12,10 @@
 <button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
 <button type="button" id="resetbtn">Reset Orientation</button>
 <button type="button" id="btn-client1">Connect</button>
+<button type="button" id="Record">Record</button>
+<button type="button" disabled="true" id="Listen">Listen</button>
+<button type="button" disabled="true" id="Send">Send</button>
+
 <div>
     <textarea name="text" class="fill-width" id="textarea" rows="2" cols="10" wrap="soft" maxlength="100" style="overflow:hidden; resize:none;"></textarea>
 
@@ -38,7 +42,8 @@
     const Eventtype = {
         SOUND: 0,
         MOTION: 1,
-        MESSAGE: 2
+        MESSAGE: 2,
+        VOICE: 3
     };
 
     var client = 0;
@@ -164,7 +169,7 @@
                 if(msg.event === Eventtype.MESSAGE){
                     ids.forEach((d) => {
                         if(d.id === msg.id){
-                            $("<p>" + msg.body + "</p>").appendTo("#" + activeid);
+                            $("<p>" + msg.body + "</p>").appendTo("#" + d.id);
                             // $("#" + activeid);
                         }
                     });
@@ -174,7 +179,7 @@
                 if(msg.event === Eventtype.MESSAGE){
                     ids.forEach((d) => {
                         if(d.id === msg.id){
-                            $("<p>" + msg.body + "</p>").appendTo("#" + activeid);
+                            $("<p>" + msg.body + "</p>").appendTo("#" + d.id);
                             // $("#" + activeid);
                         }
                     });
@@ -182,7 +187,8 @@
                 break;
             case MessageType.TOY:
                 if(msg.event === Eventtype.MOTION){
-                    addEvent(msg.id, msg.time, "");
+                    addEvent(msg.id, "",msg.time);
+                    sounds["vibrate"].play()
                 }
 
 
@@ -344,118 +350,155 @@
 
 
     //
-    // document.body.addEventListener('click', init);
-    // var analyzer;
-    // var sampleRate;
+    document.body.addEventListener('click', init);
+    var analyzer;
+    var sampleRate;
+
+    var recorder = undefined;
+    var audioChunks;
+    var audioBlob;
+
+    function init(){
+        document.body.removeEventListener('click', init);
+        var AC = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AC();
+        var microphone;
+
+
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+
+
+
+        analyzer = audioContext.createAnalyser();
+        const gainNode = audioContext.createGain();
+        if(navigator.mediaDevices.getUserMedia()){
+            console.log("getUserMedia Supported");
+            var constraints = {audio: true};
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(
+                    function(stream){
+                        recorder = new MediaRecorder(stream);
+                        audioChunks = [];
+                        recorder.addEventListener("dataavailable", event => {
+                            audioChunks.push(event.data);
+                        });
+
+                        recorder.addEventListener("stop", () => {
+                            audioBlob = new Blob(audioChunks);
+                            audioChunks = [];
+
+                        });
+                    })
+                .catch(function(err){
+                    console.log("Error! "+err)
+                })
+        }
+        else{
+            console.log("getUserMedia is not supported");
+        }
+
+
+    }
+
+    $("#Record").click(() => {
+        console.log("hello");
+        if(recorder != undefined){
+            $("#Listen").prop("disabled", true);
+            console.log("hello2");
+            recorder.start();
+            setTimeout(() => {
+                recorder.stop();
+                $("#Listen").prop("disabled", false);
+                $("#Send").prop("disabled", false);
+            } , 3000);
+        }
+
+    })
+
+    $("#Listen").click(() => {
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audioout = new Audio(audioUrl);
+        audioout.play();
+    })
+
+    $('#Send').click(() => {
+        var url = blobToBase64(audioBlob);
+        var data = {
+            type: MessageType.GRANDPARENT,
+            event: Eventtype.VOICE,
+            data: url
+        };
+        serverConnection.send(JSON.stringify(data))
+    });
+
+
+
+    var blobToBase64 = function(blob, callback) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var dataUrl = reader.result;
+            // var base64 = dataUrl.split(',')[1];
+            callback(dataUrl);
+        };
+        reader.readAsDataURL(blob);
+    };
+
+    //https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+    // function base64toBlob(base64Data, contentType) {
+    //     contentType = contentType || '';
+    //     var sliceSize = 1024;
+    //     var byteCharacters = atob(base64Data);
+    //     var bytesLength = byteCharacters.length;
+    //     var slicesCount = Math.ceil(bytesLength / sliceSize);
+    //     var byteArrays = new Array(slicesCount);
     //
-    // function init(){
-    //     document.body.removeEventListener('click', init);
-    //     var AC = window.AudioContext || window.webkitAudioContext;
-    //     var audioContext = new AC();
-    //     var microphone;
+    //     for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+    //         var begin = sliceIndex * sliceSize;
+    //         var end = Math.min(begin + sliceSize, bytesLength);
     //
-    //
-    //     if (navigator.mediaDevices.getUserMedia === undefined) {
-    //         navigator.mediaDevices.getUserMedia = function(constraints) {
-    //
-    //             // First get ahold of the legacy getUserMedia, if present
-    //             var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-    //
-    //             // Some browsers just don't implement it - return a rejected promise with an error
-    //             // to keep a consistent interface
-    //             if (!getUserMedia) {
-    //                 return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-    //             }
-    //
-    //             // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-    //             return new Promise(function(resolve, reject) {
-    //                 getUserMedia.call(navigator, constraints, resolve, reject);
-    //             });
+    //         var bytes = new Array(end - begin);
+    //         for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+    //             bytes[i] = byteCharacters[offset].charCodeAt(0);
     //         }
+    //         byteArrays[sliceIndex] = new Uint8Array(bytes);S
     //     }
-    //
-    //
-    //
-    //     analyzer = audioContext.createAnalyser();
-    //     const gainNode = audioContext.createGain();
-    //     if(navigator.mediaDevices.getUserMedia()){
-    //         console.log("getUserMedia Supported");
-    //         var constraints = {audio: true};
-    //         navigator.mediaDevices.getUserMedia(constraints)
-    //             .then(
-    //                 function(stream){
-    //                     microphone = audioContext.createMediaStreamSource(stream);
-    //                     microphone.connect(gainNode);
-    //                     gainNode.gain.value = 1;
-    //                     gainNode.connect(analyzer);
-    //                     sampleRate = audioContext.sampleRate;
-    //                     // analyzer.connect(audioContext.destination);
-    //
-    //                     beginRecording(analyzer);
-    //                 })
-    //             .catch(function(err){
-    //                 console.log("Error! "+err)
-    //             })
-    //     }
-    //     else{
-    //         console.log("getUserMedia is not supported");
-    //     }
-    //
-    //
+    //     return new Blob(byteArrays, { type: contentType });
     // }
-    //
-    // function beginRecording(analyzer){
-    //     analyzer.fftsize = 512 //needs to be a power of 2, between 32 and MAX UNSIGNED INT
-    //     var bufferlength = analyzer.fftsize;
-    //     var freqBinDataArray = new Uint8Array(bufferlength);
-    //
-    //     var checkAudio = function (){
-    //         analyzer.getByteFrequencyData(freqBinDataArray);
-    //         // console.log(freqBinDataArray);
-    //         rms = getRMS(freqBinDataArray);
-    //         if(rms <  50){
-    //             if(peak_sound > rms){
-    //
-    //                 var c = MessageType.CLIENT1;
-    //                 if(client === 2){
-    //                     c = MessageType.CLIENT2;
-    //                 }
-    //                 data = {
-    //                     type: c,
-    //                     event: Eventtype.SOUND,
-    //                     value: peak_sound
-    //                 }
-    //                 if(serverConnection != undefined){
-    //                     serverConnection.send(JSON.stringify(data));
-    //                 }
-    //             }
-    //             peak_sound = 0;
-    //         }
-    //         else{
-    //             if(rms > peak_sound){
-    //                 peak_sound = rms;
-    //             }
-    //         }
-    //         // console.log("RMS: "+ getRMS(freqBinDataArray));
-    //         // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
-    //     };
-    //     setInterval(checkAudio, 64);
-    // }
-    //
-    // function getRMS(spectrum){
-    //     var rms = 0;
-    //     for (var i = 0; i < spectrum.length; i++){
-    //         rms += spectrum[i] * spectrum[i];
-    //     }
-    //     rms /= spectrum.length;
-    //     rms = Math.sqrt(rms);
-    //     return rms
-    // }
-    //
-    // function  getIndexofMax(array) {
-    //     return array.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0
-    //     )
-    // }
+
+    const b64toBlob = (url) =>
+        fetch(url).then(res => res.blob());
+
+
+    function Base64toplay(url){
+        var pblob = b64toBlob(url);
+        pblob.then((e) => {
+            const audioUrl = URL.createObjectURL(e);
+            const audioout = new Audio(audioUrl);
+            audioout.play();
+        })
+    }
+
+
+
+
+
 
 
 

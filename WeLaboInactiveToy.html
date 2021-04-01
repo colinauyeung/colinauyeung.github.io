@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
 </head>
 <body>
-<div>Toy 4</div>
+<div>Toy 5</div>
 <button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
 <button type="button" id="resetbtn">Reset Orientation</button>
 <button type="button" id="btn-client1">Connect</button>
@@ -32,7 +32,8 @@
     const Eventtype = {
         SOUND: 0,
         MOTION: 1,
-        MESSAGE: 2
+        MESSAGE: 2,
+        VOICE: 3
     };
 
     var client = 0;
@@ -146,6 +147,21 @@
 
     }
 
+    var audiourl;
+
+    const b64toBlob = (url) =>
+        fetch(url).then(res => res.blob());
+
+
+    function Base64toplay(url){
+        var pblob = b64toBlob(url);
+        pblob.then((e) => {
+            const audioUrl = URL.createObjectURL(e);
+            const audioout = new Audio(audioUrl);
+            audioout.play();
+        })
+    }
+
     function handleMessage(mEvent) {
         var msg = JSON.parse(mEvent.data);
 
@@ -154,6 +170,9 @@
                 msgDiv.html(msg.message);
                 break;
             case MessageType.GRANDPARENT:
+                if(msg.event === Eventtype.VOICE){
+                    audiourl = msg.data;
+                }
                 break;
             case MessageType.LORA:
                 break;
@@ -227,6 +246,9 @@
             var t = new Date(Date.now());
 
             if(peak_acc >= 10){
+                if(audiourl != undefined){
+                    Base64toplay(audiourl);
+                }
                 data = {
                     type: MessageType.TOY,
                     event: Eventtype.MOTION,
@@ -234,7 +256,7 @@
                     id: uuidv4()
                 };
                 if(ptime != undefined){
-                    if(t - ptime >= 60000){
+                    if(t - ptime >= 0){
                         serverConnection.send(JSON.stringify(data));
                         msgDiv.html("Send Signla");
                         ptime = t;
