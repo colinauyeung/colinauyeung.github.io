@@ -224,13 +224,13 @@
         if(acc < 5){
             console.log(peak_acc);
 
-            var now = Date.now();
+            var t = new Date(Date.now());
 
             if(peak_acc >= 10){
                 data = {
                     type: MessageType.TOY,
                     event: Eventtype.MOTION,
-                    time: now.toISOString(),
+                    time: t.toISOString(),
                     id: uuidv4()
                 };
                 if(ptime != undefined){
@@ -240,7 +240,7 @@
                     if(now - ptime >= 60000){
                         serverConnection.send(JSON.stringify(data));
                         msgDiv.html("Send Signla");
-                        ptime = now;
+                        ptime = t;
                     }
                 }
 
