@@ -118,11 +118,11 @@
             #resetbtn{
                 width:50%;
             }
-            #ic22xw{
+            #soundbtn{
                 float:left;
                 width:50%;
             }
-            #ixsuhp{
+            #facebtn{
                 width:50%;
             }
             #i8ih{
@@ -264,7 +264,7 @@
                 </optgroup>
             </select>
             <div class="form-group">
-                <button type="button" class="button" id="mappingset">Set Map</button>
+                <button type="button" class="button" class="mappingset">Set Map</button>
             </div>
         </form>
     </div>
@@ -272,18 +272,55 @@
         <form id="i37r6-2" class="form">
             <div class="form-group">
             </div>
-            <label class="label">Label</label>
-            <select id="ik41z-2" class="select"><option value="">- Select option -</option><option value="1">Option 1</option></select>
-            <label class="label">Label</label>
-            <select class="select"><option value="">- Select option -</option><option value="1">Option 1</option></select>
-            <label class="label">Label</label>
-            <select class="select"><option value="">- Select option -</option><option value="1">Option 1</option></select>
-            <label class="label">Label</label>
-            <select class="select"><option value="">- Select option -</option><option value="1">Option 1</option></select>
-            <label class="label">Label</label>
-            <select class="select"><option value="">- Select option -</option><option value="1">Option 1</option></select>
+            <label>Fast Alpha</label>
+            <select id="FddFA" name="FddFA" class="select">
+
+                <option value="happy" selected>Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+
+            </select>
+            <label>Alpha</label>
+            <select id="FddA" name="FddA" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" selected>Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
+            <label>Fast Beta</label>
+            <select id="FddFB" name="FddFB" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" selected>Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
+            <label>Beta</label>
+            <select id="FddB" name="FddB" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" selected>Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
+            <label>Sound</label>
+            <select id="FddS" name="FddS" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" selected>Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
             <div class="form-group">
-                <button type="submit" class="button">Send</button>
+                <button type="button" class="button" class="mappingset">Set Map</button>
             </div>
         </form>
     </div>
@@ -296,8 +333,8 @@
     <div class="form-group">
     </div>
     <div id="ial36i" class="form-group">
-        <button type="submit" id="ic22xw" class="button">Send</button>
-        <button id="ixsuhp" class="button">Send</button>
+        <button type="button" id="soundbtn" class="button" onclick="SoundToggle()">Sound</button>
+        <button id="facebtn" class="button" onclick="FaceToggle()" disabled >Face</button>
     </div>
 </form>
 
@@ -413,6 +450,8 @@ for (var i = 0, len = items.length; i < len; i++) {
 
 <script>
 
+    var mode = 0;
+
     const MessageType = {
         SERVER_INFO: 0,
         CLIENT1: 1,
@@ -424,7 +463,8 @@ for (var i = 0, len = items.length; i < len; i++) {
 
     const Eventtype = {
         SOUND: 0,
-        MOTION: 1
+        MOTION: 1,
+        FACE: 2
     };
 
     var client = 0;
@@ -432,7 +472,10 @@ for (var i = 0, len = items.length; i < len; i++) {
 
     var btn1 = $("#btn-client1");
     var btn2 = $("#btn-client2");
-    var mapset = $("#mappingset");
+    var mapset = $(".mappingset");
+
+    var sbtn = $("#soundbtn");
+    var fbtn = $("#facebtn");
     var rsbtn = $("#resetbtn");
 
     var msgDiv = $("#msgDiv");
@@ -509,6 +552,37 @@ for (var i = 0, len = items.length; i < len; i++) {
         "Sound": "vibrate"
     };
 
+    var faces = {
+        "neutral": "sounds/WeLabo/faces/neutral.png",
+        "angry": "sounds/WeLabo/faces/angry.png",
+        "happy": "sounds/WeLabo/faces/happy.png",
+        "sad": "sounds/WeLabo/faces/sad.png",
+        "confused": "sounds/WeLabo/faces/confused.png",
+        "mischievous": "sounds/WeLabo/faces/mischievous.png",
+    };
+
+    var face_map = {
+        "Fast Alpha": "happy",
+        "Alpha": "neutral",
+        "Fast Beta": "confused",
+        "Beta": "mischievous",
+        "Sound": "sad"
+    };
+
+    function SoundToggle(){
+        mode = 0;
+        sbtn.prop("disabled", true);
+        fbtn.prop("disabled", false);
+
+
+    }
+
+    function FaceToggle(){
+        mode = 1;
+        sbtn.prop("disabled", false);
+        fbtn.prop("disabled", true);
+    }
+
 
 
     sounds["cat"] = cat;
@@ -547,6 +621,11 @@ for (var i = 0, len = items.length; i < len; i++) {
         mapping["Fast Beta"] = $("#ddFB :selected").val();
         mapping["Beta"] = $("#ddB :selected").val();
         mapping["Sound"] = $("#ddS :selected").val();
+        face_map["Fast Alpha"] = $("#FddFA :selected").val();
+        face_map["Alpha"] = $("#FddA :selected").val();
+        face_map["Fast Beta"] = $("#FddFB :selected").val();
+        face_map["Beta"] = $("#FddB :selected").val();
+        face_map["Sound"] = $("#FddS :selected").val();
     });
 
     rsbtn.on("click", ()=> {
@@ -557,7 +636,7 @@ for (var i = 0, len = items.length; i < len; i++) {
         serverConnection = undefined;
         btn2.prop("disabled", false);
         btn1.prop("disabled", false);
-        msgDiv.html("Peer Disconnected: Connection Closed");
+        alert("Peer Disconnected: Connection Closed");
 
     }
 
@@ -685,14 +764,22 @@ for (var i = 0, len = items.length; i < len; i++) {
             if(peak_acc >= 20){
                 console.log({"a": diff_a, "b":diff_b, "c":diff_c});
                 if(diff_a >= diff_b && diff_a >= diff_c){
-                    data.value = "Fast Alpha";
+                    data.value = mapping["Fast Alpha"];
+                    if(mode === 1){
+                        data.event = Eventtype.FACE;
+                        data.value = face_map["Fast Alpha"];
+                    }
                     if(serverConnection != undefined){
                         serverConnection.send(JSON.stringify(data));
                     }
                 }
                 else{
                     // if(diff_b >= diff_c){
-                        data.value = "Fast Beta"
+                        data.value = mapping["Fast Beta"];
+                        if(mode === 1){
+                            data.event = Eventtype.FACE;
+                            data.value = face_map["Fast Beta"];
+                        }
                         if(serverConnection != undefined){
                             serverConnection.send(JSON.stringify(data));
                         }
@@ -706,14 +793,22 @@ for (var i = 0, len = items.length; i < len; i++) {
                 if(peak_acc >= 10){
                     console.log({"a": diff_a, "b":diff_b, "c":diff_c});
                     if(diff_a >= diff_b && diff_a >= diff_c){
-                        data.value = "Alpha";
+                        data.value = mapping["Alpha"];
+                        if(mode === 1){
+                            data.event = Eventtype.FACE;
+                            data.value = face_map["Alpha"];
+                        }
                         if(serverConnection != undefined){
                             serverConnection.send(JSON.stringify(data));
                         }
                     }
                     else{
                         // if(diff_b >= diff_c){
-                            data.value = "Beta";
+                            data.value = mapping["Beta"];
+                            if(mode === 1){
+                                data.event = Eventtype.FACE;
+                                data.value = face_map["Beta"];
+                            }
                             if(serverConnection != undefined){
                                 serverConnection.send(JSON.stringify(data));
                             }
@@ -817,7 +912,7 @@ for (var i = 0, len = items.length; i < len; i++) {
             analyzer.getByteFrequencyData(freqBinDataArray);
             // console.log(freqBinDataArray);
             rms = getRMS(freqBinDataArray);
-            if(rms <  50){
+            if(rms <  90){
                 if(peak_sound > rms){
 
                     var c = MessageType.CLIENT1;
@@ -827,7 +922,11 @@ for (var i = 0, len = items.length; i < len; i++) {
                     data = {
                         type: c,
                         event: Eventtype.SOUND,
-                        value: peak_sound
+                        value: mapping["Sound"]
+                    }
+                    if(mode === 1){
+                        data.event = Eventtype.FACE;
+                        data.value = face_map["Sound"];
                     }
                     if(serverConnection != undefined){
                         serverConnection.send(JSON.stringify(data));

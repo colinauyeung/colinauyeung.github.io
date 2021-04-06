@@ -115,28 +115,12 @@
             #resetbtn{
                 width:50%;
             }
-            #ic22xw{
-                float:left;
-                width:50%;
-            }
-            #ixsuhp{
-                width:50%;
-            }
             #i8ih{
                 width:100%;
                 min-height:0;
             }
             #i8l5{
                 padding:0 0 0 0;
-            }
-            #btn-client1{
-                padding:7px 10px 7px 10px;
-            }
-            #tabbar{
-                padding:10px 10px 0px 10px;
-            }
-            #btn-client1{
-                margin:0 0 0 0;
             }
             #resetbtn{
                 margin:0 0 0 0;
@@ -155,6 +139,14 @@
                 text-align:center;
                 font-family: 'Dela Gothic One', cursive;
             }
+            #imagebox{
+                color:black;
+                width:100%;
+            }
+            #spacer{
+                min-height: 250px;
+                color: #6C8C8C;
+            }
         }
     </style>
 </head>
@@ -167,6 +159,8 @@
                 <br draggable="true" data-highlightable="1" id="iv7v"/>
             </div>
         </div>
+        <img id="imagebox" src="sounds/WeLabo/faces/neutral.png"/>
+        <div id="spacer">a</div>
         <div id="ibdo" class="cell">
             <form id="i8l5" class="form">
                 <div id="i8ett" class="form-group">
@@ -303,7 +297,8 @@ for (var i = 0, len = items.length; i < len; i++) {
 
     const Eventtype = {
         SOUND: 0,
-        MOTION: 1
+        MOTION: 1,
+        FACE: 2,
     };
 
     var client = 0;
@@ -399,6 +394,15 @@ for (var i = 0, len = items.length; i < len; i++) {
     sounds["whoosh"] = whoosh;
     sounds["vibrate"] = vibrate;
 
+    var faces = {
+        "neutral": "sounds/WeLabo/faces/neutral.png",
+        "angry": "sounds/WeLabo/faces/angry.png",
+        "happy": "sounds/WeLabo/faces/happy.png",
+        "sad": "sounds/WeLabo/faces/sad.png",
+        "confused": "sounds/WeLabo/faces/confused.png",
+        "mischievous": "sounds/WeLabo/faces/mischievous.png",
+    };
+
 
     btn1.on("click", () => {
         btn2.prop("disabled", true);
@@ -449,13 +453,17 @@ for (var i = 0, len = items.length; i < len; i++) {
                 break;
             case MessageType.CLIENT1:
                 if(msg.event === Eventtype.SOUND){
-                    msgDiv.html("Sound");
-                    sounds[mapping["Sound"]].play();
+                    sounds[msg.value].play();
 
                 }
                 else{
-                    msgDiv.html("Motion");
-                    sounds[mapping[msg.value]].play();
+                    if(msg.event === Eventtype.FACE){
+                        document.getElementById("imagebox").src = faces[msg.value];
+                    }
+                    else{
+                        sounds[msg.value].play();
+                    }
+
                     // switch(msg.value) {
                     //     case "Alpha":
                     //         sounds["camera"].play();
