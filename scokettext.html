@@ -264,7 +264,7 @@
                 </optgroup>
             </select>
             <div class="form-group">
-                <button type="button" class="button" class="mappingset">Set Map</button>
+                <button type="button" class="button" onclick="setMap()">Set Map</button>
             </div>
         </form>
     </div>
@@ -320,7 +320,7 @@
                 <option value="angry" >Angry</option>
             </select>
             <div class="form-group">
-                <button type="button" class="button" class="mappingset">Set Map</button>
+                <button type="button" class="button" onclick="setMap()">Set Map</button>
             </div>
         </form>
     </div>
@@ -472,7 +472,6 @@ for (var i = 0, len = items.length; i < len; i++) {
 
     var btn1 = $("#btn-client1");
     var btn2 = $("#btn-client2");
-    var mapset = $(".mappingset");
 
     var sbtn = $("#soundbtn");
     var fbtn = $("#facebtn");
@@ -615,7 +614,8 @@ for (var i = 0, len = items.length; i < len; i++) {
         client = 2;
     });
 
-    mapset.on("click", () => {
+    function setMap() {
+        console.log("click");
         mapping["Fast Alpha"] = $("#ddFA :selected").val();
         mapping["Alpha"] = $("#ddA :selected").val();
         mapping["Fast Beta"] = $("#ddFB :selected").val();
@@ -626,7 +626,7 @@ for (var i = 0, len = items.length; i < len; i++) {
         face_map["Fast Beta"] = $("#FddFB :selected").val();
         face_map["Beta"] = $("#FddB :selected").val();
         face_map["Sound"] = $("#FddS :selected").val();
-    });
+    };
 
     rsbtn.on("click", ()=> {
        base_vales.setup = false;
