@@ -590,11 +590,7 @@ for (var i = 0, len = items.length; i < len; i++) {
                 z = -100
             }
         }
-        let top = data[0].val;
-        let right = data[1].val;
-        let left = data[3].val;
 
-        let back = 15;
 
         let chunk = {
             id: uuidv4(),
@@ -610,7 +606,7 @@ for (var i = 0, len = items.length; i < len; i++) {
         let remove = [];
         playingsounds.forEach((d,i) => {
             m = d.pos[3];
-            m = m -2;
+            m = m -1;
             if(m < 0){
                 remove.push(i)
             }
@@ -628,7 +624,7 @@ for (var i = 0, len = items.length; i < len; i++) {
 
         let t = d3.transition()
             .ease(d3.easeLinear)
-            .duration(1000)
+            .duration(2500)
 
         let t2 = d3.transition()
             .ease(d3.easePolyInOut)
@@ -1195,7 +1191,7 @@ for (var i = 0, len = items.length; i < len; i++) {
         )
     }
 
-    setInterval(updatecircles, 1000);
+    setInterval(updatecircles, 2500);
 
 
 

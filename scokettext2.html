@@ -155,7 +155,7 @@
 <div data-tabs="1" id="i6wrh">
     <div id="ias2" class="row">
         <div id="i8ih" class="cell">
-            <div id="title">Usa-Labo - Controller 3
+            <div id="title">Usa-Labo - Controller 4
                 <br draggable="true" data-highlightable="1" id="iv7v"/>
             </div>
         </div>
@@ -416,13 +416,14 @@ for (var i = 0, len = items.length; i < len; i++) {
                 .then(permissionState => {
                     if (permissionState === 'granted') {
                         window.addEventListener('deviceorientation', handleOrientation, true);
+                        setInterval(sendorientation, 500);
                     }
                 })
                 .catch(console.error);
         } else {
             // handle regular non iOS 13+ devices
             console.log ("not iOS");
-            window.addEventListener('deviceorientation', handleOrientation, true)
+            window.addEventListener('deviceorientation', handleOrientation, true);
             setInterval(sendorientation, 500);
         }
         if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
