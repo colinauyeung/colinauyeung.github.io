@@ -155,7 +155,7 @@
 <div data-tabs="1" id="i6wrh">
     <div id="ias2" class="row">
         <div id="i8ih" class="cell">
-            <div id="title">Usa-Labo - Controller 1
+            <div id="title">Usa-Labo - Controller 2
                 <br draggable="true" data-highlightable="1" id="iv7v"/>
             </div>
         </div>
@@ -475,6 +475,8 @@ for (var i = 0, len = items.length; i < len; i++) {
         var diff_b = Math.abs(beta-last_beta);
         var diff_g = Math.abs(beta-last_gamma);
         if(diff_b > 5 || diff_g > 5){
+            last_beta = beta;
+            last_gamma = gamma;
             serverConnection.send(JSON.stringify(data));
         }
 
