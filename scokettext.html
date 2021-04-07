@@ -865,7 +865,7 @@ for (var i = 0, len = items.length; i < len; i++) {
         serverConnection = undefined;
         btn2.prop("disabled", false);
         btn1.prop("disabled", false);
-        alert("Peer Disconnected: Connection Closed");
+        // alert("Peer Disconnected: Connection Closed");
 
     }
 
@@ -874,7 +874,7 @@ for (var i = 0, len = items.length; i < len; i++) {
 
         switch (msg.type){
             case MessageType.SERVER_INFO:
-                alert(msg.message);
+                // alert(msg.message);
                 break;
             case MessageType.CLIENT1:
                 if(msg.event === Eventtype.SOUND){
