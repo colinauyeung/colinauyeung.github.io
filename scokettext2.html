@@ -202,82 +202,6 @@ for (var i = 0, len = items.length; i < len; i++) {
 
 <div id="Config">
 
-<!--    <label>Fast Alpha</label>-->
-<!--    <select id="ddFA" name="ddFA">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat" selected>Cat</option>-->
-<!--            <option value="pop" >Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Alpha</label>-->
-<!--    <select id="ddA" name="ddA">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop" selected>Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Fast Beta</label>-->
-<!--    <select id="ddFB" name="ddFB">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop">Pop</option>-->
-<!--            <option value="camera" selected>Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Beta</label>-->
-<!--    <select id="ddB" name="ddB">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop">Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water" selected>Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Sound</label>-->
-<!--    <select id="ddS" name="ddS">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop">Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate" selected>Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-
 
 </div>
 
@@ -299,6 +223,8 @@ for (var i = 0, len = items.length; i < len; i++) {
         SOUND: 0,
         MOTION: 1,
         FACE: 2,
+        ACCEL: 3,
+        ORIENT: 4
     };
 
     var client = 0;
@@ -404,25 +330,16 @@ for (var i = 0, len = items.length; i < len; i++) {
     };
 
 
-    btn1.on("click", () => {
-        btn2.prop("disabled", true);
-        btn1.prop("disabled", true);
-        destination = "wss://colinauyeung-portfolio.herokuapp.com/client1";
-        serverConnection = new WebSocket(destination);
-        serverConnection.onmessage = handleMessage;
-        serverConnection.onclose = handleClose;
-        client = 1;
-    });
-
     btn2.on("click", () => {
+        btn2.prop("disabled", true);
         btn1.prop("disabled", true);
         destination = "wss://colinauyeung-portfolio.herokuapp.com/client2";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
         serverConnection.onclose = handleClose;
-        // $("#Config").remove();
         client = 2;
     });
+
 
     mapset.on("click", () => {
         mapping["Fast Alpha"] = $("#ddFA :selected").val();
@@ -480,7 +397,7 @@ for (var i = 0, len = items.length; i < len; i++) {
                     // }
                 };
 
-                msgDiv2.html(msg.value);
+                // msgDiv2.html(msg.value);
                 break;
             case MessageType.CLIENT2:
                 break;
@@ -539,9 +456,25 @@ for (var i = 0, len = items.length; i < len; i++) {
         last_values["beta"] = beta;
         last_values["gamma"] = gamma;
 
+        var c = MessageType.CLIENT1;
+        if(client === 2){
+            c = MessageType.CLIENT2;
+        }
+        data = {
+            type: c,
+            event: Eventtype.ORIENT,
+            beta: beta,
+            gamma: gamma
+        };
+        serverConnection.send(JSON.stringify(data));
+
         // msgDiv.html(diff_alpha);
 
     }
+
+    var peak_x;
+    var peak_y;
+    var peak_z;
 
     function handleMotion(event){
         var acc = Math.max(Math.abs(event.acceleration.x), Math.abs(event.acceleration.y), Math.abs(event.acceleration.z));
@@ -560,60 +493,22 @@ for (var i = 0, len = items.length; i < len; i++) {
                 c = MessageType.CLIENT2;
             }
 
-            data = {
-                type: c,
-                event: Eventtype.MOTION,
-                value: "None"
-            };
+
             if(diff_c > 0.70){
                 diff_c = 1 - diff_c;
             }
 
-            if(peak_acc >= 20){
-                console.log({"a": diff_a, "b":diff_b, "c":diff_c});
-                if(diff_a >= diff_b && diff_a >= diff_c){
-                    data.value = "Fast Alpha";
-                    if(serverConnection != undefined){
-                        serverConnection.send(JSON.stringify(data));
-                    }
-                }
-                else{
-                    // if(diff_b >= diff_c){
-                        data.value = "Fast Beta"
-                        if(serverConnection != undefined){
-                            serverConnection.send(JSON.stringify(data));
-                        }
-                    // }
-                    // else{
-                    //     msgDiv.html("Fast Gamma")
-                    // }
-                }
+            if(peak_acc >= 5){
+                data = {
+                    type: c,
+                    event: Eventtype.ACCEL,
+                    x: peak_x,
+                    y: peak_y,
+                    z: peak_z
+                };
+                serverConnection.send(JSON.stringify(data));
             }
-            else{
-                if(peak_acc >= 10){
-                    console.log({"a": diff_a, "b":diff_b, "c":diff_c});
-                    if(diff_a >= diff_b && diff_a >= diff_c){
-                        data.value = "Alpha";
-                        if(serverConnection != undefined){
-                            serverConnection.send(JSON.stringify(data));
-                        }
-                    }
-                    else{
-                        // if(diff_b >= diff_c){
-                            data.value = "Beta";
-                            if(serverConnection != undefined){
-                                serverConnection.send(JSON.stringify(data));
-                            }
-                        // }
-                        // else{
-                        //     msgDiv.html("Gamma")
-                        // }
-                    }
-                }
-                else{
-                    // msgDiv.html("You haven't gone")
-                }
-            }
+
             peak_acc = 0;
 
 
@@ -621,6 +516,9 @@ for (var i = 0, len = items.length; i < len; i++) {
         else{
             if(acc > peak_acc){
                 peak_acc = acc;
+                peak_x = event.acceleration.x;
+                peak_y = event.acceleration.y;
+                peak_z = event.acceleration.z;
             }
 
         }

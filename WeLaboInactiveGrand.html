@@ -30,7 +30,7 @@
         margin: 5px 0 5px 0;
     }
 
-    .grand {
+    .lora {
         color: black;
         margin:5px 0 5px 15px;
         background-image:linear-gradient(#A6826D,#A6826D);
@@ -40,7 +40,7 @@
         background-size:auto;
         padding:5px 5px 5px 5px;
     }
-    .lora {
+    .grand {
         color: black;
         margin:5px 15px 5px 0;
         background-image:linear-gradient(#F2E1D8,#F2E1D8);
@@ -61,14 +61,16 @@
         background-color:rgba(0,0,0,0);
     }
     .select{
-        width:100%;
+        width:75%;
+        margin-top:5px;
         margin-bottom:15px;
-        padding:7px 10px;
         border-radius:2px;
         color:#fff;
         background-color:#554c57;
         border:none;
         height:30px;
+        padding:5px 5px 5px 5px;
+        float: left;
     }
     .label{
         width:100%;
@@ -155,16 +157,9 @@
         #resetbtn{
             width:50%;
         }
-        #soundbtn{
-            float:left;
-            width:30%;
-        }
-        #pausebtn{
-            float:left;
-            width:33.3%;
-        }
         #facebtn{
-            width:33.3%;
+            float:left;
+            width:25%;
         }
         #i8ih{
             width:100%;
@@ -175,7 +170,7 @@
         }
         #btn-client1{
             padding:7px 10px 7px 10px;
-            width: 33.3%;
+            width: 50%;
             float: left;
         }
         #tabbar{
@@ -217,9 +212,17 @@
             <form id="i8l5" class="form">
                 <div id="i8ett" class="form-group">
                     <textarea name="text"  class="fill-width" id="textarea" rows="2" cols="10" wrap="soft" maxlength="100" style="overflow:hidden; resize:none;"></textarea>
-                    <button type="button" id="btn-client1" class="button">Connect</button>
-                    <button type="button" id="facebtn" onclick="textreturn()" class="button">Send</button>
-                    <button type="button" id="pausebtn" onclick="pausehandlder()" class="button">Pause</button>
+                    <button type="button" id="btn-client1" class="button">Connect to Server</button>
+                    <button type="button" id="SetMotion" onclick="textreturn()" class="button">Send</button>
+                    <select id="selface" name="FddS" class="select">
+                        <option value="happy" >Happy</option>
+                        <option value="neutral" >Neutral</option>
+                        <option value="confused" >Confused</option>
+                        <option value="mischievous" >Mischievous</option>
+                        <option value="sad" selected>Sad</option>
+                        <option value="angry" >Angry</option>
+                    </select>
+                    <button type="button" id="facebtn" onclick="setface()" class="button">Set Face</button>
 
                 </div>
 
@@ -281,7 +284,6 @@ for (var i = 0, len = items.length; i < len; i++) {
         MOTION: 1,
         MESSAGE: 2,
         FACE: 3,
-        PAUSE: 4
     };
 
     var client = 0;
@@ -289,7 +291,7 @@ for (var i = 0, len = items.length; i < len; i++) {
 
     var btn1 = $("#btn-client1");
     var rsbtn = $("#resetbtn");
-    var pausebtn = $("#pausebtn");
+
     var msgDiv = $("#msgDiv");
     var msgDiv2 = $("#msgDiv2");
     var serverConnection = undefined;
@@ -376,7 +378,7 @@ for (var i = 0, len = items.length; i < len; i++) {
 
     btn1.on("click", () => {
         btn1.prop("disabled", true);
-        destination = "wss://colinauyeung-portfolio.herokuapp.com/lora";
+        destination = "wss://colinauyeung-portfolio.herokuapp.com/grandparent";
         serverConnection = new WebSocket(destination);
         serverConnection.onmessage = handleMessage;
         serverConnection.onclose = handleClose;
@@ -395,21 +397,8 @@ for (var i = 0, len = items.length; i < len; i++) {
 
     }
 
-    var paused = false;
-    function pausehandlder(){
-        paused = !paused;
-        if(paused){
-            pausebtn.html("Unpause");
-        }
-        else{
-            pausebtn.html("Pause");
-        }
-        data = {
-            type: MessageType.LORA,
-            event: Eventtype.PAUSE,
-            body: paused
-        };
-        serverConnection.send(JSON.stringify(data));
+    function setface(){
+
     }
 
     var activeid = undefined;
@@ -494,9 +483,9 @@ for (var i = 0, len = items.length; i < len; i++) {
             ids.forEach((d) => {
                 if(d.id === activeid){
                     var text = $("textarea").val();
-                    $("<p class='lora'>" + text + "</p>").appendTo("#" + activeid);
+                    $("<p class='grand'>" + text + "</p>").appendTo("#" + activeid);
                     data = {
-                        type: MessageType.LORA,
+                        type: MessageType.GRANDPARENT,
                         event: Eventtype.MESSAGE,
                         id: activeid,
                         body: text
@@ -507,6 +496,16 @@ for (var i = 0, len = items.length; i < len; i++) {
             });
             console.log($("#" + activeid).html());
         }
+    }
+
+    function setface(){
+        data = {
+            type: MessageType.GRANDPARENT,
+            event: Eventtype.FACE,
+            id: activeid,
+            body: $("#selface :selected").val()
+        };
+        serverConnection.send(JSON.stringify(data));
     }
 
 

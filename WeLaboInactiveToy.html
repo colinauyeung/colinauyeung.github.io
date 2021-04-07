@@ -3,16 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        max-width: 375px;
+        margin:0;
+        background-color:#6C8C8C;
+    }
+    .form{
+        border-radius:3px;
+        padding:10px 15px;
+        background-color:rgba(0,0,0,0);
+    }
+    .select{
+        width:100%;
+        margin-bottom:15px;
+        padding:7px 10px;
+        border-radius:2px;
+        color:#fff;
+        background-color:#554c57;
+        border:none;
+        height:30px;
+    }
+    .label{
+        width:100%;
+        display:block;
+    }
+    .button{
+        width:100%;
+        /*margin:15px 0;*/
+        background-color:#D9BAC0;
+        border:none;
+        color:#000000;
+        border-radius:2px;
+        padding:7px 10px;
+        font-size:1em;
+        cursor:pointer;
+        margin:0 0 0 0;
+    }
+    .button:disabled,
+    .button[disabled]{
+        border: 1px solid #999999;
+        background-color: #cccccc;
+        color: #666666;
+    }
+    .row{
+        display:flex;
+        justify-content:flex-start;
+        align-items:stretch;
+        flex-wrap:nowrap;
+        padding:10px;
+    }
+    .cell{
+        min-height:75px;
+        flex-grow:1;
+        flex-basis:100%;
+    }
+    .tab{
+        text-decoration:none;
+        width:25%;
+        color:inherit;
+        padding:7px 14px 10px 10px;
+        transition:opacity 0.3s;
+        display:inline-block;
+        border-radius:3px;
+        margin-right:10px;
+    }
+    .tab.tab-active{
+        background-color:#0d94e6;
+        color:white;
+    }
+    .tab-content{
+        padding:6px 12px;
+        min-height:100px;
+        animation:fadeEffect 1s;
+        background-color: #3C4959;
+        color: white;
+    }
+    *{
+        box-sizing:border-box;
+    }
+    @keyframes fadeEffect{
+        from{
+            opacity:0;
+        }
+        to{
+            opacity:1;
+        }
+    }
+    @media (max-width: 768px){
+        .row{
+            flex-wrap:wrap;
+        }
+    }
+    @media (max-width: 480px){
+        #title{
+            padding:10px;
+            font-size:26px;
+        }
+        #SetMotion{
+            width:50%;
+        }
+        #resetbtn{
+            width:50%;
+        }
+        #i8ih{
+            width:100%;
+            min-height:0;
+        }
+        #i8l5{
+            padding:0 0 0 0;
+        }
+        #resetbtn{
+            margin:0 0 0 0;
+        }
+        #SetMotion{
+            margin:0 0 0 0;
+            float:left;
+        }
+        #ias2{
+            padding:10px 10px 0 10px;
+        }
+        #ibdo{
+            min-height:0;
+        }
+        #title{
+            text-align:center;
+            font-family: 'Dela Gothic One', cursive;
+        }
+        #imagebox{
+            color:black;
+            width:100%;
+        }
+        #spacer{
+            min-height: 250px;
+            color: #6C8C8C;
+        }
+    }
+</style>
 </head>
 <body>
-<div>Toy 7</div>
-<button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
-<button type="button" id="resetbtn">Reset Orientation</button>
-<button type="button" id="btn-client1">Connect</button>
-<button type="button" disabled="true" id="Play">Play Voice</button>
+
+<div data-tabs="1" id="i6wrh">
+    <div id="ias2" class="row">
+        <div id="i8ih" class="cell">
+            <div id="title">Usa-Labo - Controller
+                <br draggable="true" data-highlightable="1" id="iv7v"/>
+            </div>
+        </div>
+        <img id="imagebox" src="sounds/WeLabo/faces/neutral.png"/>
+        <div id="spacer">a</div>
+        <div id="ibdo" class="cell">
+            <form id="i8l5" class="form">
+                <div id="i8ett" class="form-group">
+                    <button type="button" id="btn-client1" class="button">Connect to Server</button>
+                    <button type="button"  id="SetMotion" class="button"onclick="requestDeviceOrientation()">Access Orientation</button>
+                    <button type="button" id="resetbtn" class="button">Reset Orientation</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
 
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -34,7 +195,8 @@
         SOUND: 0,
         MOTION: 1,
         MESSAGE: 2,
-        VOICE: 3
+        FACE: 3,
+        PAUSE: 4
     };
 
     var client = 0;
@@ -126,6 +288,15 @@
     sounds["whoosh"] = whoosh;
     sounds["vibrate"] = vibrate;
 
+    var faces = {
+        "neutral": "sounds/WeLabo/faces/neutral.png",
+        "angry": "sounds/WeLabo/faces/angry.png",
+        "happy": "sounds/WeLabo/faces/happy.png",
+        "sad": "sounds/WeLabo/faces/sad.png",
+        "confused": "sounds/WeLabo/faces/confused.png",
+        "mischievous": "sounds/WeLabo/faces/mischievous.png",
+    };
+
 
     btn1.on("click", () => {
         btn1.prop("disabled", true);
@@ -171,7 +342,7 @@
 
 
 
-
+    var paused = false;
 
     function handleMessage(mEvent) {
         var msg = JSON.parse(mEvent.data);
@@ -181,12 +352,15 @@
                 msgDiv.html(msg.message);
                 break;
             case MessageType.GRANDPARENT:
-                if(msg.event === Eventtype.VOICE){
-                    audiourl = msg.data;
+                if(msg.event === Eventtype.FACE){
+                    document.getElementById("imagebox").src = faces[msg.body];
                     // $("#Play").prop("disabled", false);
                 }
                 break;
             case MessageType.LORA:
+                if(msg.event === Eventtype.PAUSE){
+                    paused = msg.body;
+                }
                 break;
             case MessageType.TOY:
                 break;
@@ -259,13 +433,6 @@
 
             if(peak_acc >= 10){
 
-                var voice  = new Howl({
-                    src: [audiourl],
-                    loop: false,
-                    format: "webm"
-                });
-
-                voice.play();
 
                 data = {
                     type: MessageType.TOY,
@@ -274,15 +441,18 @@
                     id: uuidv4()
                 };
                 if(ptime != undefined){
-                    if(t - ptime >= 0){
+                    if(t - ptime >= 6000 && !paused){
                         serverConnection.send(JSON.stringify(data));
                         msgDiv.html("Send Signla");
                         ptime = t;
                     }
                 }
                 else{
-                    serverConnection.send(JSON.stringify(data));
-                    ptime = t;
+                    if(!paused){
+                        serverConnection.send(JSON.stringify(data));
+                        ptime = t;
+                    }
+
                 }
 
             }

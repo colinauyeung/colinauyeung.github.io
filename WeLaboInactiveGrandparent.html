@@ -12,9 +12,6 @@
 <button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
 <button type="button" id="resetbtn">Reset Orientation</button>
 <button type="button" id="btn-client1">Connect</button>
-<button type="button" id="Record">Record</button>
-<button type="button" disabled="true" id="Listen">Listen</button>
-<button type="button" disabled="true" id="Send">Send</button>
 
 <div>
     <textarea name="text" class="fill-width" id="textarea" rows="2" cols="10" wrap="soft" maxlength="100" style="overflow:hidden; resize:none;"></textarea>
@@ -417,87 +414,87 @@
 
     }
 
-    $("#Record").click(() => {
-        console.log("hello");
-        if(recorder != undefined){
-            $("#Listen").prop("disabled", true);
-            console.log("hello2");
-            recorder.start();
-            setTimeout(() => {
-                recorder.stop();
-                $("#Listen").prop("disabled", false);
-                $("#Send").prop("disabled", false);
-            } , 3000);
-        }
-
-    })
-
-    $("#Listen").click(() => {
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audioout = new Audio(audioUrl);
-        audioout.play();
-    })
-
-    $('#Send').click(() => {
-        var url;
-        blobToBase64(audioBlob, (e) => {
-            url = e;
-            var data = {
-                type: MessageType.GRANDPARENT,
-                event: Eventtype.VOICE,
-                data: url
-            };
-            serverConnection.send(JSON.stringify(data))
-        });
-
-    });
-
-
-
-    var blobToBase64 = function(blob, callback) {
-        var reader = new FileReader();
-        reader.onload = function() {
-            var dataUrl = reader.result;
-            // var base64 = dataUrl.split(',')[1];
-            callback(dataUrl);
-        };
-        reader.readAsDataURL(blob);
-    };
-
-    //https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
-    // function base64toBlob(base64Data, contentType) {
-    //     contentType = contentType || '';
-    //     var sliceSize = 1024;
-    //     var byteCharacters = atob(base64Data);
-    //     var bytesLength = byteCharacters.length;
-    //     var slicesCount = Math.ceil(bytesLength / sliceSize);
-    //     var byteArrays = new Array(slicesCount);
-    //
-    //     for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-    //         var begin = sliceIndex * sliceSize;
-    //         var end = Math.min(begin + sliceSize, bytesLength);
-    //
-    //         var bytes = new Array(end - begin);
-    //         for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
-    //             bytes[i] = byteCharacters[offset].charCodeAt(0);
-    //         }
-    //         byteArrays[sliceIndex] = new Uint8Array(bytes);S
+    // $("#Record").click(() => {
+    //     console.log("hello");
+    //     if(recorder != undefined){
+    //         $("#Listen").prop("disabled", true);
+    //         console.log("hello2");
+    //         recorder.start();
+    //         setTimeout(() => {
+    //             recorder.stop();
+    //             $("#Listen").prop("disabled", false);
+    //             $("#Send").prop("disabled", false);
+    //         } , 3000);
     //     }
-    //     return new Blob(byteArrays, { type: contentType });
+    //
+    // })
+    //
+    // $("#Listen").click(() => {
+    //     const audioUrl = URL.createObjectURL(audioBlob);
+    //     const audioout = new Audio(audioUrl);
+    //     audioout.play();
+    // })
+    //
+    // $('#Send').click(() => {
+    //     var url;
+    //     blobToBase64(audioBlob, (e) => {
+    //         url = e;
+    //         var data = {
+    //             type: MessageType.GRANDPARENT,
+    //             event: Eventtype.VOICE,
+    //             data: url
+    //         };
+    //         serverConnection.send(JSON.stringify(data))
+    //     });
+    //
+    // });
+    //
+    //
+    //
+    // var blobToBase64 = function(blob, callback) {
+    //     var reader = new FileReader();
+    //     reader.onload = function() {
+    //         var dataUrl = reader.result;
+    //         // var base64 = dataUrl.split(',')[1];
+    //         callback(dataUrl);
+    //     };
+    //     reader.readAsDataURL(blob);
+    // };
+    //
+    // //https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+    // // function base64toBlob(base64Data, contentType) {
+    // //     contentType = contentType || '';
+    // //     var sliceSize = 1024;
+    // //     var byteCharacters = atob(base64Data);
+    // //     var bytesLength = byteCharacters.length;
+    // //     var slicesCount = Math.ceil(bytesLength / sliceSize);
+    // //     var byteArrays = new Array(slicesCount);
+    // //
+    // //     for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+    // //         var begin = sliceIndex * sliceSize;
+    // //         var end = Math.min(begin + sliceSize, bytesLength);
+    // //
+    // //         var bytes = new Array(end - begin);
+    // //         for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+    // //             bytes[i] = byteCharacters[offset].charCodeAt(0);
+    // //         }
+    // //         byteArrays[sliceIndex] = new Uint8Array(bytes);S
+    // //     }
+    // //     return new Blob(byteArrays, { type: contentType });
+    // // }
+    //
+    // const b64toBlob = (url) =>
+    //     fetch(url).then(res => res.blob());
+    //
+    //
+    // function Base64toplay(url){
+    //     var pblob = b64toBlob(url);
+    //     pblob.then((e) => {
+    //         const audioUrl = URL.createObjectURL(e);
+    //         const audioout = new Audio(audioUrl);
+    //         audioout.play();
+    //     })
     // }
-
-    const b64toBlob = (url) =>
-        fetch(url).then(res => res.blob());
-
-
-    function Base64toplay(url){
-        var pblob = b64toBlob(url);
-        pblob.then((e) => {
-            const audioUrl = URL.createObjectURL(e);
-            const audioout = new Audio(audioUrl);
-            audioout.play();
-        })
-    }
 
 
 

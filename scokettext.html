@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-ease.v2.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3-transform/1.0.4/d3-transform.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
 
@@ -182,8 +188,8 @@
         </div>
     </div>
     <nav data-tab-container="1" id="tabbar" class="tab-container">
-        <a href="#tab1" data-tab="1" id="ihran" class="tab">Tab 1</a>
-        <a href="#tab2" data-tab="1" id="iubny" class="tab">Tab 2</a>
+        <a href="#tab1" data-tab="1" id="ihran" class="tab">Sound</a>
+        <a href="#tab2" data-tab="1" id="iubny" class="tab">Face</a>
         <a href="#tab3" data-tab="1" id="ik7ng" class="tab">Tab 3</a>
     </nav>
     <div id="tab1" data-tab-content="1" class="tab-content">
@@ -325,6 +331,7 @@
         </form>
     </div>
     <div id="tab3" data-tab-content="1" class="tab-content">
+        <svg id="svg" viewBox="0 0 375 375" width="100%" height="375" preserveAspectRatio="xMidYMin meet">
     </div>
 </div>
 <form id="i32js4" class="form">
@@ -363,87 +370,306 @@ for (var i = 0, len = items.length; i < len; i++) {
 }
 </script>
 
+<script>
 
-<div id="Config">
+    var playingsounds = [];
+    let height = document.getElementById("svg").viewBox.baseVal.height;
+    let width = document.getElementById("svg").viewBox.baseVal.width;
+    let margin = 10;
+    let radius = (height/3)
 
-<!--    <label>Fast Alpha</label>-->
-<!--    <select id="ddFA" name="ddFA">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat" selected>Cat</option>-->
-<!--            <option value="pop" >Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Alpha</label>-->
-<!--    <select id="ddA" name="ddA">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop" selected>Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Fast Beta</label>-->
-<!--    <select id="ddFB" name="ddFB">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop">Pop</option>-->
-<!--            <option value="camera" selected>Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Beta</label>-->
-<!--    <select id="ddB" name="ddB">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop">Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water" selected>Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate">Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
-<!--    <label>Sound</label>-->
-<!--    <select id="ddS" name="ddS">-->
-<!--        <optgroup label="Sounds">-->
-<!--            <option value="cat">Cat</option>-->
-<!--            <option value="pop">Pop</option>-->
-<!--            <option value="camera">Camera</option>-->
-<!--            <option value="water">Water</option>-->
-<!--            <option value="bell">Bell</option>-->
-<!--            <option value="phone">Phone</option>-->
-<!--            <option value="whoosh">Whoosh</option>-->
-<!--        </optgroup>-->
-<!--        <optgroup label="Other">-->
-<!--            <option value="vibrate" selected>Vibrate</option>-->
-<!--        </optgroup>-->
-<!--    </select>-->
+    var centre = d3Transform()
+        .translate([width/2,height/2]);
 
 
-</div>
+    let line = d3.lineRadial()
+        .curve(d3.curveCardinalClosed.tension(0.2))
+        .angle(d => xscale(d.n))
+
+
+
+    function getline(val) {
+        let lined = d3.lineRadial()
+            .curve(d3.curveCardinalClosed.tension(val))
+            .angle(d => xscale(d.n))
+
+        return lined;
+    }
+
+    let yscale = d3.scaleLinear()
+        .domain([0,10])
+        .range([0, radius]);
+
+    let xscale = d3.scaleLinear()
+        .domain([0, 4])
+        .range([0, 2*Math.PI]);
+
+    var data = [
+        {
+            //top
+            n: 0,
+            val: 5
+        },
+        {
+            //right
+            n:1,
+            val: 5
+        },
+        {
+            n:2,
+            val: 5
+        },
+        {
+            //left
+            n:3,
+            val: 5
+        }
+    ]
+
+    let svg = d3.select("svg");
+
+
+    //D3 Conversion from https://www.visualcinnamon.com/2016/06/glow-filter-d3-visualization/
+    //SVG filter for the gooey effect
+    //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+    var defs = svg.append('defs');
+    var filter = defs.append("filter")
+        .attr("id","glow");
+    filter.append("feGaussianBlur")
+        .attr("stdDeviation","3.5")
+        .attr("result","coloredBlur");
+    var feMerge = filter.append("feMerge");
+    feMerge.append("feMergeNode")
+        .attr("in","coloredBlur");
+    feMerge.append("feMergeNode")
+        .attr("in","SourceGraphic");
+    //////////////////////////////////////////////////////////////////////////////
+
+    //D3 Conversion from https://www.visualcinnamon.com/2015/05/gooey-effect/
+    //SVG filter for the gooey effect
+    //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+    var filter2 = defs.append('filter').attr('id','gooey');
+    filter2.append('feGaussianBlur')
+        .attr('in','SourceGraphic')
+        .attr('stdDeviation','10')
+        .attr('result','blur');
+    filter2.append('feColorMatrix')
+        .attr('in','blur')
+        .attr('mode','matrix')
+        .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
+        .attr('result','gooey');
+    ///////////////////////////////////////////////////////////////////////////
+
+    defs.append('style')
+        .attr('type', 'text/css')
+        .text("@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Oxygen:wght@700&display=swap');");
+
+    let layer1 = svg.append("g");
+    layer1.style("filter", "url(#gooey)")
+    let layer2 = svg.append("g");
+    let layer3 = svg.append('g');
+
+
+    let path = layer2.append("path")
+        .style("filter", "url(#glow)")
+        .attr("fill", "#D9BAC0")
+        .attr("stroke", "#D9BAC0")
+        .attr("fill-opacity", 0.2)
+        .attr("stroke-width", 1.5)
+        .attr("transform", centre)
+
+    path.attr("d", line
+        .radius(d => yscale(d.val))
+        (data));
+
+
+    var leftlarge = d3.scaleLinear()
+        .domain([0, -10])
+        .range([3, 10])
+    var leftsmall = d3.scaleLinear()
+        .domain([10, 0])
+        .range([0, 3])
+    var rightlarge = d3.scaleLinear()
+        .domain([0, 10])
+        .range([3, 10])
+    var rightsmall = d3.scaleLinear()
+        .domain([-10, 0])
+        .range([0, 3])
+    var tbscale = d3.scaleLinear()
+        .domain([0, 10])
+        .range([3, 10])
+
+    function randomize(gamma, beta){
+        let lrran = gamma/9;
+        let left = 0;
+        let right = 0;
+        if(lrran >= 0){
+            left = leftsmall(lrran)
+            right = rightlarge(lrran)
+        }
+        else{
+            left = leftlarge(lrran)
+            right = rightsmall(lrran)
+        }
+        let tbran = beta/18
+        let top = 0;
+        let bottom = 0;
+        if(tbran >= 0){
+            top = leftsmall(tbran)
+            bottom = rightlarge(tbran)
+        }
+        else{
+            top = leftlarge(tbran)
+            bottom = rightsmall(tbran)
+        }
+
+
+        data[0].val = top
+        data[1].val = right
+        data[2].val = bottom
+        data[3].val = left
+
+
+        // let val = Math.floor(Math.random() * (soundscape.length));
+        // if(val > soundscape.length -1){
+        //     val = soundscape.length;
+        // }
+        // currentsound = val;
+        // let color = soundscape[currentsound].color
+
+        line = getline(0.5);
+
+        path.transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .attr("d", line.radius(d => yscale(d.val))(data));
+
+
+
+    }
+
+    var speedscale = d3.scaleLinear()
+        .domain([0, 5])
+        .range([0.9, 0.4]);
+
+    let vscale = d3.scaleSqrt()
+        .domain([-100,100])
+        .range([30, height-30]);
+    let hscale = d3.scaleSqrt()
+        .domain([-100,100])
+        .range([30, width-30]);
+    let rscale = d3.scaleSqrt()
+        .domain([0,175])
+        .range([0, 300]);
+    var palatte = d3.scaleSequential(d3.interpolateRdPu).domain([-100,100]);
+
+    function addcircle(x,y,z){
+        let val = Math.abs((x^2) + (y^2) + (z^2));
+        let mangitudue = Math.sqrt(val);
+        if(x > 100){
+            x = 100;
+        }
+        else{
+            if(x< -100){
+                x = -100
+            }
+        }
+        if(y > 100){
+            y = 100;
+        }
+        else{
+            if(y< -100){
+                y = -100
+            }
+        }
+        if(z > 100){
+            z = 100;
+        }
+        else{
+            if(z< -100){
+                z = -100
+            }
+        }
+        let top = data[0].val;
+        let right = data[1].val;
+        let left = data[3].val;
+
+        let back = 15;
+
+        let chunk = {
+            id: uuidv4(),
+            pos: [x,y,z,mangitudue],
+        };
+        playingsounds.push(chunk);
+    }
+
+    function updatecircles(){
+
+
+
+        let remove = [];
+        playingsounds.forEach((d,i) => {
+            m = d.pos[3];
+            m = m -2;
+            if(m < 0){
+                remove.push(i)
+            }
+            else{
+                d.pos[3] = m;
+            }
+
+        })
+        remove.sort()
+        remove.reverse()
+        remove.forEach(d => {
+            playingsounds.splice(d, 1)
+        })
+
+
+        let t = d3.transition()
+            .ease(d3.easeLinear)
+            .duration(1000)
+
+        let t2 = d3.transition()
+            .ease(d3.easePolyInOut)
+            .duration(2500)
+
+
+        let circle = layer1
+            .selectAll(".bubble")
+            .data(playingsounds, function(d) {return d.id})
+
+        circle.join(
+            enter =>
+                enter
+                    .append('circle')
+                    .attr('class', 'bubble')
+                    .attr('cx', d => hscale(d.pos[0]))
+                    .attr('cy', d=> {
+                        return vscale(d.pos[1])
+                    })
+                    .attr('r', d => {
+                        return rscale(Math.abs(d.pos[3]))
+                    })
+                    .attr("opacity", 0.5)
+                    .attr('fill', d => {return palatte(d.pos[2])}),
+            update =>
+                update
+                    .call(update => update.transition(t)
+                        .attr('r', d => {
+                            return rscale(d.pos[3])
+                        })
+                    ),
+            exit =>
+                exit
+                    .call(exit => exit.transition(t2)
+                        .attr("r", 0))
+                    .remove()
+        )
+
+    }
+
+</script>
 
 <div id="msgDiv"></div>
 <div id="msgDiv2"></div>
@@ -464,7 +690,9 @@ for (var i = 0, len = items.length; i < len; i++) {
     const Eventtype = {
         SOUND: 0,
         MOTION: 1,
-        FACE: 2
+        FACE: 2,
+        ACCEL: 3,
+        ORIENT: 4
     };
 
     var client = 0;
@@ -675,6 +903,13 @@ for (var i = 0, len = items.length; i < len; i++) {
                 msgDiv2.html(msg.value);
                 break;
             case MessageType.CLIENT2:
+
+                if(msg.event === Eventtype.ORIENT){
+                    randomize(msg.gamma, msg.beta);
+                }
+                if(msg.event === Eventtype.ACCEL){
+                    addcircle(msg.x, msg.y, msg.z);
+                }
                 break;
             default:
                 break;
@@ -959,6 +1194,8 @@ for (var i = 0, len = items.length; i < len; i++) {
         return array.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0
         )
     }
+
+    setInterval(updatecircles, 1000);
 
 
 
