@@ -155,7 +155,7 @@
 <div data-tabs="1" id="i6wrh">
     <div id="ias2" class="row">
         <div id="i8ih" class="cell">
-            <div id="title">Usa-Labo - Controller 2
+            <div id="title">Usa-Labo - Controller 3
                 <br draggable="true" data-highlightable="1" id="iv7v"/>
             </div>
         </div>
@@ -423,6 +423,7 @@ for (var i = 0, len = items.length; i < len; i++) {
             // handle regular non iOS 13+ devices
             console.log ("not iOS");
             window.addEventListener('deviceorientation', handleOrientation, true)
+            setInterval(sendorientation, 500);
         }
         if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
             DeviceMotionEvent.requestPermission()
@@ -459,6 +460,17 @@ for (var i = 0, len = items.length; i < len; i++) {
         last_values["beta"] = beta;
         last_values["gamma"] = gamma;
 
+
+
+
+        // msgDiv.html(diff_alpha);
+
+    }
+
+    function sendorientation(){
+        beta = last_values["beta"];
+        gamma = last_values["gamma"];
+
         var c = MessageType.CLIENT1;
         if(client === 2){
             c = MessageType.CLIENT2;
@@ -479,11 +491,9 @@ for (var i = 0, len = items.length; i < len; i++) {
             last_gamma = gamma;
             serverConnection.send(JSON.stringify(data));
         }
-
-
-        // msgDiv.html(diff_alpha);
-
     }
+
+
 
     var peak_x;
     var peak_y;
