@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-ease.v2.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3-transform/1.0.4/d3-transform.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            height: 100%;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            max-width: 375px;
+            margin:0;
+            background-color:#6C8C8C;
+        }
+        .form{
+            border-radius:3px;
+            padding:10px 15px;
+            background-color:rgba(0,0,0,0);
+        }
+        .select{
+            width:100%;
+            margin-bottom:15px;
+            padding:7px 10px;
+            border-radius:2px;
+            color:#fff;
+            background-color:#554c57;
+            border:none;
+            height:30px;
+        }
+        .label{
+            width:100%;
+            display:block;
+        }
+        .button{
+            width:100%;
+            /*margin:15px 0;*/
+            background-color:#D9BAC0;
+            /*border:none;*/
+            color:#000000;
+            border-radius:2px;
+            padding:7px 10px;
+            font-size:1em;
+            cursor:pointer;
+            margin:0 0 0 0;
+        }
+        .button:active {
+            background-color: #857075;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        .button:disabled,
+        .button[disabled]{
+            border: 1px solid #999999;
+            background-color: #cccccc;
+            color: #666666;
+        }
+        .row{
+            display:flex;
+            justify-content:flex-start;
+            align-items:stretch;
+            flex-wrap:nowrap;
+            padding:10px;
+        }
+        .cell{
+            min-height:75px;
+            flex-grow:1;
+            flex-basis:100%;
+        }
+        .tab{
+            text-decoration:none;
+            width:25%;
+            color:inherit;
+            padding:7px 14px 10px 10px;
+            transition:opacity 0.3s;
+            display:inline-block;
+            border-radius:3px;
+            margin-right:10px;
+        }
+        .tab.tab-active{
+            background-color:#0d94e6;
+            color:white;
+        }
+        .tab-content{
+            padding:6px 12px;
+            min-height:100px;
+            animation:fadeEffect 1s;
+            background-color: #3C4959;
+            color: white;
+        }
+        *{
+            box-sizing:border-box;
+        }
+        @keyframes fadeEffect{
+            from{
+                opacity:0;
+            }
+            to{
+                opacity:1;
+            }
+        }
+        @media (max-width: 768px){
+            .row{
+                flex-wrap:wrap;
+            }
+        }
+        @media (max-width: 480px){
+            #title{
+                padding:10px;
+                font-size:26px;
+            }
+            #SetMotion{
+                width:50%;
+            }
+            #resetbtn{
+                width:50%;
+            }
+            #soundbtn{
+                float:left;
+                width:50%;
+            }
+            #facebtn{
+                width:50%;
+            }
+            #i8ih{
+                width:100%;
+                min-height:0;
+            }
+            #i8l5{
+                padding:0 0 0 0;
+            }
+            #btn-client1{
+                padding:7px 10px 7px 10px;
+            }
+            #tabbar{
+                padding:10px 10px 0px 10px;
+            }
+            #btn-client1{
+                margin:0 0 0 0;
+            }
+            #resetbtn{
+                margin:0 0 0 0;
+            }
+            #SetMotion{
+                margin:0 0 0 0;
+                float:left;
+            }
+            #ias2{
+                padding:10px 10px 0 10px;
+            }
+            #ibdo{
+                min-height:0;
+            }
+            #title{
+                text-align:center;
+                font-family: 'Dela Gothic One', cursive;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div data-tabs="1" id="i6wrh">
+    <div id="ias2" class="row">
+        <div id="i8ih" class="cell">
+            <div id="title">Usabo Controller
+                <br draggable="true" data-highlightable="1" id="iv7v"/>
+            </div>
+        </div>
+        <div id="ibdo" class="cell">
+            <form id="i8l5" class="form">
+                <div id="i8ett" class="form-group">
+                    <button type="button" id="btn-client1" class="button">Connect to Server</button>
+                    <button type="button"  id="SetMotion" class="button"onclick="requestDeviceOrientation()">Access Orientation</button>
+                    <button type="button" id="resetbtn" class="button">Reset Orientation</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <nav data-tab-container="1" id="tabbar" class="tab-container">
+        <a href="#tab1" data-tab="1" id="ihran" class="tab">Sound</a>
+        <a href="#tab2" data-tab="1" id="iubny" class="tab">Face</a>
+        <a href="#tab3" data-tab="1" id="ik7ng" class="tab">Tab 3</a>
+    </nav>
+    <div id="tab1" data-tab-content="1" class="tab-content">
+        <form id="i37r6" class="form">
+            <label>Fast Alpha</label>
+            <select id="ddFA" name="ddFA" class="select">
+                <optgroup label="Sounds">
+                    <option value="cat" selected>Cat</option>
+                    <option value="pop" >Pop</option>
+                    <option value="camera">Camera</option>
+                    <option value="water">Water</option>
+                    <option value="bell">Bell</option>
+                    <option value="phone">Phone</option>
+                    <option value="whoosh">Whoosh</option>
+                </optgroup>
+                <optgroup label="Other">
+                    <option value="vibrate">Vibrate</option>
+                </optgroup>
+            </select>
+            <label>Alpha</label>
+            <select id="ddA" name="ddA" class="select">
+                <optgroup label="Sounds">
+                    <option value="cat">Cat</option>
+                    <option value="pop" selected>Pop</option>
+                    <option value="camera">Camera</option>
+                    <option value="water">Water</option>
+                    <option value="bell">Bell</option>
+                    <option value="phone">Phone</option>
+                    <option value="whoosh">Whoosh</option>
+                </optgroup>
+                <optgroup label="Other">
+                    <option value="vibrate">Vibrate</option>
+                </optgroup>
+            </select>
+            <label>Fast Beta</label>
+            <select id="ddFB" name="ddFB" class="select">
+                <optgroup label="Sounds">
+                    <option value="cat">Cat</option>
+                    <option value="pop">Pop</option>
+                    <option value="camera" selected>Camera</option>
+                    <option value="water">Water</option>
+                    <option value="bell">Bell</option>
+                    <option value="phone">Phone</option>
+                    <option value="whoosh">Whoosh</option>
+                </optgroup>
+                <optgroup label="Other">
+                    <option value="vibrate">Vibrate</option>
+                </optgroup>
+            </select>
+            <label>Beta</label>
+            <select id="ddB" name="ddB" class="select">
+                <optgroup label="Sounds">
+                    <option value="cat">Cat</option>
+                    <option value="pop">Pop</option>
+                    <option value="camera">Camera</option>
+                    <option value="water" selected>Water</option>
+                    <option value="bell">Bell</option>
+                    <option value="phone">Phone</option>
+                    <option value="whoosh">Whoosh</option>
+                </optgroup>
+                <optgroup label="Other">
+                    <option value="vibrate">Vibrate</option>
+                </optgroup>
+            </select>
+            <label>Sound</label>
+            <select id="ddS" name="ddS" class="select">
+                <optgroup label="Sounds">
+                    <option value="cat">Cat</option>
+                    <option value="pop">Pop</option>
+                    <option value="camera">Camera</option>
+                    <option value="water">Water</option>
+                    <option value="bell">Bell</option>
+                    <option value="phone">Phone</option>
+                    <option value="whoosh">Whoosh</option>
+                </optgroup>
+                <optgroup label="Other">
+                    <option value="vibrate" selected>Vibrate</option>
+                </optgroup>
+            </select>
+            <div class="form-group">
+                <button type="button" class="button" onclick="setMap()">Set Map</button>
+            </div>
+        </form>
+    </div>
+    <div id="tab2" data-tab-content="1" class="tab-content">
+        <form id="i37r6-2" class="form">
+            <div class="form-group">
+            </div>
+            <label>Fast Alpha</label>
+            <select id="FddFA" name="FddFA" class="select">
+
+                <option value="happy" selected>Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+
+            </select>
+            <label>Alpha</label>
+            <select id="FddA" name="FddA" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" selected>Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
+            <label>Fast Beta</label>
+            <select id="FddFB" name="FddFB" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" selected>Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
+            <label>Beta</label>
+            <select id="FddB" name="FddB" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" selected>Mischievous</option>
+                <option value="sad" >Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
+            <label>Sound</label>
+            <select id="FddS" name="FddS" class="select">
+                <option value="happy" >Happy</option>
+                <option value="neutral" >Neutral</option>
+                <option value="confused" >Confused</option>
+                <option value="mischievous" >Mischievous</option>
+                <option value="sad" selected>Sad</option>
+                <option value="angry" >Angry</option>
+            </select>
+            <div class="form-group">
+                <button type="button" class="button" onclick="setMap()">Set Map</button>
+            </div>
+        </form>
+    </div>
+    <div id="tab3" data-tab-content="1" class="tab-content">
+        <svg id="svg" viewBox="0 0 375 375" width="100%" height="375" preserveAspectRatio="xMidYMin meet">
+    </div>
+</div>
+<form id="i32js4" class="form">
+    <div class="form-group">
+    </div>
+    <div class="form-group">
+    </div>
+    <div id="ial36i" class="form-group">
+        <button type="button" id="soundbtn" class="button" onclick="SoundToggle()">Sound</button>
+        <button id="facebtn" class="button" onclick="FaceToggle()" disabled >Face</button>
+    </div>
+</form>
+
+
+<script>var items = document.querySelectorAll('#i6wrh');
+for (var i = 0, len = items.length; i < len; i++) {
+    (function(){
+        var t,e=this,a="[data-tab]",n=document.body,r=n.matchesSelector||n.webkitMatchesSelector||n.mozMatchesSelector||n.msMatchesSelector,o=function(){
+            var a=e.querySelectorAll("[data-tab-content]")||[];
+            for(t=0;t<a.length;t++)a[t].style.display="none"}
+            ,i=function(n){
+            var r=e.querySelectorAll(a)||[];
+            for(t=0;t<r.length;t++){
+                var i=r[t],s=i.className.replace("tab-active","").trim();
+                i.className=s}
+            o(),n.className+=" tab-active";
+            var l=n.getAttribute("href"),c=e.querySelector(l);
+            c&&(c.style.display="")}
+            ,s=e.querySelector(".tab-active"+a);
+        s=s||e.querySelector(a),s&&i(s),e.addEventListener("click",function(t){
+            var e=t.target;
+            r.call(e,a)&&i(e)}
+        )
+    }
+        .bind(items[i]))();
+}
+</script>
+
+<script>
+
+    var playingsounds = [];
+    let height = document.getElementById("svg").viewBox.baseVal.height;
+    let width = document.getElementById("svg").viewBox.baseVal.width;
+    let margin = 10;
+    let radius = (height/3)
+
+    var centre = d3Transform()
+        .translate([width/2,height/2]);
+
+
+    let line = d3.lineRadial()
+        .curve(d3.curveCardinalClosed.tension(0.2))
+        .angle(d => xscale(d.n))
+
+
+
+    function getline(val) {
+        let lined = d3.lineRadial()
+            .curve(d3.curveCardinalClosed.tension(val))
+            .angle(d => xscale(d.n))
+
+        return lined;
+    }
+
+    let yscale = d3.scaleLinear()
+        .domain([0,10])
+        .range([0, radius]);
+
+    let xscale = d3.scaleLinear()
+        .domain([0, 4])
+        .range([0, 2*Math.PI]);
+
+    var odata = [
+        {
+            //top
+            n: 0,
+            val: 5
+        },
+        {
+            //right
+            n:1,
+            val: 5
+        },
+        {
+            n:2,
+            val: 5
+        },
+        {
+            //left
+            n:3,
+            val: 5
+        }
+    ];
+
+    let svg = d3.select("svg");
+
+
+    //D3 Conversion from https://www.visualcinnamon.com/2016/06/glow-filter-d3-visualization/
+    //SVG filter for the gooey effect
+    //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+    var defs = svg.append('defs');
+    var filter = defs.append("filter")
+        .attr("id","glow");
+    filter.append("feGaussianBlur")
+        .attr("stdDeviation","3.5")
+        .attr("result","coloredBlur");
+    var feMerge = filter.append("feMerge");
+    feMerge.append("feMergeNode")
+        .attr("in","coloredBlur");
+    feMerge.append("feMergeNode")
+        .attr("in","SourceGraphic");
+    //////////////////////////////////////////////////////////////////////////////
+
+    //D3 Conversion from https://www.visualcinnamon.com/2015/05/gooey-effect/
+    //SVG filter for the gooey effect
+    //Code from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+    var filter2 = defs.append('filter').attr('id','gooey');
+    filter2.append('feGaussianBlur')
+        .attr('in','SourceGraphic')
+        .attr('stdDeviation','10')
+        .attr('result','blur');
+    filter2.append('feColorMatrix')
+        .attr('in','blur')
+        .attr('mode','matrix')
+        .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
+        .attr('result','gooey');
+    ///////////////////////////////////////////////////////////////////////////
+
+    defs.append('style')
+        .attr('type', 'text/css')
+        .text("@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Oxygen:wght@700&display=swap');");
+
+    let layer1 = svg.append("g");
+    layer1.style("filter", "url(#gooey)")
+    let layer2 = svg.append("g");
+    let layer3 = svg.append('g');
+
+
+    let path = layer2.append("path")
+        .style("filter", "url(#glow)")
+        .attr("fill", "#D9BAC0")
+        .attr("stroke", "#D9BAC0")
+        .attr("fill-opacity", 0.2)
+        .attr("stroke-width", 1.5)
+        .attr("transform", centre)
+
+    path.attr("d", line
+        .radius(d => yscale(d.val))
+        (odata));
+
+
+    var leftlarge = d3.scaleLinear()
+        .domain([0, -10])
+        .range([3, 10])
+    var leftsmall = d3.scaleLinear()
+        .domain([10, 0])
+        .range([0, 3])
+    var rightlarge = d3.scaleLinear()
+        .domain([0, 10])
+        .range([3, 10])
+    var rightsmall = d3.scaleLinear()
+        .domain([-10, 0])
+        .range([0, 3])
+    var tbscale = d3.scaleLinear()
+        .domain([0, 10])
+        .range([3, 10])
+
+    function randomize(gamma, beta){
+        let lrran = gamma/9;
+        let left = 0;
+        let right = 0;
+        if(lrran >= 0){
+            left = leftsmall(lrran)
+            right = rightlarge(lrran)
+        }
+        else{
+            left = leftlarge(lrran)
+            right = rightsmall(lrran)
+        }
+        let tbran = beta/18
+        let top = 0;
+        let bottom = 0;
+        if(tbran >= 0){
+            top = leftsmall(tbran)
+            bottom = rightlarge(tbran)
+        }
+        else{
+            top = leftlarge(tbran)
+            bottom = rightsmall(tbran)
+        }
+
+
+        odata[0].val = top
+        odata[1].val = right
+        odata[2].val = bottom
+        odata[3].val = left
+
+
+        // let val = Math.floor(Math.random() * (soundscape.length));
+        // if(val > soundscape.length -1){
+        //     val = soundscape.length;
+        // }
+        // currentsound = val;
+        // let color = soundscape[currentsound].color
+
+        line = getline(0.5);
+
+        path.transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .attr("d", line.radius(d => yscale(d.val))(odata));
+
+
+
+    }
+
+    var speedscale = d3.scaleLinear()
+        .domain([0, 5])
+        .range([0.9, 0.4]);
+
+    let vscale = d3.scaleSqrt()
+        .domain([-100,100])
+        .range([30, height-30]);
+    let hscale = d3.scaleSqrt()
+        .domain([-100,100])
+        .range([30, width-30]);
+    let rscale = d3.scaleSqrt()
+        .domain([0,175])
+        .range([0, 300]);
+    var palatte = d3.scaleSequential(d3.interpolateRdPu).domain([-100,100]);
+
+    function addcircle(x,y,z){
+        let val = Math.abs((x^2) + (y^2) + (z^2));
+        let mangitudue = Math.sqrt(val);
+        if(x > 100){
+            x = 100;
+        }
+        else{
+            if(x< -100){
+                x = -100
+            }
+        }
+        if(y > 100){
+            y = 100;
+        }
+        else{
+            if(y< -100){
+                y = -100
+            }
+        }
+        if(z > 100){
+            z = 100;
+        }
+        else{
+            if(z< -100){
+                z = -100
+            }
+        }
+
+
+        let chunk = {
+            id: uuidv4(),
+            pos: [x,y,z,mangitudue],
+        };
+        playingsounds.push(chunk);
+    }
+
+    function updatecircles(){
+
+
+
+        let remove = [];
+        playingsounds.forEach((d,i) => {
+            m = d.pos[3];
+            m = m -1;
+            if(m < 0){
+                remove.push(i)
+            }
+            else{
+                d.pos[3] = m;
+            }
+
+        })
+        remove.sort()
+        remove.reverse()
+        remove.forEach(d => {
+            playingsounds.splice(d, 1)
+        })
+
+
+        let t = d3.transition()
+            .ease(d3.easeLinear)
+            .duration(2500)
+
+        let t2 = d3.transition()
+            .ease(d3.easePolyInOut)
+            .duration(2500)
+
+
+        let circle = layer1
+            .selectAll(".bubble")
+            .data(playingsounds, function(d) {return d.id})
+
+        circle.join(
+            enter =>
+                enter
+                    .append('circle')
+                    .attr('class', 'bubble')
+                    .attr('cx', d => hscale(d.pos[0]))
+                    .attr('cy', d=> {
+                        return vscale(d.pos[1])
+                    })
+                    .attr('r', d => {
+                        return rscale(Math.abs(d.pos[3]))
+                    })
+                    .attr("opacity", 0.5)
+                    .attr('fill', d => {return palatte(d.pos[2])}),
+            update =>
+                update
+                    .call(update => update.transition(t)
+                        .attr('r', d => {
+                            return rscale(d.pos[3])
+                        })
+                    ),
+            exit =>
+                exit
+                    .call(exit => exit.transition(t2)
+                        .attr("r", 0))
+                    .remove()
+        )
+
+    }
+
+</script>
+
+<div id="msgDiv"></div>
+<div id="msgDiv2"></div>
+
+<script>
+
+    var mode = 0;
+
+    const MessageType = {
+        SERVER_INFO: 0,
+        CLIENT1: 1,
+        CLIENT2: 2,
+        TOY: 3,
+        GRANDPARENT: 4,
+        LORA: 5
+    };
+
+    const Eventtype = {
+        SOUND: 0,
+        MOTION: 1,
+        FACE: 2,
+        ACCEL: 3,
+        ORIENT: 4
+    };
+
+    var client = 0;
+
+
+    var btn1 = $("#btn-client1");
+    var btn2 = $("#btn-client2");
+
+    var sbtn = $("#soundbtn");
+    var fbtn = $("#facebtn");
+    var rsbtn = $("#resetbtn");
+    var motionbtn = $("#SetMotion");
+    var msgDiv = $("#msgDiv");
+    var msgDiv2 = $("#msgDiv2");
+    var serverConnection = undefined;
+
+    var sounds = {};
+
+    var base_vales = {
+         setup: false,
+         alpha: 0,
+         beta: 0,
+         gamma: 0
+    };
+
+    var last_values = {
+        alpha: 0,
+        beta: 0,
+        gamma: 0
+    };
+
+    var data;
+
+    var max = 0;
+
+    var peak_acc = 0;
+
+    var peak_sound = 0;
+
+    var setup = false;
+
+    var cat = new Howl({
+        src: ["sounds/WeLabo/cat.mp3"],
+        loop: false
+    });
+
+    var pop = new Howl({
+        src: ["sounds/WeLabo/pop.mp3"],
+        loop: false
+    });
+
+    var camera = new Howl({
+        src: ["sounds/WeLabo/camera.mp3"],
+        loop: false
+    });
+
+    var water = new Howl({
+        src: ["sounds/WeLabo/water.mp3"],
+        loop: false
+    });
+
+    var bell = new Howl({
+        src: ["sounds/WeLabo/bell.mp3"],
+        loop: false
+    });
+    var phone = new Howl({
+        src: ["sounds/WeLabo/phone.mp3"],
+        loop: false
+    });
+    var whoosh = new Howl({
+        src: ["sounds/WeLabo/whoosh.mp3"],
+        loop: false
+    });
+    var vibrate = new Howl({
+        src: ["sounds/WeLabo/vibrate.mp3"],
+        loop: false
+    });
+
+    var mapping = {
+        "Fast Alpha": "cat",
+        "Alpha": "pop",
+        "Fast Beta": "camera",
+        "Beta": "water",
+        "Sound": "vibrate"
+    };
+
+    var faces = {
+        "neutral": "sounds/WeLabo/faces/neutral.png",
+        "angry": "sounds/WeLabo/faces/angry.png",
+        "happy": "sounds/WeLabo/faces/happy.png",
+        "sad": "sounds/WeLabo/faces/sad.png",
+        "confused": "sounds/WeLabo/faces/confused.png",
+        "mischievous": "sounds/WeLabo/faces/mischievous.png",
+    };
+
+    var face_map = {
+        "Fast Alpha": "happy",
+        "Alpha": "neutral",
+        "Fast Beta": "confused",
+        "Beta": "mischievous",
+        "Sound": "sad"
+    };
+
+    function SoundToggle(){
+        mode = 0;
+        sbtn.prop("disabled", true);
+        fbtn.prop("disabled", false);
+
+
+    }
+
+    function FaceToggle(){
+        mode = 1;
+        sbtn.prop("disabled", false);
+        fbtn.prop("disabled", true);
+    }
+
+
+
+    sounds["cat"] = cat;
+    sounds["pop"] = pop;
+    sounds["camera"] = camera;
+    sounds["water"] = water;
+    sounds["bell"] = bell;
+    sounds["phone"] = phone;
+    sounds["whoosh"] = whoosh;
+    sounds["vibrate"] = vibrate;
+
+
+    btn1.on("click", () => {
+        btn2.prop("disabled", true);
+        btn1.prop("disabled", true);
+        destination = "wss://colinauyeung-portfolio.herokuapp.com/client1";
+        serverConnection = new WebSocket(destination);
+        serverConnection.onmessage = handleMessage;
+        serverConnection.onclose = handleClose;
+        client = 1;
+    });
+
+    btn2.on("click", () => {
+        btn1.prop("disabled", true);
+        destination = "wss://colinauyeung-portfolio.herokuapp.com/client2";
+        serverConnection = new WebSocket(destination);
+        serverConnection.onmessage = handleMessage;
+        serverConnection.onclose = handleClose;
+        // $("#Config").remove();
+        client = 2;
+    });
+
+    function setMap() {
+        console.log("click");
+        mapping["Fast Alpha"] = $("#ddFA :selected").val();
+        mapping["Alpha"] = $("#ddA :selected").val();
+        mapping["Fast Beta"] = $("#ddFB :selected").val();
+        mapping["Beta"] = $("#ddB :selected").val();
+        mapping["Sound"] = $("#ddS :selected").val();
+        face_map["Fast Alpha"] = $("#FddFA :selected").val();
+        face_map["Alpha"] = $("#FddA :selected").val();
+        face_map["Fast Beta"] = $("#FddFB :selected").val();
+        face_map["Beta"] = $("#FddB :selected").val();
+        face_map["Sound"] = $("#FddS :selected").val();
+    };
+
+    rsbtn.on("click", ()=> {
+       base_vales.setup = false;
+    });
+
+    function handleClose(){
+        serverConnection = undefined;
+        btn2.prop("disabled", false);
+        btn1.prop("disabled", false);
+        // alert("Peer Disconnected: Connection Closed");
+
+    }
+
+    function handleMessage(mEvent) {
+        var msg = JSON.parse(mEvent.data);
+
+        switch (msg.type){
+            case MessageType.SERVER_INFO:
+                // alert(msg.message);
+                break;
+            case MessageType.CLIENT1:
+                if(msg.event === Eventtype.SOUND){
+                    msgDiv.html("Sound");
+                    sounds[mapping["Sound"]].play();
+
+                }
+                else{
+                    msgDiv.html("Motion");
+                    sounds[mapping[msg.value]].play();
+                    // switch(msg.value) {
+                    //     case "Alpha":
+                    //         sounds["camera"].play();
+                    //         break;
+                    //     case "Fast Alpha":
+                    //         sounds["pop"].play();
+                    //         break;
+                    //     case "Beta":
+                    //         sounds["water"].play();
+                    //         break;
+                    //     case "Fast Beta":
+                    //         sounds["bell"].play();
+                    //         break;
+                    // }
+                };
+
+                msgDiv2.html(msg.value);
+                break;
+            case MessageType.CLIENT2:
+
+                if(msg.event === Eventtype.ORIENT){
+                    randomize(msg.gamma, msg.beta);
+                }
+                if(msg.event === Eventtype.ACCEL){
+                    addcircle(msg.x, msg.y, msg.z);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
+    //https://developer.apple.com/forums/thread/128376
+    function requestDeviceOrientation () {
+        motionbtn.prop("disabled", true);
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('deviceorientation', handleOrientation, true)
+        }
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            DeviceMotionEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('devicemotion', handleMotion, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('devicemotion', handleMotion, true)
+        }
+    }
+
+    function handleOrientation(event) {
+        var absolute = event.absolute;
+        var alpha    = event.alpha;
+        var beta     = event.beta;
+        var gamma    = event.gamma;
+
+        if(!base_vales["setup"]){
+            base_vales["alpha"] = alpha;
+            base_vales["beta"] = beta;
+            base_vales["gamma"] = gamma;
+            base_vales["setup"] = true;
+        }
+
+        last_values["alpha"] = alpha;
+        last_values["beta"] = beta;
+        last_values["gamma"] = gamma;
+
+        // msgDiv.html(diff_alpha);
+
+    }
+
+    function handleMotion(event){
+        var acc = Math.max(Math.abs(event.acceleration.x), Math.abs(event.acceleration.y), Math.abs(event.acceleration.z));
+
+        if(acc < 5){
+            console.log(peak_acc);
+            diff_a = Math.abs(last_values["alpha"] - base_vales["alpha"])/360;
+            // if(diff_a > 0.80){
+            //     diff_a = 1 - diff_a;
+            // }
+            diff_b = Math.abs(last_values["beta"] - base_vales["beta"])/360;
+            diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"])/180;
+
+            var c = MessageType.CLIENT1;
+            if(client === 2){
+                c = MessageType.CLIENT2;
+            }
+
+            data = {
+                type: c,
+                event: Eventtype.MOTION,
+                value: "None"
+            };
+            if(diff_c > 0.70){
+                diff_c = 1 - diff_c;
+            }
+
+            if(peak_acc >= 20){
+                console.log({"a": diff_a, "b":diff_b, "c":diff_c});
+                if(diff_a >= diff_b && diff_a >= diff_c){
+                    data.value = mapping["Fast Alpha"];
+                    if(mode === 1){
+                        data.event = Eventtype.FACE;
+                        data.value = face_map["Fast Alpha"];
+                    }
+                    if(serverConnection != undefined){
+                        serverConnection.send(JSON.stringify(data));
+                    }
+                }
+                else{
+                    // if(diff_b >= diff_c){
+                        data.value = mapping["Fast Beta"];
+                        if(mode === 1){
+                            data.event = Eventtype.FACE;
+                            data.value = face_map["Fast Beta"];
+                        }
+                        if(serverConnection != undefined){
+                            serverConnection.send(JSON.stringify(data));
+                        }
+                    // }
+                    // else{
+                    //     msgDiv.html("Fast Gamma")
+                    // }
+                }
+            }
+            else{
+                if(peak_acc >= 10){
+                    console.log({"a": diff_a, "b":diff_b, "c":diff_c});
+                    if(diff_a >= diff_b && diff_a >= diff_c){
+                        data.value = mapping["Alpha"];
+                        if(mode === 1){
+                            data.event = Eventtype.FACE;
+                            data.value = face_map["Alpha"];
+                        }
+                        if(serverConnection != undefined){
+                            serverConnection.send(JSON.stringify(data));
+                        }
+                    }
+                    else{
+                        // if(diff_b >= diff_c){
+                            data.value = mapping["Beta"];
+                            if(mode === 1){
+                                data.event = Eventtype.FACE;
+                                data.value = face_map["Beta"];
+                            }
+                            if(serverConnection != undefined){
+                                serverConnection.send(JSON.stringify(data));
+                            }
+                        // }
+                        // else{
+                        //     msgDiv.html("Gamma")
+                        // }
+                    }
+                }
+                else{
+                    // msgDiv.html("You haven't gone")
+                }
+            }
+            peak_acc = 0;
+
+
+        }
+        else{
+            if(acc > peak_acc){
+                peak_acc = acc;
+            }
+
+        }
+
+
+
+        // if(Math.abs(event.acceleration.x) > Math.abs(max)){
+        //     max = event.acceleration.x;
+        // }
+        // msgDiv2.html(event.acceleration.x);
+    }
+
+
+
+    document.body.addEventListener('click', init);
+    var analyzer;
+    var sampleRate;
+
+    function init(){
+        document.body.removeEventListener('click', init);
+        var AC = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AC();
+        var microphone;
+
+
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+
+
+
+        analyzer = audioContext.createAnalyser();
+        const gainNode = audioContext.createGain();
+        if(navigator.mediaDevices.getUserMedia()){
+            console.log("getUserMedia Supported");
+            var constraints = {audio: true};
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(
+                    function(stream){
+                        microphone = audioContext.createMediaStreamSource(stream);
+                        microphone.connect(gainNode);
+                        gainNode.gain.value = 1;
+                        gainNode.connect(analyzer);
+                        sampleRate = audioContext.sampleRate;
+                        // analyzer.connect(audioContext.destination);
+
+                        beginRecording(analyzer);
+                    })
+                .catch(function(err){
+                    console.log("Error! "+err)
+                })
+        }
+        else{
+            console.log("getUserMedia is not supported");
+        }
+
+
+    }
+
+    function beginRecording(analyzer){
+        analyzer.fftsize = 512 //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+        var bufferlength = analyzer.fftsize;
+        var freqBinDataArray = new Uint8Array(bufferlength);
+
+        var checkAudio = function (){
+            analyzer.getByteFrequencyData(freqBinDataArray);
+            // console.log(freqBinDataArray);
+            rms = getRMS(freqBinDataArray);
+            if(rms <  90){
+                if(peak_sound > rms){
+
+                    var c = MessageType.CLIENT1;
+                    if(client === 2){
+                        c = MessageType.CLIENT2;
+                    }
+                    data = {
+                        type: c,
+                        event: Eventtype.SOUND,
+                        value: mapping["Sound"]
+                    }
+                    if(mode === 1){
+                        data.event = Eventtype.FACE;
+                        data.value = face_map["Sound"];
+                    }
+                    if(serverConnection != undefined){
+                        serverConnection.send(JSON.stringify(data));
+                    }
+                }
+                peak_sound = 0;
+            }
+            else{
+                if(rms > peak_sound){
+                    peak_sound = rms;
+                }
+            }
+            console.log("RMS: "+ getRMS(freqBinDataArray));
+            console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+        };
+        setInterval(checkAudio, 64);
+    }
+
+    function getRMS(spectrum){
+        var rms = 0;
+        for (var i = 0; i < spectrum.length; i++){
+            rms += spectrum[i] * spectrum[i];
+        }
+        rms /= spectrum.length;
+        rms = Math.sqrt(rms);
+        return rms
+    }
+
+    function  getIndexofMax(array) {
+        return array.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0
+        )
+    }
+
+    setInterval(updatecircles, 2500);
+
+
+
+
+</script>
+
+</body>
+</html>

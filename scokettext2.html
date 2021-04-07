@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            max-width: 375px;
+            margin:0;
+            background-color:#6C8C8C;
+        }
+        .form{
+            border-radius:3px;
+            padding:10px 15px;
+            background-color:rgba(0,0,0,0);
+        }
+        .select{
+            width:100%;
+            margin-bottom:15px;
+            padding:7px 10px;
+            border-radius:2px;
+            color:#fff;
+            background-color:#554c57;
+            border:none;
+            height:30px;
+        }
+        .label{
+            width:100%;
+            display:block;
+        }
+        .button{
+            width:100%;
+            /*margin:15px 0;*/
+            background-color:#D9BAC0;
+            /*border:none;*/
+            color:#000000;
+            border-radius:2px;
+            padding:7px 10px;
+            font-size:1em;
+            cursor:pointer;
+            margin:0 0 0 0;
+        }
+        .button:active {
+            background-color: #857075;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        .button:disabled,
+        .button[disabled]{
+            border: 1px solid #999999;
+            background-color: #cccccc;
+            color: #666666;
+        }
+        .row{
+            display:flex;
+            justify-content:flex-start;
+            align-items:stretch;
+            flex-wrap:nowrap;
+            padding:10px;
+        }
+        .cell{
+            min-height:75px;
+            flex-grow:1;
+            flex-basis:100%;
+        }
+        .tab{
+            text-decoration:none;
+            width:25%;
+            color:inherit;
+            padding:7px 14px 10px 10px;
+            transition:opacity 0.3s;
+            display:inline-block;
+            border-radius:3px;
+            margin-right:10px;
+        }
+        .tab.tab-active{
+            background-color:#0d94e6;
+            color:white;
+        }
+        .tab-content{
+            padding:6px 12px;
+            min-height:100px;
+            animation:fadeEffect 1s;
+            background-color: #3C4959;
+            color: white;
+        }
+        *{
+            box-sizing:border-box;
+        }
+        @keyframes fadeEffect{
+            from{
+                opacity:0;
+            }
+            to{
+                opacity:1;
+            }
+        }
+        @media (max-width: 768px){
+            .row{
+                flex-wrap:wrap;
+            }
+        }
+        @media (max-width: 480px){
+            #title{
+                padding:10px;
+                font-size:26px;
+            }
+            #SetMotion{
+                width:50%;
+            }
+            #resetbtn{
+                width:50%;
+            }
+            #i8ih{
+                width:100%;
+                min-height:0;
+            }
+            #i8l5{
+                padding:0 0 0 0;
+            }
+            #resetbtn{
+                margin:0 0 0 0;
+            }
+            #SetMotion{
+                margin:0 0 0 0;
+                float:left;
+            }
+            #ias2{
+                padding:10px 10px 0 10px;
+            }
+            #ibdo{
+                min-height:0;
+            }
+            #title{
+                text-align:center;
+                font-family: 'Dela Gothic One', cursive;
+            }
+            #imagebox{
+                color:black;
+                width:100%;
+            }
+            #spacer{
+                min-height: 250px;
+                color: #6C8C8C;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div data-tabs="1" id="i6wrh">
+    <div id="ias2" class="row">
+        <div id="i8ih" class="cell">
+            <div id="title">Usabo!
+                <br draggable="true" data-highlightable="1" id="iv7v"/>
+            </div>
+        </div>
+        <img id="imagebox" src="sounds/WeLabo/faces/neutral.png"/>
+        <div id="spacer">a</div>
+        <div id="ibdo" class="cell">
+            <form id="i8l5" class="form">
+                <div id="i8ett" class="form-group">
+                    <button type="button" id="btn-client2" class="button">Connect to Server</button>
+                    <button type="button"  id="SetMotion" class="button"onclick="requestDeviceOrientation()">Access Orientation</button>
+                    <button type="button" id="resetbtn" class="button">Reset Orientation</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+<script>var items = document.querySelectorAll('#i6wrh');
+for (var i = 0, len = items.length; i < len; i++) {
+    (function(){
+        var t,e=this,a="[data-tab]",n=document.body,r=n.matchesSelector||n.webkitMatchesSelector||n.mozMatchesSelector||n.msMatchesSelector,o=function(){
+            var a=e.querySelectorAll("[data-tab-content]")||[];
+            for(t=0;t<a.length;t++)a[t].style.display="none"}
+            ,i=function(n){
+            var r=e.querySelectorAll(a)||[];
+            for(t=0;t<r.length;t++){
+                var i=r[t],s=i.className.replace("tab-active","").trim();
+                i.className=s}
+            o(),n.className+=" tab-active";
+            var l=n.getAttribute("href"),c=e.querySelector(l);
+            c&&(c.style.display="")}
+            ,s=e.querySelector(".tab-active"+a);
+        s=s||e.querySelector(a),s&&i(s),e.addEventListener("click",function(t){
+            var e=t.target;
+            r.call(e,a)&&i(e)}
+        )
+    }
+        .bind(items[i]))();
+}
+</script>
+
+
+<div id="Config">
+
+
+</div>
+
+<div id="msgDiv"></div>
+<div id="msgDiv2"></div>
+
+<script>
+
+    const MessageType = {
+        SERVER_INFO: 0,
+        CLIENT1: 1,
+        CLIENT2: 2,
+        TOY: 3,
+        GRANDPARENT: 4,
+        LORA: 5
+    };
+
+    const Eventtype = {
+        SOUND: 0,
+        MOTION: 1,
+        FACE: 2,
+        ACCEL: 3,
+        ORIENT: 4
+    };
+
+    var client = 0;
+
+
+    var btn1 = $("#btn-client1");
+    var btn2 = $("#btn-client2");
+    var mapset = $("#mappingset");
+    var rsbtn = $("#resetbtn");
+    var motionbtn = $("#SetMotion");
+    var msgDiv = $("#msgDiv");
+    var msgDiv2 = $("#msgDiv2");
+    var serverConnection = undefined;
+
+    var sounds = {};
+
+    var base_vales = {
+         setup: false,
+         alpha: 0,
+         beta: 0,
+         gamma: 0
+    };
+
+    var last_values = {
+        alpha: 0,
+        beta: 0,
+        gamma: 0
+    };
+
+    var data;
+
+    var max = 0;
+
+    var peak_acc = 0;
+
+    var peak_sound = 0;
+
+    var setup = false;
+
+    var cat = new Howl({
+        src: ["sounds/WeLabo/cat.mp3"],
+        loop: false
+    });
+
+    var pop = new Howl({
+        src: ["sounds/WeLabo/pop.mp3"],
+        loop: false
+    });
+
+    var camera = new Howl({
+        src: ["sounds/WeLabo/camera.mp3"],
+        loop: false
+    });
+
+    var water = new Howl({
+        src: ["sounds/WeLabo/water.mp3"],
+        loop: false
+    });
+
+    var bell = new Howl({
+        src: ["sounds/WeLabo/bell.mp3"],
+        loop: false
+    });
+    var phone = new Howl({
+        src: ["sounds/WeLabo/phone.mp3"],
+        loop: false
+    });
+    var whoosh = new Howl({
+        src: ["sounds/WeLabo/whoosh.mp3"],
+        loop: false
+    });
+    var vibrate = new Howl({
+        src: ["sounds/WeLabo/vibrate.mp3"],
+        loop: false
+    });
+
+    var mapping = {
+        "Fast Alpha": "cat",
+        "Alpha": "pop",
+        "Fast Beta": "camera",
+        "Beta": "water",
+        "Sound": "vibrate"
+    };
+
+
+
+    sounds["cat"] = cat;
+    sounds["pop"] = pop;
+    sounds["camera"] = camera;
+    sounds["water"] = water;
+    sounds["bell"] = bell;
+    sounds["phone"] = phone;
+    sounds["whoosh"] = whoosh;
+    sounds["vibrate"] = vibrate;
+
+    var faces = {
+        "neutral": "sounds/WeLabo/faces/neutral.png",
+        "angry": "sounds/WeLabo/faces/angry.png",
+        "happy": "sounds/WeLabo/faces/happy.png",
+        "sad": "sounds/WeLabo/faces/sad.png",
+        "confused": "sounds/WeLabo/faces/confused.png",
+        "mischievous": "sounds/WeLabo/faces/mischievous.png",
+    };
+
+
+    btn2.on("click", () => {
+        btn2.prop("disabled", true);
+        btn1.prop("disabled", true);
+        destination = "wss://colinauyeung-portfolio.herokuapp.com/client2";
+        serverConnection = new WebSocket(destination);
+        serverConnection.onmessage = handleMessage;
+        serverConnection.onclose = handleClose;
+        client = 2;
+    });
+
+
+    mapset.on("click", () => {
+        mapping["Fast Alpha"] = $("#ddFA :selected").val();
+        mapping["Alpha"] = $("#ddA :selected").val();
+        mapping["Fast Beta"] = $("#ddFB :selected").val();
+        mapping["Beta"] = $("#ddB :selected").val();
+        mapping["Sound"] = $("#ddS :selected").val();
+    });
+
+    rsbtn.on("click", ()=> {
+       base_vales.setup = false;
+    });
+
+    function handleClose(){
+        serverConnection = undefined;
+        btn2.prop("disabled", false);
+        btn1.prop("disabled", false);
+        msgDiv.html("Peer Disconnected: Connection Closed");
+
+    }
+
+    function handleMessage(mEvent) {
+        var msg = JSON.parse(mEvent.data);
+
+        switch (msg.type){
+            case MessageType.SERVER_INFO:
+                alert(msg.message);
+                break;
+            case MessageType.CLIENT1:
+                if(msg.event === Eventtype.SOUND){
+                    sounds[msg.value].play();
+
+                }
+                else{
+                    if(msg.event === Eventtype.FACE){
+                        document.getElementById("imagebox").src = faces[msg.value];
+                    }
+                    else{
+                        sounds[msg.value].play();
+                    }
+
+                    // switch(msg.value) {
+                    //     case "Alpha":
+                    //         sounds["camera"].play();
+                    //         break;
+                    //     case "Fast Alpha":
+                    //         sounds["pop"].play();
+                    //         break;
+                    //     case "Beta":
+                    //         sounds["water"].play();
+                    //         break;
+                    //     case "Fast Beta":
+                    //         sounds["bell"].play();
+                    //         break;
+                    // }
+                };
+
+                // msgDiv2.html(msg.value);
+                break;
+            case MessageType.CLIENT2:
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
+    //https://developer.apple.com/forums/thread/128376
+    function requestDeviceOrientation () {
+        motionbtn.prop("disabled", true);
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation, true);
+                        setInterval(sendorientation, 500);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('deviceorientation', handleOrientation, true);
+            setInterval(sendorientation, 500);
+        }
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            DeviceMotionEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('devicemotion', handleMotion, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('devicemotion', handleMotion, true)
+        }
+    }
+
+    var last_gamma = 0;
+    var last_beta = 0;
+
+    function handleOrientation(event) {
+        var absolute = event.absolute;
+        var alpha    = event.alpha;
+        var beta     = event.beta;
+        var gamma    = event.gamma;
+
+        if(!base_vales["setup"]){
+            base_vales["alpha"] = alpha;
+            base_vales["beta"] = beta;
+            base_vales["gamma"] = gamma;
+            base_vales["setup"] = true;
+        }
+
+        last_values["alpha"] = alpha;
+        last_values["beta"] = beta;
+        last_values["gamma"] = gamma;
+
+
+
+
+        // msgDiv.html(diff_alpha);
+
+    }
+
+    function sendorientation(){
+        beta = last_values["beta"];
+        gamma = last_values["gamma"];
+
+        var c = MessageType.CLIENT1;
+        if(client === 2){
+            c = MessageType.CLIENT2;
+        }
+
+
+
+        data = {
+            type: c,
+            event: Eventtype.ORIENT,
+            beta: beta,
+            gamma: gamma
+        };
+        var diff_b = Math.abs(beta-last_beta);
+        var diff_g = Math.abs(beta-last_gamma);
+        if(diff_b > 5 || diff_g > 5){
+            last_beta = beta;
+            last_gamma = gamma;
+            serverConnection.send(JSON.stringify(data));
+        }
+    }
+
+
+
+    var peak_x;
+    var peak_y;
+    var peak_z;
+
+    function handleMotion(event){
+        var acc = Math.max(Math.abs(event.acceleration.x), Math.abs(event.acceleration.y), Math.abs(event.acceleration.z));
+
+        if(acc < 5){
+            console.log(peak_acc);
+            diff_a = Math.abs(last_values["alpha"] - base_vales["alpha"])/360;
+            // if(diff_a > 0.80){
+            //     diff_a = 1 - diff_a;
+            // }
+            diff_b = Math.abs(last_values["beta"] - base_vales["beta"])/360;
+            diff_c = Math.abs(last_values["gamma"] - base_vales["gamma"])/180;
+
+            var c = MessageType.CLIENT1;
+            if(client === 2){
+                c = MessageType.CLIENT2;
+            }
+
+
+            if(diff_c > 0.70){
+                diff_c = 1 - diff_c;
+            }
+
+            if(peak_acc >= 5){
+                data = {
+                    type: c,
+                    event: Eventtype.ACCEL,
+                    x: peak_x,
+                    y: peak_y,
+                    z: peak_z
+                };
+                serverConnection.send(JSON.stringify(data));
+            }
+
+            peak_acc = 0;
+
+
+        }
+        else{
+            if(acc > peak_acc){
+                peak_acc = acc;
+                peak_x = event.acceleration.x;
+                peak_y = event.acceleration.y;
+                peak_z = event.acceleration.z;
+            }
+
+        }
+
+
+
+        // if(Math.abs(event.acceleration.x) > Math.abs(max)){
+        //     max = event.acceleration.x;
+        // }
+        // msgDiv2.html(event.acceleration.x);
+    }
+
+
+
+    document.body.addEventListener('click', init);
+    var analyzer;
+    var sampleRate;
+
+    function init(){
+        document.body.removeEventListener('click', init);
+        var AC = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AC();
+        var microphone;
+
+
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+
+
+
+        analyzer = audioContext.createAnalyser();
+        const gainNode = audioContext.createGain();
+        if(navigator.mediaDevices.getUserMedia()){
+            console.log("getUserMedia Supported");
+            var constraints = {audio: true};
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(
+                    function(stream){
+                        microphone = audioContext.createMediaStreamSource(stream);
+                        microphone.connect(gainNode);
+                        gainNode.gain.value = 1;
+                        gainNode.connect(analyzer);
+                        sampleRate = audioContext.sampleRate;
+                        // analyzer.connect(audioContext.destination);
+
+                        beginRecording(analyzer);
+                    })
+                .catch(function(err){
+                    console.log("Error! "+err)
+                })
+        }
+        else{
+            console.log("getUserMedia is not supported");
+        }
+
+
+    }
+
+    function beginRecording(analyzer){
+        analyzer.fftsize = 512 //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+        var bufferlength = analyzer.fftsize;
+        var freqBinDataArray = new Uint8Array(bufferlength);
+
+        var checkAudio = function (){
+            analyzer.getByteFrequencyData(freqBinDataArray);
+            // console.log(freqBinDataArray);
+            rms = getRMS(freqBinDataArray);
+            if(rms <  50){
+                if(peak_sound > rms){
+
+                    var c = MessageType.CLIENT1;
+                    if(client === 2){
+                        c = MessageType.CLIENT2;
+                    }
+                    data = {
+                        type: c,
+                        event: Eventtype.SOUND,
+                        value: peak_sound
+                    }
+                    if(serverConnection != undefined){
+                        serverConnection.send(JSON.stringify(data));
+                    }
+                }
+                peak_sound = 0;
+            }
+            else{
+                if(rms > peak_sound){
+                    peak_sound = rms;
+                }
+            }
+            // console.log("RMS: "+ getRMS(freqBinDataArray));
+            // console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+        };
+        setInterval(checkAudio, 64);
+    }
+
+    function getRMS(spectrum){
+        var rms = 0;
+        for (var i = 0; i < spectrum.length; i++){
+            rms += spectrum[i] * spectrum[i];
+        }
+        rms /= spectrum.length;
+        rms = Math.sqrt(rms);
+        return rms
+    }
+
+    function  getIndexofMax(array) {
+        return array.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0
+        )
+    }
+
+
+
+
+</script>
+
+</body>
+</html>
