@@ -42,7 +42,7 @@
         width:100%;
         /*margin:15px 0;*/
         background-color:#D9BAC0;
-        border:none;
+        /*border:none;*/
         color:#000000;
         border-radius:2px;
         padding:7px 10px;
@@ -50,6 +50,13 @@
         cursor:pointer;
         margin:0 0 0 0;
     }
+
+    .button:active {
+        background-color: #857075;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+    }
+
     .button:disabled,
     .button[disabled]{
         border: 1px solid #999999;
@@ -204,6 +211,7 @@
 
     var btn1 = $("#btn-client1");
     var rsbtn = $("#resetbtn");
+    var motionbtn = $("#SetMotion");
 
     var msgDiv = $("#msgDiv");
     var msgDiv2 = $("#msgDiv2");
@@ -374,6 +382,7 @@
 
     //https://developer.apple.com/forums/thread/128376
     function requestDeviceOrientation () {
+        motionbtn.prop("disabled", true);
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
             DeviceOrientationEvent.requestPermission()
                 .then(permissionState => {
