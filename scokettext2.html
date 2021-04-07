@@ -439,6 +439,9 @@ for (var i = 0, len = items.length; i < len; i++) {
         }
     }
 
+    var last_gamma = 0;
+    var last_beta = 0;
+
     function handleOrientation(event) {
         var absolute = event.absolute;
         var alpha    = event.alpha;
@@ -460,13 +463,21 @@ for (var i = 0, len = items.length; i < len; i++) {
         if(client === 2){
             c = MessageType.CLIENT2;
         }
+
+
+
         data = {
             type: c,
             event: Eventtype.ORIENT,
             beta: beta,
             gamma: gamma
         };
-        serverConnection.send(JSON.stringify(data));
+        var diff_b = Math.abs(beta-last_beta);
+        var diff_g = Math.abs(beta-last_gamma);
+        if(diff_b > 5 || diff_g > 5){
+            serverConnection.send(JSON.stringify(data));
+        }
+
 
         // msgDiv.html(diff_alpha);
 
