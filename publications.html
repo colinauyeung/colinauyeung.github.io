@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/newstyle.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        body{
+            height: 100%;
+            margin: 0;
+        }
+        .projectimg{
+            margin-right: 17px
+        }
+
+        .classheader{
+            font-size: 40px;
+            margin: 35px 0 20px 0;
+        }
+
+        .classbody{
+            color: white;
+            padding: 10px;
+            height: 133px;
+            border:solid;
+            border-color: #3a4a59;
+            border-width: 1px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+
+        }
+
+        .classbody a{
+            text-decoration: none;
+            color: white;
+        }
+
+        .classbody img{
+            max-width: 325px;
+            float: left;
+        }
+
+        .classtext{
+            position: relative;
+            /*float: right;*/
+            left: 10px;
+        }
+
+        .classtitle{
+            font-size: 25px;
+            font-weight: bold;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        .classsub{
+            font-size: 16px;
+            margin-top: 5px;
+            margin-bottom: 0px;
+        }
+
+        #content{
+            height: 100%;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div id="i7kd" class="row">
+    <div id="maincell" class="cell">
+        <div id="headerrow" class="row">
+            <div id="headercontainer" class="cell">
+                <div class="dropdown">
+                    <button id="ihgy"class="dropbtn">
+                        <img src="images/hamburger_icons.png" style="width: 85px;height: 85px;float:left;padding: 0;margin:0;display: block;">
+                    </button>
+                    <div class="dropdown-content">
+                        <div id="homediv">
+                            <a href="index.html">
+                                <img src="images/home_icons.png" style="width: 85px;height: 85px;float:left;padding: 0;margin:0;display: block;">
+                            </a>
+                            <span id="spanhome"></span>
+
+                        </div>
+                        <div id="divproject">
+                            <a  href="projects.html">
+                                <img src="images/projects_icons.png" style="width: 85px;height: 85px;float:left;padding: 0;margin:0;display: block;">
+                            </a>
+                            <span id="spanproject"></span>
+                        </div>
+
+                        <div id="divpaper">
+                            <a  href="publications.html">
+                                <img src="images/papers_icons.png" style="width: 85px;height: 85px;float:left;padding: 0;margin:0;display: block;">
+                            </a>
+                            <span id="spanpaper"></span>
+                        </div>
+
+                        <div id="divcontact">
+                            <a  href="contact.html">
+                                <!--                                <img src="images/contact_icons.png" style="width: 70px;height: 70px;float:left;padding:0;margin:7px;display: block;">-->
+                                <img src="images/contact_icons.png" style="width: 85px;height: 85px;float:left;padding: 0;margin:0;display: block;">
+                            </a>
+                            <span id="spancontact"></span>
+                        </div>
+
+
+
+                        <!--                        <a href="#">2</a>-->
+                        <!--                        <a href="#">3</a>-->
+                    </div>
+                </div>
+
+                <div id="header" class="row">
+                    <div id="headerlocation" class="cell">
+                        <a href="publications.html" style="text-decoration: none; color: black;">Publications</a>
+
+                    </div>
+                    <div id="headerspace" class="cell">
+                    </div>
+                    <div id="headername" class="cell">
+                        Colin Au Yeung
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="body" class="row">
+            <div id="sidebar" class="cell">
+            </div>
+            <div id="content" class="cell" >
+                <div style="margin-left: 20px; margin-right: 20px; font-weight: 100;">
+                    <div >
+                        <p style="font-size: 60px; margin: 30px 0px 20px 0px">Publications</p>
+                    </div>
+                    <div class="classdiv">
+                        <p class="classheader">Work in Progress</p>
+                        <div class="classbody" style="background-color: #244C6B">
+                            <a href="pub/audiencebot.pdf">
+                                <img src="images/AB_image.png">
+                            </a>
+
+                            <div class="classtext">
+                                <a href="pub/audiencebot.pdf">
+                                    <p class="classtitle">Talk like Somebody is Watching: Understanding and Supporting Novice Live Streamers</p>
+                                    <p class="classsub">Terrance Mok, Colin Au Yeung, Anthony Tang, Lora Oehlberg</p>
+                                    <p class="classsub">IMX'20 ACM Internation Conference on Interactive Media Experiences: Work in Progress</p>
+                                </a>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+                <div id="footer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+    var height = document.documentElement.scrollHeight;
+
+    document.getElementById("footer").style.height = height -450 +"px";
+
+</script>
+</body>
+<html>
