@@ -9,18 +9,6 @@ body{
     justify-content: center;
 }
 
-#sidebar{
-    float: left;
-    min-width: 150px;
-    height: 375px;
-    position: sticky;
-    top: 7rem;
-    margin-right: 1rem ;
-    background: #45B1FF;
-    border-radius: 15px;
-    border: 5px solid white;
-
-}
 
 #header{
     font-family:"LINE Seed JP", sans-serif;
@@ -158,3 +146,49 @@ body{
     margin-left: 1rem;
 }
 
+#sidebar{
+    /* float: left; */
+    min-width: 155px;
+    max-width: 155px;
+    /* height: 375px; */
+    position: sticky;
+    top: 7rem;
+    margin-right: 1rem ;
+    background: #45B1FF;
+    border-radius: 20px;
+    border: 5px solid white;
+
+}
+
+#sidebarlayout{
+    display: flexbox;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* padding-left: 21px;
+    padding-right: 21px; */
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.sidebaritem{
+    text-decoration:none;
+    color: #FFF;
+    font-family: "LINE Seed JP";
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -3.6px;
+}
+
+.sidebarline{
+    height: 2px;
+    width: 80%;
+    background: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
