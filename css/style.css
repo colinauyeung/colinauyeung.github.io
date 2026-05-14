@@ -2,193 +2,275 @@ body{
     background: #45B1FF;
 }
 
-#layout{
-    display: flex;
-    width: 100vw;
-    align-items: flex-start;
-    justify-content: center;
-}
+@media (max-width: 796px){
+    #sidebar{
+        display:none;
+    }
+
+    /* Dropdown Button */
+    .dropbtn {
+        font-family:"LINE Seed JP", sans-serif;
+        width: 100%;
 
 
-#header{
-    font-family:"LINE Seed JP", sans-serif;
-    color: white;
-    font-size: 64px;
-}
+        background-color: #04AA6D;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+    }
 
-#mainbox{
-    background: #68C0FF;
-    border-radius: 8px 8px 0px 0px;
-    border: 6px solid white;
-    /* border-bottom: none; */
-    min-height: 100vh;
-    display: flex;
-    position: relative;
-}
+    /* The container <div> - needed to position the dropdown content */
+    #dropdown {
+        width: 100%;
+        position: relative;
+        display: inline-block;
+    }
 
-#maincontent-wrapper{
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    background: none;
-    display: flex;
-    /* z-index: 1; */
-}
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        width: 100%;
 
-#in-paper-content{
-    margin-left: 18%;
-    display: inline;
-    padding-top: 20px;
-    padding-right: 20px;
-}
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
 
-.linetitle{
-    font-family:"LINE Seed JP", sans-serif;
-    color: white;
-    font-size: 64px;
-    letter-spacing:-6.4px;
-    position: relative;
-    
-}
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
 
-.bodytext{
-    color: #FFF;
-    font-family: "LINE Seed JP";
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 30.5px; /* 120.833% */
-}
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {background-color: #ddd;}
+
+    /* Show the dropdown menu on hover */
+    #dropdown:hover .dropdown-content {display: block;}
+
+    /* Change the background color of the dropdown button when the dropdown content is shown */
+    #dropdown:hover .dropbtn {background-color: #3e8e41;}
 
 
-
-.linebreak{
-    height: 30.5px;
-}
-
-#paperelements{
-    width: 100%;
-    height: 100%;
-    /* position: absolute; */
-    left: 0px;
-    top: 0px;
-
-    display: flex;
-    /* background: white; */
-}
-
-#paperlines{
-    position: absolute;
-    margin-top: 94px;
-    width: 100%;
-    /* height: 100%; */
-    /* height: calc(100% - 100px); */
-    /* background: white; */
-    /* background: repeating-linear-gradient(
-        0deg,
-        #ffffff,
-        #ffffff 1px,
-        #ffffff00 1px,
-        #ffffff00 29px
-    ); */
-}
-
-.horizontalline{
-    height: 1.5px;
-    width: 100%;
-    background: white;
-    margin-bottom: 29px;
-}
-
-
-
-#verticalpaperline{
-    position: absolute;
-    width: 1.5px;
-    height: 100%;
-    margin-left: 15%;
-    background: white;
-    float: left;
-    left: 1rem;
-}
-
-
-#circle-wrapper{
-    position: relative;
-    margin-left: calc(15% / 2 - 20.2px);
-    margin-top: 164px;
-    width: 41px;
 
 }
 
-.circle{
-    width: 41px;
-    height: 41px;
-    background: white;
-    border-radius: 50%;
-    margin-bottom: 305px;
+@media (min-width: 796px){
+    #layout{
+        display: flex;
+        width: 100vw;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    #dropdown{
+        display:none;
+    }
+
+    #header{
+        font-family:"LINE Seed JP", sans-serif;
+        color: white;
+        font-size: 64px;
+    }
+
+    #mainbox{
+        overflow: hidden;
+        background: #68C0FF;
+        border-radius: 8px 8px 0px 0px;
+        border: 6px solid white;
+        /* border-bottom: none; */
+        min-height: 100vh;
+        /* min-width: 755px; */
+        display: flex;
+        position: relative;
+    }
+
+    #maincontent-wrapper{
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        background: none;
+        display: flex;
+        /* z-index: 1; */
+        /* padding-bottom: 20px; */
+    }
+
+    #in-paper-content{
+        margin-left: 18%;
+        display: inline;
+        padding-top: 20px;
+        padding-right: 20px;
+        
+    }
+
+    .linetitle{
+        font-family:"LINE Seed JP", sans-serif;
+        color: white;
+        font-size: 64px;
+        letter-spacing:-6.4px;
+        position: relative;
+        
+    }
+
+    .bodytext{
+        color: #FFF;
+        font-family: "LINE Seed JP";
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 30.5px; 
+    }
+
+
+
+    .linebreak{
+        height: 30.5px;
+    }
+
+    #paperelements{
+        width: 100%;
+        height: 100%;
+        /* position: absolute; */
+        left: 0px;
+        top: 0px;
+
+        display: flex;
+        /* background: white; */
+    }
+
+    #paperlines{
+        position: absolute;
+        margin-top: 94px;
+        width: 100%;
+        /* height: 100%; */
+        /* height: calc(100% - 100px); */
+        /* background: white; */
+        /* background: repeating-linear-gradient(
+            0deg,
+            #ffffff,
+            #ffffff 1px,
+            #ffffff00 1px,
+            #ffffff00 29px
+        ); */
+    }
+
+    .horizontalline{
+        height: 1.5px;
+        width: 100%;
+        background: white;
+        margin-bottom: 29px;
+    }
+
+
+
+    #verticalpaperline{
+        position: absolute;
+        width: 1.5px;
+        height: 100%;
+        margin-left: 14%;
+        background: white;
+        float: left;
+        left: 1rem;
+    }
+
+
+    #circle-wrapper{
+        position: relative;
+        margin-left: calc(15% / 2 - 20.2px);
+        margin-top: 164px;
+        width: 41px;
+
+    }
+
+    .initcircle{
+        width: 41px;
+        height: 41px;
+        background: white;
+        border-radius: 50%;
+        /* margin-bottom: 100px; */
+    }
+
+    .circle{
+        /* padding-top: 100px; */
+        width: 41px;
+        height: 41px;
+        background: white;
+        border-radius: 50%;
+        /* margin-bottom: 100px; */
+        margin-top: 305px;
+    }
+
+    #main-wrapper{
+
+        position: relative;
+        width:100%;
+        max-width: 755px;
+        /* height: 1422px; */
+        font-family:"LINE Seed JP", sans-serif;
+    }
+
+    #hiddenbar{
+        float: left;
+        width: 150px;
+        height: 375px;
+        margin-left: 1rem;
+    }
+
+    #sidebar{
+        /* float: left; */
+        min-width: 155px;
+        max-width: 155px;
+        /* height: 375px; */
+        position: sticky;
+        top: 7rem;
+        margin-right: 1rem ;
+        background: #45B1FF;
+        border-radius: 20px;
+        border: 5px solid white;
+
+    }
+
+    #sidebarlayout{
+        display: flexbox;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        /* padding-left: 21px;
+        padding-right: 21px; */
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .sidebaritem{
+        text-decoration:none;
+        color: #FFF;
+        font-family: "LINE Seed JP";
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: -3.6px;
+    }
+
+    .sidebarline{
+        height: 2px;
+        width: 80%;
+        background: white;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+    }
+
+ 
+
+
 }
 
-#main-wrapper{
-
-    position: relative;
-    width:100%;
-    max-width: 755px;
-    /* height: 1422px; */
-    font-family:"LINE Seed JP", sans-serif;
-}
-
-#hiddenbar{
-    float: left;
-    width: 150px;
-    height: 375px;
-    margin-left: 1rem;
-}
-
-#sidebar{
-    /* float: left; */
-    min-width: 155px;
-    max-width: 155px;
-    /* height: 375px; */
-    position: sticky;
-    top: 7rem;
-    margin-right: 1rem ;
-    background: #45B1FF;
-    border-radius: 20px;
-    border: 5px solid white;
-
-}
-
-#sidebarlayout{
-    display: flexbox;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    /* padding-left: 21px;
-    padding-right: 21px; */
-    padding-top: 14px;
-    padding-bottom: 14px;
-}
-
-.sidebaritem{
-    text-decoration:none;
-    color: #FFF;
-    font-family: "LINE Seed JP";
-    font-size: 36px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: -3.6px;
-}
-
-.sidebarline{
-    height: 2px;
-    width: 80%;
-    background: white;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-
-}
