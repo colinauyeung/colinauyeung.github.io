@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous"></script>
+</head>
+<body>
+<div>Grandparent</div>
+<button type="button"  onclick="requestDeviceOrientation()">Access Orientation</button>
+<button type="button" id="resetbtn">Reset Orientation</button>
+<button type="button" id="btn-client1">Connect</button>
+
+<div>
+    <textarea name="text" class="fill-width" id="textarea" rows="2" cols="10" wrap="soft" maxlength="100" style="overflow:hidden; resize:none;"></textarea>
+
+</div>
+
+<div id="msgDiv"></div>
+<div id="msgDiv2"></div>
+<div id="msgcontainer"></div>
+
+<script>
+
+    const MessageType = {
+        SERVER_INFO: 0,
+        CLIENT1: 1,
+        CLIENT2: 2,
+        TOY: 3,
+        GRANDPARENT: 4,
+        LORA: 5
+
+    };
+
+    var ids =[];
+
+    const Eventtype = {
+        SOUND: 0,
+        MOTION: 1,
+        MESSAGE: 2,
+        VOICE: 3
+    };
+
+    var client = 0;
+
+
+    var btn1 = $("#btn-client1");
+    var rsbtn = $("#resetbtn");
+
+    var msgDiv = $("#msgDiv");
+    var msgDiv2 = $("#msgDiv2");
+    var serverConnection = undefined;
+
+    var sounds = {};
+
+    var base_vales = {
+         setup: false,
+         alpha: 0,
+         beta: 0,
+         gamma: 0
+    };
+
+    var last_values = {
+        alpha: 0,
+        beta: 0,
+        gamma: 0
+    };
+
+    var data;
+
+    var max = 0;
+
+    var peak_acc = 0;
+
+    var setup = false;
+
+    var cat = new Howl({
+        src: ["sounds/WeLabo/cat.mp3"],
+        loop: false
+    });
+
+    var pop = new Howl({
+        src: ["sounds/WeLabo/pop.mp3"],
+        loop: false
+    });
+
+    var camera = new Howl({
+        src: ["sounds/WeLabo/camera.mp3"],
+        loop: false
+    });
+
+    var water = new Howl({
+        src: ["sounds/WeLabo/water.mp3"],
+        loop: false
+    });
+
+    var bell = new Howl({
+        src: ["sounds/WeLabo/bell.mp3"],
+        loop: false
+    });
+    var phone = new Howl({
+        src: ["sounds/WeLabo/phone.mp3"],
+        loop: false
+    });
+    var whoosh = new Howl({
+        src: ["sounds/WeLabo/whoosh.mp3"],
+        loop: false
+    });
+    var vibrate = new Howl({
+        src: ["sounds/WeLabo/vibrate.mp3"],
+        loop: false
+    });
+
+    var mapping = {
+        "Fast Alpha": "cat",
+        "Alpha": "pop",
+        "Fast Beta": "camera",
+        "Beta": "water",
+        "Sound": "vibrate"
+    };
+
+
+
+    sounds["cat"] = cat;
+    sounds["pop"] = pop;
+    sounds["camera"] = camera;
+    sounds["water"] = water;
+    sounds["bell"] = bell;
+    sounds["phone"] = phone;
+    sounds["whoosh"] = whoosh;
+    sounds["vibrate"] = vibrate;
+
+
+    btn1.on("click", () => {
+        btn1.prop("disabled", true);
+        destination = "wss://colinauyeung-portfolio.herokuapp.com/grandparent";
+        serverConnection = new WebSocket(destination);
+        serverConnection.onmessage = handleMessage;
+        serverConnection.onclose = handleClose;
+        client = 1;
+    });
+
+
+    rsbtn.on("click", ()=> {
+       base_vales.setup = false;
+    });
+
+    function handleClose(){
+        serverConnection = undefined;
+        btn1.prop("disabled", false);
+        msgDiv.html("Peer Disconnected: Connection Closed");
+
+    }
+
+    var activeid = undefined;
+    function handleMessage(mEvent) {
+        var msg = JSON.parse(mEvent.data);
+
+        switch (msg.type){
+            case MessageType.SERVER_INFO:
+                msgDiv.html(msg.message);
+                break;
+            case MessageType.GRANDPARENT:
+                if(msg.event === Eventtype.MESSAGE){
+                    ids.forEach((d) => {
+                        if(d.id === msg.id){
+                            $("<p>" + msg.body + "</p>").appendTo("#" + d.id);
+                            // $("#" + activeid);
+                        }
+                    });
+                }
+                break;
+            case MessageType.LORA:
+                if(msg.event === Eventtype.MESSAGE){
+                    ids.forEach((d) => {
+                        if(d.id === msg.id){
+                            $("<p>" + msg.body + "</p>").appendTo("#" + d.id);
+                            // $("#" + activeid);
+                        }
+                    });
+                }
+                break;
+            case MessageType.TOY:
+                if(msg.event === Eventtype.MOTION){
+                    addEvent(msg.id, "",msg.time);
+                    sounds["vibrate"].play()
+                }
+
+
+
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    function addEvent(id, text, time){
+        ids.push({"id": id, "time": time, "text": [text]});
+        var genString = "<div id='" + id + "'></div>";
+        $(genString).appendTo('#msgcontainer');
+        $("#" + id).html(time + ": " + text);
+        $('#' + id).click((event) =>{
+            if($(event.target).is("div")) {
+                $('#msgcontainer').children('div').css("background-color", "white");
+                if(activeid != event.target.id){
+                    $("#" + event.target.id).css('background-color', "yellow");
+                    activeid = event.target.id;
+                }
+                else{
+                    activeid = undefined;
+                }
+            }
+
+
+        })
+    }
+
+    $("textarea").keydown(function(e){
+        if (e.keyCode == 13)
+        {
+            textreturn();
+            e.preventDefault();
+        }
+    });
+
+    function textreturn () {
+        if(activeid != undefined){
+            ids.forEach((d) => {
+                if(d.id === activeid){
+                    var text = $("textarea").val();
+                    $("<p>" + text + "</p>").appendTo("#" + activeid);
+                    data = {
+                        type: MessageType.GRANDPARENT,
+                        event: Eventtype.MESSAGE,
+                        id: activeid,
+                        body: text
+                    };
+                    serverConnection.send(JSON.stringify(data));
+                    // $("#" + activeid);
+                }
+            });
+            console.log($("#" + activeid).html());
+        }
+    }
+
+
+
+
+    //https://developer.apple.com/forums/thread/128376
+    function requestDeviceOrientation () {
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('deviceorientation', handleOrientation, true)
+        }
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            DeviceMotionEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('devicemotion', handleMotion, true);
+                    }
+                })
+                .catch(console.error);
+        } else {
+            // handle regular non iOS 13+ devices
+            console.log ("not iOS");
+            window.addEventListener('devicemotion', handleMotion, true)
+        }
+    }
+
+    function handleOrientation(event) {
+        var absolute = event.absolute;
+        var alpha    = event.alpha;
+        var beta     = event.beta;
+        var gamma    = event.gamma;
+
+        if(!base_vales["setup"]){
+            base_vales["alpha"] = alpha;
+            base_vales["beta"] = beta;
+            base_vales["gamma"] = gamma;
+            base_vales["setup"] = true;
+        }
+
+        last_values["alpha"] = alpha;
+        last_values["beta"] = beta;
+        last_values["gamma"] = gamma;
+
+        // msgDiv.html(diff_alpha);
+
+    }
+    var ptime = undefined;
+    function handleMotion(event){
+        // var acc = Math.max(Math.abs(event.acceleration.x), Math.abs(event.acceleration.y), Math.abs(event.acceleration.z));
+        //
+        // if(acc < 5){
+        //     console.log(peak_acc);
+        //
+        //     var now = Date.now();
+        //
+        //     if(peak_acc >= 10){
+        //         data = {
+        //             type: MessageType.TOY,
+        //             event: Eventtype.MOTION,
+        //             time: now.toISOString()
+        //         };
+        //         if(ptime != undefined){
+        //             serverConnection.send(JSON.stringify(data));
+        //         }
+        //         else{
+        //             if(now - ptime >= 60000){
+        //                 serverConnection.send(JSON.stringify(data));
+        //                 msgDiv.html("Send Signla");
+        //                 ptime = now;
+        //             }
+        //         }
+        //
+        //     }
+        //     peak_acc = 0;
+        //
+        //
+        // }
+        // else{
+        //     if(acc > peak_acc){
+        //         peak_acc = acc;
+        //     }
+        //
+        // }
+
+
+
+        // if(Math.abs(event.acceleration.x) > Math.abs(max)){
+        //     max = event.acceleration.x;
+        // }
+        // msgDiv2.html(event.acceleration.x);
+    }
+
+
+    //
+    document.body.addEventListener('click', init);
+    var analyzer;
+    var sampleRate;
+
+    var recorder = undefined;
+    var audioChunks;
+    var audioBlob;
+
+    function init(){
+        document.body.removeEventListener('click', init);
+        var AC = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AC();
+        var microphone;
+
+
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function(constraints) {
+
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+
+
+
+        analyzer = audioContext.createAnalyser();
+        const gainNode = audioContext.createGain();
+        if(navigator.mediaDevices.getUserMedia()){
+            console.log("getUserMedia Supported");
+            var constraints = {audio: true};
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(
+                    function(stream){
+                        recorder = new MediaRecorder(stream, {"mimeType": 'audio/webm;codecs=opus'});
+                        audioChunks = [];
+                        recorder.addEventListener("dataavailable", event => {
+                            audioChunks.push(event.data);
+                        });
+
+                        recorder.addEventListener("stop", () => {
+                            audioBlob = new Blob(audioChunks);
+                            audioChunks = [];
+
+                        });
+                    })
+                .catch(function(err){
+                    console.log("Error! "+err)
+                })
+        }
+        else{
+            console.log("getUserMedia is not supported");
+        }
+
+
+    }
+
+    // $("#Record").click(() => {
+    //     console.log("hello");
+    //     if(recorder != undefined){
+    //         $("#Listen").prop("disabled", true);
+    //         console.log("hello2");
+    //         recorder.start();
+    //         setTimeout(() => {
+    //             recorder.stop();
+    //             $("#Listen").prop("disabled", false);
+    //             $("#Send").prop("disabled", false);
+    //         } , 3000);
+    //     }
+    //
+    // })
+    //
+    // $("#Listen").click(() => {
+    //     const audioUrl = URL.createObjectURL(audioBlob);
+    //     const audioout = new Audio(audioUrl);
+    //     audioout.play();
+    // })
+    //
+    // $('#Send').click(() => {
+    //     var url;
+    //     blobToBase64(audioBlob, (e) => {
+    //         url = e;
+    //         var data = {
+    //             type: MessageType.GRANDPARENT,
+    //             event: Eventtype.VOICE,
+    //             data: url
+    //         };
+    //         serverConnection.send(JSON.stringify(data))
+    //     });
+    //
+    // });
+    //
+    //
+    //
+    // var blobToBase64 = function(blob, callback) {
+    //     var reader = new FileReader();
+    //     reader.onload = function() {
+    //         var dataUrl = reader.result;
+    //         // var base64 = dataUrl.split(',')[1];
+    //         callback(dataUrl);
+    //     };
+    //     reader.readAsDataURL(blob);
+    // };
+    //
+    // //https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+    // // function base64toBlob(base64Data, contentType) {
+    // //     contentType = contentType || '';
+    // //     var sliceSize = 1024;
+    // //     var byteCharacters = atob(base64Data);
+    // //     var bytesLength = byteCharacters.length;
+    // //     var slicesCount = Math.ceil(bytesLength / sliceSize);
+    // //     var byteArrays = new Array(slicesCount);
+    // //
+    // //     for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+    // //         var begin = sliceIndex * sliceSize;
+    // //         var end = Math.min(begin + sliceSize, bytesLength);
+    // //
+    // //         var bytes = new Array(end - begin);
+    // //         for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+    // //             bytes[i] = byteCharacters[offset].charCodeAt(0);
+    // //         }
+    // //         byteArrays[sliceIndex] = new Uint8Array(bytes);S
+    // //     }
+    // //     return new Blob(byteArrays, { type: contentType });
+    // // }
+    //
+    // const b64toBlob = (url) =>
+    //     fetch(url).then(res => res.blob());
+    //
+    //
+    // function Base64toplay(url){
+    //     var pblob = b64toBlob(url);
+    //     pblob.then((e) => {
+    //         const audioUrl = URL.createObjectURL(e);
+    //         const audioout = new Audio(audioUrl);
+    //         audioout.play();
+    //     })
+    // }
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

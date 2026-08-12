@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    window.addEventListener("load", (e) => {
+        init();
+    })
+
+    function init(){
+        var audioContext = new(window.AudioContext || window.webkitAudiocontext)();
+        var microphone;
+
+        var analyzer = audioContext.createAnalyser();
+        if(navigator.mediaDevices.getUserMedia()){
+            console.log("getUserMedia Supported");
+            var constraints = {audio: true};
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(
+                    function(stream){
+                        microphone = audioContext.createMediaStreamSource(stream);
+                        microphone.connect(analyzer);
+                        analyzer.connect(audioContext.destination);
+                        beginRecording(analyzer);
+                    })
+                .catch(function(err){
+                    console.log("Error! "+err)
+                })
+        }
+        else{
+            console.log("getUserMedia is not supported");
+        }
+
+
+    }
+
+    function beginRecording(analyzer){
+        analyzer.fftsize = 512 //needs to be a power of 2, between 32 and MAX UNSIGNED INT
+        var bufferlength = analyzer.fftsize;
+        var freqBinDataArray = new Uint8Array(bufferlength);
+
+        var checkAudio = function (){
+            analyzer.getByteFrequencyData(freqBinDataArray);
+            console.log(freqBinDataArray);
+            console.log("RMS: "+ getRMS(freqBinDataArray));
+            console.log("Dominate Freq: " + getIndexofMax(freqBinDataArray));
+        }
+        setInterval(checkAudio, 64);
+    }
+
+    function getRMS(spectrum){
+        var rms = 0;
+        for (var i = 0; i < spectrum.length; i++){
+            rms += spectrum[i] * spectrum[i];
+        }
+        rms /= spectrum.length;
+        rms = Math.sqrt(rms);
+        return rms
+    }
+
+    function  getIndexofMax(array){
+        return array.reduce((iMax, x, i, arr) => x > arr[iMax]? i : iMax,0
+        )
+    }
+</script>
+</body>
+</html>

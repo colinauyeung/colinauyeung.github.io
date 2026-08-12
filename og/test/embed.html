@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="svg-pan-zoom.js"></script>
+  </head>
+
+  <body>
+    <h1>Network of House of Representatives Candidates during the 2020 General Election/h1>
+    <embed id="demo-tiger" type="image/svg+xml" style="width: 2000px; height: 1000px; border:1px solid black; " src="test2.svg">
+
+    <script>
+      // Don't use window.onLoad like this in production, because it can only listen to one function.
+      window.onload = function() {
+        svgPanZoom('#demo-tiger', {
+          zoomEnabled: true,
+          controlIconsEnabled: true,
+          maxZoom: 40
+        });
+      };
+    </script>
+
+
+
+
+</body></html>
