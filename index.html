@@ -8,190 +8,285 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Fragment+Mono:ital@0;1&family=Micro+5&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=LINE+Seed+JP:wght@100;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
     <style>
-        @media (min-width: 796px) and (max-width:1047px){
 
-            #mainbox{
-                height: 2250px;
-            }
+        #travel-container{
+            padding: 0px 5px;
+            /* width: 100%; */
+            /* display: flexbox;
+            justify-content: center;
+            align-items: center; */
+        }
 
-            .imagebox{
-                float: left;
-                width: calc(755px * 0.5);
-                padding: 30px;
-                justify-content: center;
-                transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
-                /* display: flex; */
+        .travel-box{
+            /* min-width: 23%; */
+            /* max-width: 50%; */
+            width: 160px;
+            height: 200px;
+            /* -webkit-box-shadow:inset 0px 0px 0px 10px #f00; */
+            /* -moz-box-shadow:inset 0px 0px 0px 10px #f00; */
+            box-shadow:inset 0px 0px 0px 5px #C7C1A1;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 12px;
+            float: left;
+        }
 
-                /* transform: rotate(12deg); */
-                /* height: 100px; */
-                /* scale: 60%; */
-
-            }
-
-            #img1{
-                transform: rotate(12deg) translateY(0px);
-            }
-            #img2{
-                transform: rotate(-6deg) translateY(-50px);
-            }
-
-            #img3{
-                transform: rotate(2deg) translateY(-100px);
-            }
-
-            .tape{
-                position: relative;
-                width: 50%;
-                aspect-ratio: 2 / 1;
-                top: -380px;
-                left: 65px;
-
-
-                background: rgba(255, 255, 255, 0.05);
-                backdrop-filter: blur(4px);
-                box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.3), 
-                inset -2px -2px 2px 1px rgba(255, 255, 255, 0.3);;
-                color: rgba(255, 255, 255, 0.8);
-                font-size: 5vmin;
-                
-
-            }
+        .travel-box:hover .travel-image-top{
+            display: none;
 
         }
 
-        @media (min-width:1047px){
+        .travel-image{
+            float:left;
+            width: 135px;
+            height: 135px;
+            position: relative;
+        }
 
-            #mainbox{
-                height: 1550px;
-            }
+        .travel-image-top{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 2;
+            display: block;
+        }
 
-            .imagebox{
-                float: left;
-                width: calc(755px * 0.39);
-                padding: 30px;
-                transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
-                /* transform: rotate(12deg); */
-                /* height: 100px; */
-                /* scale: 60%; */
+        .travel-image-bottom{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 1;
+        }
 
-            }
+        .travel-line{
+            height: 39px;
+            width: 10px;
+            border: #4F4D41;
+            background-color: #4F4D41;
+            float:left;
+            margin-top:4px;
+            margin-right:5px;
+        }
 
-            #img1{
-                transform: rotate(12deg) translateY(0px);
-            }
-            #img2{
-                transform: rotate(-6deg) translateY(100px);
-            }
-
-            #img3{
-                transform: rotate(2deg) translateY(-50px);
-            }
-
-            .tape{
-                position: relative;
-                width: 50%;
-                aspect-ratio: 2 / 1;
-                top: -280px;
-                left: 65px;
-
-
-                background: rgba(255, 255, 255, 0.05);
-                backdrop-filter: blur(4px);
-                box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.3), 
-                inset -2px -2px 2px 1px rgba(255, 255, 255, 0.3);;
-                color: rgba(255, 255, 255, 0.8);
-                font-size: 5vmin;
-                transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
-
-            }
+        .travel-textbox{
+            padding-top: 140px;
+            font-family: "Micro 5", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 32px;
+            line-height: 60%;
         }
 
 
     </style>
 
+
     <div id="layout">
         <div id="sidebar">
             <div id="sidebarlayout">
-                <img style="width: 113px; margin-left: auto; margin-right: auto; margin-bottom: 4px;" src="images/avatar.png">
-                <a class="sidebaritem">home</a>
-                <div class="sidebarline"></div>
-                <a class="sidebaritem">projects</a>
-                <div class="sidebarline"></div>
-                <a class="sidebaritem">research</a>
-                <div class="sidebarline"></div>
-                <a class="sidebaritem">contact</a>
 
+                <div id="avatarbox">
+                    <div class="menu-title">
+                        <div class="menu-title-text micro-5-regular">[avatar]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+                    </div>
+                    <img style="width: 113px; margin-left: auto; margin-right: auto; margin-bottom: 4px;" src="images/avatar2.png">
+
+                </div>
+
+                <div id="menubox" class="micro-5-regular">
+                    <div class="menu-title">
+                        <div class="menu-title-text">[menu]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+
+                    </div>
+                    <a href="index.html"><div class="sidebaritem">./home</div></a>
+                    <a href="research.html"><div class="sidebaritem">./research</div></a>
+                    <a href="projects.html"> <div class="sidebaritem">./projects</div></a>
+                    <div class="sidebaritem">./contact</div>
+                </div>
                 
             </div>
             
 
         </div>
-
-        <div id="dropdown">
-            <button class="dropbtn">home</button>
-            <div class="dropdown-content">
-                <a href="#">home</a>
-                <a href="#">projects</a>
-                <a href="#">research</a>
-                <a href="#">contact</a>
+        
+        <div id="dropdown-container">
+            <div id="dropdown">
+                <button class="dropbtn">./home</button>
+                <div class="dropdown-content">
+                    <!-- <a href="#">./home</a> -->
+                    <a href="#">./projects</a>
+                    <a href="#">./research</a>
+                    <a href="#">./contact</a>
+                </div>
             </div>
+            <img id="dropdown-decor" src="images/xbutton.png">
+
+
+
+        </div>
+
+        <div id="mobile-header">
+
+
+            <img style="width: 60px; margin:10px; float:left;" src="images/avatar2.png">
+            <div id="mb-text-box">
+                <div id="mb-name-box">
+                    <div id="mb-name-box-block"></div>
+                    <div id="mb-name-box-text">colin.auyeung</div>
+                </div>
+                <div id="mb-title-box">developer/hci.researcher</div>
+            </div>
+
         </div>
 
 
         <div id="main-wrapper">
-            <div id="header">
-                colin.auyeung
-            </div>
             <div id="mainbox">
-                <div id="paperelements">
-                    <div id="paperlines">
-                        <div class="horizontalline"></div>
-
-
+                <div id="content-wrapper">
+                    <div id="titlebar">
+                        <div id="urltitle" class="micro-5-regular">colin.auyeung/home</div>
+                        <img class="top-decor" src="images/minbutton.png">
+                        <img class="top-decor" src="images/maxbutton.png">
+                        <img class="top-decor" src="images/xbutton2.png">
                     </div>
-                    <div id="verticalpaperline"></div>
-                    <div id="circle-wrapper">
-                        <div class="circle"></div>
-                        <div class="circle"></div>
-                        <!-- <div class="circle"></div> -->
+
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Hello!</div>
                     </div>
-                </div>
-                <div id="maincontent-wrapper">
-                    <div id="in-paper-content">
-                        <div class="linetitle" style="margin-bottom: 14px;">hello!</div>
-                        <!-- <h1>hello!</h1> -->
+
+                    <div class="text-wrapper">
                         <div class="bodytext">I’m Colin Au Yeung (he/him), a HCI researcher interested in how we may design technology to support meaningful interactions in social spaces. </div>
                         <div class="linebreak"></div>
                         <div class="bodytext">I’ve just recently finished my Master’s in Computer Science @ the University of Calgary with Dr. Lora Oehlberg in the Interactions Lab. My thesis is entitled “Virtual Attendees at Anime Conventions: Supporting Telepresence in Physical Third Places”.</div>
                         <div class="linebreak"></div>
-                        <div class="bodytext">My undergrad degree is in Computer Science at the University of Calgary with a minor in Political Science. My specialty in PoliSci was American-East Asian relations! </div>
+                        <div class="bodytext">My undergrad degree is in Computer Science at the University of Calgary with a minor in Political Science. My specialty in PoliSci was American-East Asian relations!</div>
                         <div class="linebreak"></div>
-                        <div class="bodytext">Beyond research, I have a passion for tangible computing, particularly in small hobby electronics to enable tactile experiences. I have really enjoyed 3D printing in the last few years. </div>
-                        
-                        <!-- <div class="linetitle" style="margin-bottom: 14px;">hello!</div>     -->
-                        <!-- <div class="linebreak"></div> -->
-                        <div class="linetitle" style="padding-top: 10px;">travels</div>
-                        <div id="img1" class="imagebox"> 
-                            <img style="position: relative;" src="images/singapore.png">
-                            <div class="tape"></div>
-                        </div>
-                        <div id="img2" class="imagebox"> 
-                            <img style="position: relative;" src="images/singapore.png">
-                            <div class="tape"></div>
-                        </div>
-                        <div id="img3" class="imagebox" style=""> 
-                            <img style="position: relative;" src="images/singapore.png">
-                            <div class="tape"></div>
-                        </div>
-     
+                        <div class="bodytext">Beyond research, I have a passion for tangible computing, particularly in small hobby electronics to enable tactile experiences. I have really enjoyed 3D printing in the last few years.</div>
                     </div>
-   
+
+
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Travel</div>
+                    </div>
+
+                    <div id="travel-container">
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/Singapore-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/Singapore.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Singapore</div>
+                                <div class="travel-year">2024</div>
+                            </div>
+                        </div>
+
+
+                         <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/thailand-mon.png">
+                                <img class="travel-image-bottom" src="images/travel/thailand.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Thailand</div>
+                                <div class="travel-year">2024</div>
+                            </div>
+                        </div>
+
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/taiwan-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/taiwan.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Taiwan</div>
+                                <div class="travel-year">2024</div>
+                            </div>
+                        </div>
+
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/japan-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/japan.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Japan</div>
+                                <div class="travel-year">2025</div>
+                            </div>
+                        </div>
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/singapore1-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/singapore1.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Singapore</div>
+                                <div class="travel-year">2025</div>
+                            </div>
+                        </div>
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/japan2-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/japan2.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Japan</div>
+                                <div class="travel-year">2026</div>
+                            </div>
+                        </div>
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/uk-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/uk.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">U.K.</div>
+                                <div class="travel-year">2026</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
                 </div>
+
+                
+
 
             </div>
             
@@ -206,90 +301,6 @@
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/animejs/dist/bundles/anime.umd.min.js"></script> -->
     <script>
-
-        // const { animate } = anime;
-
-        function getMainboxSize(){
-            mainbox = document.getElementById("mainbox")
-            posinfo = mainbox.getBoundingClientRect()
-            height = posinfo.height - 6;
-            width = posinfo.width - 12;
-            
-            // height = document.getElementById("mainbox").style("height")
-            return {"height": height, "width": width}
-        }
-
-        function fillLines(){
-            height = getMainboxSize().height;
-
-            paperlines = document.getElementById("paperlines");
-            paperlines.textContent = '';
-
-            newline = document.createElement("div")
-            newline.className = "horizontalline"
-            paperlines.append(newline)
-
-            fillHeight = height-95.5
-            numLines = Math.floor(fillHeight/30.5)
-
-            for (let i = 0; i<numLines; i++){
-                nline = document.createElement("div")
-                nline.className = "horizontalline"
-
-                document.getElementById("paperlines").append(nline)
-
-            }
-
-        }
-
-        function fillCirles(){
-            height = getMainboxSize().height;
-
-            circlewrapper = document.getElementById("circle-wrapper");
-            circlewrapper.textContent = "";
-
-            fillHeight = height - 164;
-            circleheight = 41 + 305;
-
-            initcircle = document.createElement("div");
-            initcircle.className = "initcircle";
-            circlewrapper.append(initcircle)
-
-
-            numCircles = Math.ceil(fillHeight/circleheight) - 1;
-
-            for (let i = 0; i<numCircles; i++){
-                ncircle = document.createElement("div");
-                ncircle.className = "circle";
-
-                circlewrapper.append(ncircle)
-            }
-
-        }
-
-        window.onload = ev =>{
-
-
-
-            // document.getElementById("mainbox").style.height = (document.getElementById("main-wrapper").scrollHeight) + "px";
-            console.log(document.getElementById("mainbox").style.height)
-
-            fillCirles()
-            fillLines()
-
-        }
-
-
-        onresize = (event) => { 
-
-            // document.getElementById("mainbox").style.height = ""
-
-            // document.getElementById("mainbox").style.height = (document.getElementById("main-wrapper").scrollHeight) + "px";
-
-            fillCirles()
-            fillLines()
-
-        }
 
 
     </script>
