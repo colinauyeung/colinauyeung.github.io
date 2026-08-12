@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Title</title>
+    <!-- Link to your CSS file here -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Fragment+Mono:ital@0;1&family=Micro+5&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=LINE+Seed+JP:wght@100;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <style>
+
+        #travel-container{
+            padding: 0px 5px;
+        }
+
+        .travel-box{
+            width: 160px;
+            height: 200px;
+            /* -webkit-box-shadow:inset 0px 0px 0px 10px #f00; */
+            /* -moz-box-shadow:inset 0px 0px 0px 10px #f00; */
+            box-shadow:inset 0px 0px 0px 5px #C7C1A1;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 12px;
+            float: left;
+        }
+
+        .travel-box:hover .travel-image-top{
+            display: none;
+
+        }
+
+        .travel-image{
+            float:left;
+            width: 135px;
+            height: 135px;
+            position: relative;
+        }
+
+        .travel-image-top{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 2;
+            display: block;
+        }
+
+        .travel-image-bottom{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 1;
+        }
+
+        .travel-line{
+            height: 39px;
+            width: 10px;
+            border: #4F4D41;
+            background-color: #4F4D41;
+            float:left;
+            margin-top:4px;
+            margin-right:5px;
+        }
+
+        .travel-textbox{
+            padding-top: 140px;
+            font-family: "Micro 5", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 32px;
+            line-height: 60%;
+        }
+
+
+    </style>
+
+
+    <div id="layout">
+        <div id="sidebar">
+            <div id="sidebarlayout">
+
+                <div id="avatarbox">
+                    <div class="menu-title">
+                        <div class="menu-title-text micro-5-regular">[avatar]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+                    </div>
+                    <img style="width: 113px; margin-left: auto; margin-right: auto; margin-bottom: 4px;" src="images/avatar2.png">
+
+                </div>
+
+                <div id="menubox" class="micro-5-regular">
+                    <div class="menu-title">
+                        <div class="menu-title-text">[menu]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+
+                    </div>
+                    <a href="index.html"><div class="sidebaritem">./home</div></a>
+                    <a href="research.html"><div class="sidebaritem">./research</div></a>
+                    <a href="projects.html"> <div class="sidebaritem">./projects</div></a>
+                    <div class="sidebaritem">./contact</div>
+                </div>
+                
+            </div>
+            
+
+        </div>
+        
+        <div id="dropdown-container">
+            <div id="dropdown">
+                <button class="dropbtn">./research</button>
+                <div class="dropdown-content">
+                    <!-- <a href="#">./home</a> -->
+                    <a href="index.html">./home</a>
+                    <a href="#">./projects</a>
+                    
+                    <a href="#">./contact</a>
+                </div>
+            </div>
+            <img id="dropdown-decor" src="images/xbutton.png">
+
+
+
+        </div>
+
+        <div id="mobile-header">
+
+
+            <img style="width: 60px; margin:10px; float:left;" src="images/avatar2.png">
+            <div id="mb-text-box">
+                <div id="mb-name-box">
+                    <div id="mb-name-box-block"></div>
+                    <div id="mb-name-box-text">colin.auyeung</div>
+                </div>
+                <div id="mb-title-box">developer/hci.researcher</div>
+            </div>
+
+        </div>
+
+
+        <div id="main-wrapper">
+            <div id="mainbox">
+                <div id="content-wrapper">
+                    <div id="titlebar">
+                        <div id="urltitle" class="micro-5-regular">colin.auyeung/research</div>
+                        <img class="top-decor" src="images/minbutton.png">
+                        <img class="top-decor" src="images/maxbutton.png">
+                        <img class="top-decor" src="images/xbutton2.png">
+                    </div>
+
+                    <!-- Header Block -->
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Grad Courses</div>
+                    </div>
+                    <!-- Header Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/msc-web.png">
+                        <img class="project-image-mobile" src="images/research-images/msc-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 601: Sustainable Interaction Design
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                Let’s Go Out to Eat: Self-Reflections on the Experiences of Co-Dining
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                Autobiographical reflections on co-dining as a first exploration for designing technology for co-dining
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://drive.google.com/file/d/1FpfAbnxThFlDdeohBCHO5kzdaXqWQJUa/view?usp=sharing"><b>Term Paper</b></a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/msc-web.png">
+                        <img class="project-image-mobile" src="images/research-images/msc-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 601: Wearable Applications
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                IN//OUT-OF Character: Controlling Dynamic Cosplay Elements with Implicit and Explicit Interaction
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                An embedded hardware interface to support both implicit
+                                and explict control of reactive cosplay elements
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://drive.google.com/file/d/15Q2ypvzaCebIV3q592YdNx6yxm7A-i4W/view?usp=sharing"><b>Term Paper</b></a>
+                                /
+                                <a href="https://youtu.be/rLPgDWHCytA?si=iAFxQgO1_wZRBb3b"><b>Demo Video</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/msc-web.png">
+                        <img class="project-image-mobile" src="images/research-images/msc-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 601: Wearables and Haptics
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                Teabot: Supporting Physicality in Remote Tea Sharing
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A prototype system for supporting tangible embodied interactions in a remote co-dining setting.
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://drive.google.com/file/d/1sBv3tzWJB6mNC1Srln2SquCojHvVLEbP/view?usp=sharing"><b>Term Paper</b></a>
+                                /
+                                <a href="https://youtu.be/xhRj49hDyQQ"><b>Demo Video</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Header Block -->
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Undergrad Courses</div>
+                    </div>
+                    <!-- Header Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/msc-web.png">
+                        <img class="project-image-mobile" src="images/research-images/msc-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 599: Visualization and Analytic
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                The New Media: Looking at the Twitter Behaviour of US House of Representatives Candidates in the Last Two Months of the 2020 General Election
+
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A data story exploring US House of Representative's use of Twitter (now X.com) leading up to the 2020 election
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://drive.google.com/file/d/1FpfAbnxThFlDdeohBCHO5kzdaXqWQJUa/view?usp=sharing"><b>Project Site</b></a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/project-images/qlearning.png">
+                        <img class="project-image-mobile" src="images/project-images/qlearning.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 599: Ai in Video Games
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                Cyber Dungeon: A Q-Learning based
+                                rogue-like
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>with David Garcia and Nikita Tripathi</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A First-Person Shooter using Q-learning to fine tuning game difficulty
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://drive.google.com/file/d/10JAC4fgsYkTlDQ2YwOAMZ_1484tAqmYW/view?usp=sharing"><b>Term Paper</b></a>
+                                /
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Demo Video</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/project-images/hri-web.png">
+                        <img class="project-image-mobile" src="images/project-images/hri-web.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 584: Human Robot Interactions
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                Usabo & Friends: Imagining Robotic Avatars
+                                for Virtual Youtubers
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A qualitative survey project exploring the use of robotic avatars
+                                for livestreaming using video prototypes with puppet robots
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://drive.google.com/file/d/1_HIAkAvowyNW16lThdKMxqpB6D8HsKCe/view?usp=sharing"><b>Term Paper</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/project-images/infovis.png">
+                        <img class="project-image-mobile" src="images/project-images/infovis.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 583: Intro to InfoVis 
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                World Happiness Visualization
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>with Michael Hung and Nathan Meulenbroek</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                Visualization of data from the World Happiness Report on a country by country
+                                basis
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <div class="project-title-banner fira-mono-medium">
+                        <div class="project-title-decor"></div>
+                        <div class="project-title-text">
+                            CPSC 581: Human Computer Interactions II
+                        </div>
+                    </div>
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop-shorter" src="images/project-images/sonic-journey.png">
+                        <img class="project-image-mobile" src="images/project-images/sonic-journey.png">
+                        <div class="project-text-block">
+                            <div class="project-top-text">
+                                Sonic Journey
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>Assignment 0: The Button</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A single button system that recreates the feeling of taking an aimless motorcycle ride
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop-shorter" src="images/project-images/intonation-web.gif">
+                        <img class="project-image-mobile" src="images/project-images/intonation.gif">
+                        <div class="project-text-block">
+                            <div class="project-top-text">
+                                Intonation Incantation
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>Assignment 1: Wordless</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                
+                                A messaging app that 
+                                conveys intonation in text conversations
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop-shorter" src="images/project-images/usabo.png">
+                        <img class="project-image-mobile" src="images/project-images/usabo.png">
+                        <div class="project-text-block">
+                            <!-- <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 581: Human Computer Interactions II
+                                </div>
+                            </div> -->
+                            <div class="project-top-text">
+                                Usabo
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>Assignment 2: The Relationship</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A cardboard body for your phone that transforms it into an interactive toy
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <div class="project-title-banner fira-mono-medium">
+                        <div class="project-title-decor"></div>
+                        <div class="project-title-text">
+                            CPSC 581: Tangible & Physical HCI
+                        </div>
+                    </div>
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop-shorter" src="images/project-images/hellosquid.png">
+                        <img class="project-image-mobile" src="images/project-images/hellosquid.png">
+                        <div class="project-text-block">
+                            <div class="project-top-text">
+                                Hello Squid
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>Assignment 1: Arduino Hello World</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A squid hat that allows you to communicate your emotions in one button
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop-shorter" src="images/project-images/tonnatz.png">
+                        <img class="project-image-mobile" src="images/project-images/tonnatz.png">
+                        <div class="project-text-block">
+                            <div class="project-top-text">
+                                Tonnetz Magic 
+                            </div>
+                            <div class="project-bottom-text">
+                                With Sarah Walker
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>Assignment 2: Physical Input</i>
+                            </div>
+                            
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                
+                                An interface for playing music tonnetz space 
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop-shorter" src="images/project-images/git-tama.png">
+                        <img class="project-image-mobile" src="images/project-images/git-tama.png">
+                        <div class="project-text-block">
+                            <!-- <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 581: Human Computer Interactions II
+                                </div>
+                            </div> -->
+                            <div class="project-top-text">
+                                Git-Tama 
+                            </div>
+                            <div class="project-bottom-text">
+                                with Daniel Lee
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>Assignment 3: Physical Output</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A physicalization of Github activity
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop-shorter" src="images/project-images/discozy.png">
+                        <img class="project-image-mobile" src="images/project-images/discozy.png">
+                        <div class="project-text-block">
+                            <!-- <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    CPSC 581: Human Computer Interactions II
+                                </div>
+                            </div> -->
+                            <div class="project-top-text">
+                                Discozy
+                            </div>
+                            <div class="project-bottom-text">
+                                <i>Course Project</i>
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                A cloak that conveys your friend's Discord activity
+                            </div>
+                            
+                            <div class="project-bottom-text">
+                                <a href="https://youtu.be/AlFf951xYuw"><b>Project Site</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+
+
+                   
+
+
+
+                </div>
+
+                
+
+
+            </div>
+            
+        </div>
+        <aside id="hiddenbar">
+
+        </aside>
+
+
+
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/animejs/dist/bundles/anime.umd.min.js"></script> -->
+    <script>
+
+
+    </script>
+
+
+
+
+</body>
+</html>

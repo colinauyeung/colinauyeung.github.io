@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Title</title>
+    <!-- Link to your CSS file here -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=LINE+Seed+JP:wght@100;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <style>
+        @media (min-width: 796px) and (max-width:1047px){
+
+            #mainbox{
+                height: 2250px;
+            }
+
+            .imagebox{
+                float: left;
+                width: calc(755px * 0.5);
+                padding: 30px;
+                justify-content: center;
+                transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+                /* display: flex; */
+
+                /* transform: rotate(12deg); */
+                /* height: 100px; */
+                /* scale: 60%; */
+
+            }
+
+            #img1{
+                transform: rotate(12deg) translateY(0px);
+            }
+            #img2{
+                transform: rotate(-6deg) translateY(-50px);
+            }
+
+            #img3{
+                transform: rotate(2deg) translateY(-100px);
+            }
+
+            .tape{
+                position: relative;
+                width: 50%;
+                aspect-ratio: 2 / 1;
+                top: -380px;
+                left: 65px;
+
+
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(4px);
+                box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.3), 
+                inset -2px -2px 2px 1px rgba(255, 255, 255, 0.3);;
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 5vmin;
+                
+
+            }
+
+        }
+
+        @media (min-width:1047px){
+
+            #mainbox{
+                height: 1550px;
+            }
+
+            .imagebox{
+                float: left;
+                width: calc(755px * 0.39);
+                padding: 30px;
+                transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+                /* transform: rotate(12deg); */
+                /* height: 100px; */
+                /* scale: 60%; */
+
+            }
+
+            #img1{
+                transform: rotate(12deg) translateY(0px);
+            }
+            #img2{
+                transform: rotate(-6deg) translateY(100px);
+            }
+
+            #img3{
+                transform: rotate(2deg) translateY(-50px);
+            }
+
+            .tape{
+                position: relative;
+                width: 50%;
+                aspect-ratio: 2 / 1;
+                top: -280px;
+                left: 65px;
+
+
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(4px);
+                box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.3), 
+                inset -2px -2px 2px 1px rgba(255, 255, 255, 0.3);;
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 5vmin;
+                transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+
+            }
+        }
+
+
+    </style>
+
+    <div id="layout">
+        <div id="sidebar">
+            <div id="sidebarlayout">
+                <img style="width: 113px; margin-left: auto; margin-right: auto; margin-bottom: 4px;" src="images/avatar.png">
+                <a class="sidebaritem">home</a>
+                <div class="sidebarline"></div>
+                <a class="sidebaritem">projects</a>
+                <div class="sidebarline"></div>
+                <a class="sidebaritem">research</a>
+                <div class="sidebarline"></div>
+                <a class="sidebaritem">contact</a>
+
+                
+            </div>
+            
+
+        </div>
+
+        <div id="dropdown">
+            <button class="dropbtn">home</button>
+            <div class="dropdown-content">
+                <a href="#">home</a>
+                <a href="#">projects</a>
+                <a href="#">research</a>
+                <a href="#">contact</a>
+            </div>
+        </div>
+
+
+        <div id="main-wrapper">
+            <div id="header">
+                colin.auyeung
+            </div>
+            <div id="mainbox">
+                <div id="paperelements">
+                    <div id="paperlines">
+                        <div class="horizontalline"></div>
+
+
+                    </div>
+                    <div id="verticalpaperline"></div>
+                    <div id="circle-wrapper">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                        <!-- <div class="circle"></div> -->
+                    </div>
+                </div>
+                <div id="maincontent-wrapper">
+                    <div id="in-paper-content">
+                        <div class="linetitle" style="margin-bottom: 14px;">hello!</div>
+                        <!-- <h1>hello!</h1> -->
+                        <div class="bodytext">I’m Colin Au Yeung (he/him), a HCI researcher interested in how we may design technology to support meaningful interactions in social spaces. </div>
+                        <div class="linebreak"></div>
+                        <div class="bodytext">I’ve just recently finished my Master’s in Computer Science @ the University of Calgary with Dr. Lora Oehlberg in the Interactions Lab. My thesis is entitled “Virtual Attendees at Anime Conventions: Supporting Telepresence in Physical Third Places”.</div>
+                        <div class="linebreak"></div>
+                        <div class="bodytext">My undergrad degree is in Computer Science at the University of Calgary with a minor in Political Science. My specialty in PoliSci was American-East Asian relations! </div>
+                        <div class="linebreak"></div>
+                        <div class="bodytext">Beyond research, I have a passion for tangible computing, particularly in small hobby electronics to enable tactile experiences. I have really enjoyed 3D printing in the last few years. </div>
+                        
+                        <!-- <div class="linetitle" style="margin-bottom: 14px;">hello!</div>     -->
+                        <!-- <div class="linebreak"></div> -->
+                        <div class="linetitle" style="padding-top: 10px;">travels</div>
+                        <div id="img1" class="imagebox"> 
+                            <img style="position: relative;" src="images/singapore.png">
+                            <div class="tape"></div>
+                        </div>
+                        <div id="img2" class="imagebox"> 
+                            <img style="position: relative;" src="images/singapore.png">
+                            <div class="tape"></div>
+                        </div>
+                        <div id="img3" class="imagebox" style=""> 
+                            <img style="position: relative;" src="images/singapore.png">
+                            <div class="tape"></div>
+                        </div>
+     
+                    </div>
+   
+                </div>
+
+            </div>
+            
+        </div>
+        <aside id="hiddenbar">
+
+        </aside>
+
+
+
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/animejs/dist/bundles/anime.umd.min.js"></script> -->
+    <script>
+
+        // const { animate } = anime;
+
+        function getMainboxSize(){
+            mainbox = document.getElementById("mainbox")
+            posinfo = mainbox.getBoundingClientRect()
+            height = posinfo.height - 6;
+            width = posinfo.width - 12;
+            
+            // height = document.getElementById("mainbox").style("height")
+            return {"height": height, "width": width}
+        }
+
+        function fillLines(){
+            height = getMainboxSize().height;
+
+            paperlines = document.getElementById("paperlines");
+            paperlines.textContent = '';
+
+            newline = document.createElement("div")
+            newline.className = "horizontalline"
+            paperlines.append(newline)
+
+            fillHeight = height-95.5
+            numLines = Math.floor(fillHeight/30.5)
+
+            for (let i = 0; i<numLines; i++){
+                nline = document.createElement("div")
+                nline.className = "horizontalline"
+
+                document.getElementById("paperlines").append(nline)
+
+            }
+
+        }
+
+        function fillCirles(){
+            height = getMainboxSize().height;
+
+            circlewrapper = document.getElementById("circle-wrapper");
+            circlewrapper.textContent = "";
+
+            fillHeight = height - 164;
+            circleheight = 41 + 305;
+
+            initcircle = document.createElement("div");
+            initcircle.className = "initcircle";
+            circlewrapper.append(initcircle)
+
+
+            numCircles = Math.ceil(fillHeight/circleheight) - 1;
+
+            for (let i = 0; i<numCircles; i++){
+                ncircle = document.createElement("div");
+                ncircle.className = "circle";
+
+                circlewrapper.append(ncircle)
+            }
+
+        }
+
+        window.onload = ev =>{
+
+
+
+            // document.getElementById("mainbox").style.height = (document.getElementById("main-wrapper").scrollHeight) + "px";
+            console.log(document.getElementById("mainbox").style.height)
+
+            fillCirles()
+            fillLines()
+
+        }
+
+
+        onresize = (event) => { 
+
+            // document.getElementById("mainbox").style.height = ""
+
+            // document.getElementById("mainbox").style.height = (document.getElementById("main-wrapper").scrollHeight) + "px";
+
+            fillCirles()
+            fillLines()
+
+        }
+
+
+    </script>
+
+
+
+
+</body>
+</html>

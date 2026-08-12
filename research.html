@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Title</title>
+    <!-- Link to your CSS file here -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Fragment+Mono:ital@0;1&family=Micro+5&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=LINE+Seed+JP:wght@100;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <style>
+
+        #travel-container{
+            padding: 0px 5px;
+        }
+
+        .travel-box{
+            width: 160px;
+            height: 200px;
+            /* -webkit-box-shadow:inset 0px 0px 0px 10px #f00; */
+            /* -moz-box-shadow:inset 0px 0px 0px 10px #f00; */
+            box-shadow:inset 0px 0px 0px 5px #C7C1A1;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 12px;
+            float: left;
+        }
+
+        .travel-box:hover .travel-image-top{
+            display: none;
+
+        }
+
+        .travel-image{
+            float:left;
+            width: 135px;
+            height: 135px;
+            position: relative;
+        }
+
+        .travel-image-top{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 2;
+            display: block;
+        }
+
+        .travel-image-bottom{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 1;
+        }
+
+        .travel-line{
+            height: 39px;
+            width: 10px;
+            border: #4F4D41;
+            background-color: #4F4D41;
+            float:left;
+            margin-top:4px;
+            margin-right:5px;
+        }
+
+        .travel-textbox{
+            padding-top: 140px;
+            font-family: "Micro 5", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 32px;
+            line-height: 60%;
+        }
+
+
+    </style>
+
+
+    <div id="layout">
+        <div id="sidebar">
+            <div id="sidebarlayout">
+
+                <div id="avatarbox">
+                    <div class="menu-title">
+                        <div class="menu-title-text micro-5-regular">[avatar]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+                    </div>
+                    <img style="width: 113px; margin-left: auto; margin-right: auto; margin-bottom: 4px;" src="images/avatar2.png">
+
+                </div>
+
+                <div id="menubox" class="micro-5-regular">
+                    <div class="menu-title">
+                        <div class="menu-title-text">[menu]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+
+                    </div>
+                    <a href="index.html"><div class="sidebaritem">./home</div></a>
+                    <a href="research.html"><div class="sidebaritem">./research</div></a>
+                    <a href="projects.html"> <div class="sidebaritem">./projects</div></a>
+                    <div class="sidebaritem">./contact</div>
+                </div>
+                
+            </div>
+            
+
+        </div>
+        
+        <div id="dropdown-container">
+            <div id="dropdown">
+                <button class="dropbtn">./research</button>
+                <div class="dropdown-content">
+                    <!-- <a href="#">./home</a> -->
+                    <a href="index.html">./home</a>
+                    <a href="#">./projects</a>
+                    
+                    <a href="#">./contact</a>
+                </div>
+            </div>
+            <img id="dropdown-decor" src="images/xbutton.png">
+
+
+
+        </div>
+
+        <div id="mobile-header">
+
+
+            <img style="width: 60px; margin:10px; float:left;" src="images/avatar2.png">
+            <div id="mb-text-box">
+                <div id="mb-name-box">
+                    <div id="mb-name-box-block"></div>
+                    <div id="mb-name-box-text">colin.auyeung</div>
+                </div>
+                <div id="mb-title-box">developer/hci.researcher</div>
+            </div>
+
+        </div>
+
+
+        <div id="main-wrapper">
+            <div id="mainbox">
+                <div id="content-wrapper">
+                    <div id="titlebar">
+                        <div id="urltitle" class="micro-5-regular">colin.auyeung/research</div>
+                        <img class="top-decor" src="images/minbutton.png">
+                        <img class="top-decor" src="images/maxbutton.png">
+                        <img class="top-decor" src="images/xbutton2.png">
+                    </div>
+
+                    <!-- Header Block -->
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Thesis</div>
+                    </div>
+                    <!-- Header Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/msc-web.png">
+                        <img class="project-image-mobile" src="images/research-images/msc-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">MSc Computer Science</div>
+                            </div>
+                            <div class="project-top-text">Virtual Attendees at Anime Conventions: Supporting Telepresence in Physical Third Places</div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                April 2026
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://hdl.handle.net/1880/124849"><b>Link</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/bsc-web.png">
+                        <img class="project-image-mobile" src="images/research-images/bsc-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">BCs Honours Computer Science</div>
+                            </div>
+                            <div class="project-top-text">Whammy-Jammy Creation: Understanding Cosplay Maker Culture</div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                April 2022
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://hdl.handle.net/1880/124849"><b>Link</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+
+  
+
+                    <!-- Header Block -->
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Publications</div>
+                    </div>
+                    <!-- Header Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/ichec2025-web.png">
+                        <img class="project-image-mobile" src="images/research-images/ichec2025-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">ICHEC 2025</div>
+                            </div>
+                            <div class="project-top-text">Supporting Reviewing Reviews: How HCI Authors Handle Peer Reviews of Manuscripts</div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                <b><i>Colin Au Yeung,</i></b> Jessi Stark, Jiannan Li, Fanny Chevalier, Joonsuk Park, Young-Ho Kim, Tony Tang
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://hdl.handle.net/1880/124849"><b>Link</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/chi2025-web2.png">
+                        <img class="project-image-mobile" src="images/research-images/chi2025-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">CHI 2025 - Honourable Mention</div>
+                            </div>
+                            <div class="project-top-text">
+                                Prompting an Embodied AI Agent: How Embodiment and Multimodal Signaling Affects Prompting Behaviour
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                Tianyi Zhang, <b><i>Colin Au Yeung,</i></b> Emily Aurelia, Yuki Onishi, Neil Chulpongsatorn, Jiannan Li, Tony Tang
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://hdl.handle.net/1880/124849"><b>Link</b></a>
+                            </div>
+                        </div>    
+                    </div>
+                    <!-- Project Block End -->
+
+                    <!-- Header Block -->
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Other</div>
+                    </div>
+                    <!-- Header Block End -->
+
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/gi2025-web.png">
+                        <img class="project-image-mobile" src="images/research-images/gi2025-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    Graphics Interface 2025 Posters
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                Ghost in the Con: Exploring the Design of Telepresence Technologies for Anime Conventions
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                <b><i>Colin Au Yeung,</i></b> Lora Oehlberg
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://hdl.handle.net/1880/124849"><b>Link</b></a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- Project Nlock End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/bsc-web.png">
+                        <img class="project-image-mobile" src="images/research-images/bsc-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    Graphics Interface 2023 Posters
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                For the Love of Cosplay: How Cosplay Maker Culture Embraces Imperfection
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                <b><i>Colin Au Yeung,</i></b> Terrance Mok, Lora Oehlberg
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Nlock End -->
+
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/workshop-web.png">
+                        <img class="project-image-mobile" src="images/research-images/workshop-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text-smaller">CHI 2022 Workshop on Reimagining Systems for Learning Hands-on Creative and Maker Skills</div>
+                            </div>
+                            <div class="project-top-text">Tabletop Time Machine: Augmenting Physical Prototyping via Situated Playback</div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                <b><i>Colin Au Yeung,</i> </b>Ryo Suzuki, Wesley Willett
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://hdl.handle.net/1880/124849"><b>Link</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Nlock End -->
+
+                    <!-- Project Block -->
+                    <div class="project-block">
+                        <img class="project-image-desktop" src="images/research-images/imx2020-web.png">
+                        <img class="project-image-mobile" src="images/research-images/imx2020-mobile.png">
+                        <div class="project-text-block">
+                            <div class="project-title-block">
+                                <div class="project-title-decor"></div>
+                                <div class="project-title-text">
+                                    IMX 2020 Work in Progress
+                                </div>
+                            </div>
+                            <div class="project-top-text">
+                                Talk Like Somebody is Watching: Understanding and Supporting Novice Live Streamers
+                            </div>
+                            <div class="project-line-break"></div>
+                            <div class="project-bottom-text">
+                                Terrance Mok,  <b><i>Colin Au Yeung,</i></b> Tony Tang, Lora Oehlberg
+                            </div>
+                            <div class="project-bottom-text">
+                                <a href="https://hdl.handle.net/1880/124849"><b>Link</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Nlock End -->
+  
+
+
+                   
+
+
+
+                </div>
+
+                
+
+
+            </div>
+            
+        </div>
+        <aside id="hiddenbar">
+
+        </aside>
+
+
+
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/animejs/dist/bundles/anime.umd.min.js"></script> -->
+    <script>
+
+
+    </script>
+
+
+
+
+</body>
+</html>
