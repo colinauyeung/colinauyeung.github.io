@@ -1,0 +1,54 @@
+[
+    {
+        "Title": "Singapore",
+        "Year": "2024",
+        "Mono": "Singapore-mono.png",
+        "Color": "Singapore.png"
+
+    },
+    {
+        "Title": "Thailand",
+        "Year": "2024",
+        "Mono": "thailand-mon.png",
+        "Color": "thailand.png"
+
+    },
+    {
+        "Title": "Taiwan",
+        "Year": "2024",
+        "Mono": "taiwan-mono.png",
+        "Color": "taiwan.png"
+
+    },
+    {
+        "Title": "Japan",
+        "Year": "2025",
+        "Mono": "japan-mono.png",
+        "Color": "japan.png"
+
+    }
+    ,
+    {
+        "Title": "Singapore",
+        "Year": "2025",
+        "Mono": "singapore1-mono.png",
+        "Color": "singapore1.png"
+
+    },
+    {
+        "Title": "Japan",
+        "Year": "2026",
+        "Mono": "japan2-mono.png",
+        "Color": "japan2.png"
+
+    },
+    {
+        "Title": "U.K.",
+        "Year": "2026",
+        "Mono": "uk-mono.png",
+        "Color": "uk.png"
+
+    }
+
+
+]

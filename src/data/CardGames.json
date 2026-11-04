@@ -1,0 +1,100 @@
+[
+    {
+
+        "title": "Cardfight Vanguard",
+        "mode": "onlyheader"
+    },
+    {
+
+        "title": "",
+        "imgurl": "2026.jpg",
+        "imgpos": "0% 0%",
+        "topText": "BSF Vancouver 2026 Second Place",
+        "subheader1": "D Format 3v3",
+        "subheader2": "",
+        "bottomText":"Team: WowWeWow",
+        "subBottom":"with Terrance Choy and Kevin Liu",
+        "authors": [],
+        "links":[{
+            "title":"Deck: AichiCon",
+            "link":"https://decklog-en.bushiroad.com/view/3CQB3"
+        }],
+        "mode": "headless"
+    },
+    {
+
+        "title": "",
+        "imgurl": "2024.jpg",
+        "imgpos": "0% 0%",
+        "topText": "BSF Vancouver 2024 Second Place",
+        "subheader1": "D Format 3v3",
+        "subheader2": "",
+        "bottomText":"Team: I Am Thou",
+        "subBottom":"with Harold Ling and Gavin Tran",
+        "authors": [],
+        "links":[{
+            "title":"Deck: PR♥ISM",
+            "link":"https://decklog-en.bushiroad.com/view/7547S"
+        }],
+        "mode": "headless"
+    },
+    {
+
+        "title": "",
+        "imgurl": "triformat2024.jpg",
+        "imgpos": "0% 0%",
+        "topText": "BSF Vancouver 2024 Second Place",
+        "subheader1": "Tri-Regulation Format 3v3 ",
+        "subheader2": "",
+        "bottomText":"Team: Thou art I ",
+        "subBottom":"with Harold Ling and Gavin Tran",
+        "authors": [],
+        "links":[{
+            "title":"Deck: Ange",
+            "link":"https://decklog-en.bushiroad.com/view/17RH6"
+        }],
+        "mode": "headless"
+    },
+    {
+
+        "title": "Shadowverse Evolved",
+        "mode": "onlyheader"
+    },
+    {
+
+        "title": "",
+        "imgurl": "triformat2024.jpg",
+        "imgpos": "0% 0%",
+        "topText": "BSF Vancouver 2025 Top 8",
+        "subheader1": "3v3 Format",
+        "subheader2": "",
+        "bottomText":"Team: 2 guys 1 social link",
+        "subBottom":"with Terrance Choy and Kevin Liu",
+        "authors": [],
+        "links":[{
+            "title":"Deck: Earthrite Rune",
+            "link":"https://decklog-en.bushiroad.com/view/5VC0L"
+        }],
+        "mode": "onlytext"
+    },
+    {
+
+        "title": "",
+        "imgurl": "triformat2024.jpg",
+        "imgpos": "0% 0%",
+        "topText": "BCS Vancouver 2023 Top 8",
+        "subheader1": "Invitationals",
+        "subheader2": "",
+        "bottomText":"",
+        "subBottom":"",
+        "authors": [],
+        "links":[{
+            "title":"Deck: Ramp Dragon",
+            "link":"https://decklog-en.bushiroad.com/view/NNLM"
+        }],
+        "mode": "onlytext"
+    }
+
+
+
+]

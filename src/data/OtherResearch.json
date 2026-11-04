@@ -1,0 +1,69 @@
+[
+    {
+
+        "title": "Graphics Interface 2025 Posters",
+        "imgurl": "gi2025-web.png",
+        "imgpos": "0% 50%",
+        "topText": "Ghost in the Con: Exploring the Design of Telepresence Technologies for Anime Conventions ",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Colin Au Yeung", "Lora Oehlberg"],
+        "links":[{
+            "title":"Link",
+            "link":"https://drive.google.com/file/d/1qwufEc_Mh4DKDuI_kWfNvbv5a__xVOC6/view?usp=sharing"
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": " Graphics Interface 2023 Posters ",
+        "imgurl": "bsc-web.png",
+        "imgpos": "0% 0%",
+        "topText": "For the Love of Cosplay: How Cosplay Maker Culture Embraces Imperfection",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Colin Au Yeung", "Terrance Mok", "Lora Oehlberg"],
+        "links":[{
+            "title":"Link",
+            "link":"https://drive.google.com/file/d/1ppIc2T95h-BVaz8iiLQu4_0orr80MNHL/view?usp=sharing"
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": "CHI 2022 Workshop on Reimagining Systems for Learning Hands-on Creative and Maker Skills",
+        "imgurl": "workshop-web.png",
+        "imgpos": "50% 50%",
+        "topText": "Tabletop Time Machine: Augmenting Physical Prototyping via Situated Playback",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Colin Au Yeung", "Ryo Suzuki", "Wesley Willett"],
+        "links":[{
+            "title":"Link",
+            "link":"https://drive.google.com/file/d/1lLdekAm57WLhxkGdbngxSL3Ygtvy7MEi/view?usp=sharing"
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": "IMX 2020 Work in Progress ",
+        "imgurl": "imx2020-web.png",
+        "imgpos": "0% 0%",
+        "topText": "Talk Like Somebody is Watching: Understanding and Supporting Novice Live Streamers",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Terrance Mok", "Colin Au Yeung", "Tony Tang", "Lora Oehlberg" ],
+        "links":[{
+            "title":"Link",
+            "link":"https://dl.acm.org/doi/abs/10.1145/3391614.3399392"
+        }],
+        "mode": "normal"
+    }
+
+
+
+]

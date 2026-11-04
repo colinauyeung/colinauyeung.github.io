@@ -1,0 +1,187 @@
+[
+    {
+
+        "title": "CPSC 599: Visualization and Analytics",
+        "imgurl": "polivis.png",
+        "imgpos": "0% 0%",
+        "topText": "The New Media: Looking at the Twitter Behaviour of US House of Representatives Candidates in the Last Two Months of the 2020 General Election ",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"A data story exploring US House of Representative's use of Twitter (now X.com) leading up to the 2020 election",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/vis.html"
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": "CPSC 599: Ai in Video Games ",
+        "imgurl": "qlearning.png",
+        "imgpos": "35% 0%",
+        "topText": "Cyber Dungeon: A Q-Learning based rogue-like",
+        "subheader1": "",
+        "subheader2": "with David Garcia and Nikita Tripathi",
+        "bottomText":"A First-Person Shooter using Q-learning to fine tuning game difficulty",
+        "authors": [],
+        "links":[{
+            "title":"Term Paper",
+            "link":"https://drive.google.com/file/d/10JAC4fgsYkTlDQ2YwOAMZ_1484tAqmYW/view?usp=sharing"
+        },
+        {
+            "title": "Demo Video",
+            "link": "https://youtu.be/AlFf951xYuw"
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": "CPSC 584: Human Robot Interactions",
+        "imgurl": "hri-web.png",
+        "imgpos": "70% 0%",
+        "topText": "Usabo & Friends: Imagining Robotic Avatars for Virtual Youtubers",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"A qualitative survey project exploring the use of robotic avatars for livestreaming using video prototypes with puppet robots",
+        "authors": [],
+        "links":[{
+            "title":"Term Paper",
+            "link":"https://drive.google.com/file/d/1_HIAkAvowyNW16lThdKMxqpB6D8HsKCe/view?usp=sharing"
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": "CPSC 583: Intro to InfoVis",
+        "imgurl": "infovis.png",
+        "imgpos": "0% 0%",
+        "topText": "World Happiness Visualization",
+        "subheader1": "",
+        "subheader2": "with Michael Hung and Nathan Meulenbroek",
+        "bottomText":"Visualization of data from the World Happiness Report on a country by country basis",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/datavis.html"
+        }],
+        "mode": "normal"
+    },
+    {
+        "title": "CPSC 581: Human Computer Interactions II",
+        "mode": "onlyheader"
+    },
+    {
+        "imgurl": "sonic-journey.png",
+        "imgpos": "50% 0%",
+        "topText": "Sonic Journey",
+        "subheader1": "",
+        "subheader2": "Assignment 0: The Button",
+        "bottomText":"A single button system that recreates the feeling of taking an aimless motorcycle ride",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/SonicJourney.html"
+        }],
+        "mode": "headless"
+    },
+    {
+        "imgurl": "intonation-web.gif",
+        "imgpos": "0% 50%",
+        "topText": "Intonation Incantation",
+        "subheader1": "",
+        "subheader2": "Assignment 1: Wordless",
+        "bottomText":"A messaging app that conveys intonation in text conversations",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/Intonation.html"
+        }],
+        "mode": "headless"
+    },
+    {
+        "imgurl": "usabo.png",
+        "imgpos": "20% 50%",
+        "topText": "Usabo",
+        "subheader1": "",
+        "subheader2": "Assignment 2: The Relationship",
+        "bottomText":"A cardboard body for your phone that transforms it into an interactive toy",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/Usabo.html"
+        }],
+        "mode": "headless"
+    },
+
+
+
+
+
+    {
+        "title": "CPSC 581: Tangible & Physical HCI",
+        "mode": "onlyheader"
+    },
+
+    {
+        "imgurl": "hellosquid.png",
+        "imgpos": "50% 0%",
+        "topText": "Hello Squid",
+        "subheader1": "",
+        "subheader2": "Assignment 1: Arduino Hello World",
+        "bottomText":"A squid hat that allows you to communicate your emotions in one button",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/Squid.html"
+        }],
+        "mode": "headless"
+    },
+    {
+        "imgurl": "tonnatz.png",
+        "imgpos": "10% 0%",
+        "topText": "Tonnetz Magic",
+        "subheader1": "With Sarah Walker",
+        "subheader2": "Assignment 2: Physical Input",
+        "bottomText":"An interface for playing music tonnetz space",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/Tonnetz.html"
+        }],
+        "mode": "headless"
+    },
+    {
+        "imgurl": "git-tama.png",
+        "imgpos": "35% 0%",
+        "topText": "Git-Tama",
+        "subheader1": "with Daniel Lee",
+        "subheader2": "Assignment 3: Physical Output",
+        "bottomText":"A physicalization of Github activity",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/Gitama.html"
+        }],
+        "mode": "headless"
+    },
+    {
+        "imgurl": "discozy.png",
+        "imgpos": "35% 0%",
+        "topText": "Discozy",
+        "subheader1": "",
+        "subheader2": "Course Project",
+        "bottomText":"A cloak that conveys your friend's Discord activity",
+        "authors": [],
+        "links":[{
+            "title":"Project Site",
+            "link":"https://colinauyeung.github.io/old-project-side/Projects/Discozy.html"
+        }],
+        "mode": "headless"
+    }
+
+    
+
+
+
+]

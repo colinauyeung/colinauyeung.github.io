@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Fragment+Mono:ital@0;1&family=Micro+5&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-fira: "Fira Mono", monospace;
+  --font-micro: "Micro 5", san-serif;
+  --font-fragment: 'Fragment Mono', monospace;
+
+  --spacing: 1px;
+
+  --color-mwhite-500: #EAE4C2;
+  --color-mbrown-500: #4F4D41;
+  --color-outline: #C7C1A1;
+  --color-lightbrown: #6E6B5C;
+  --color-darkbrown: #131109;
+
+  --inset-shadow-header: inset 0px 0px 0px 3px #C7C1A1;
+
+  --breakpoint-md: 796px;
+}
+
+body{
+
+  @media (max-width: 796px) {
+    background: #EAE4C2; 
+  }
+  @media (min-width: 797px) {
+    background: #C7C1A1;  
+  }
+
+
+}

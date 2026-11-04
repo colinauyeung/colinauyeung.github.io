@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Title</title>
+    <!-- Link to your CSS file here -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Fragment+Mono:ital@0;1&family=Micro+5&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=LINE+Seed+JP:wght@100;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <style>
+
+        #travel-container{
+            padding: 0px 5px;
+            /* width: 100%; */
+            /* display: flexbox;
+            justify-content: center;
+            align-items: center; */
+        }
+
+        .travel-box{
+            /* min-width: 23%; */
+            /* max-width: 50%; */
+            width: 160px;
+            height: 200px;
+            /* -webkit-box-shadow:inset 0px 0px 0px 10px #f00; */
+            /* -moz-box-shadow:inset 0px 0px 0px 10px #f00; */
+            box-shadow:inset 0px 0px 0px 5px #C7C1A1;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 12px;
+            float: left;
+        }
+
+        .travel-box:hover .travel-image-top{
+            display: none;
+
+        }
+
+        .travel-image{
+            float:left;
+            width: 135px;
+            height: 135px;
+            position: relative;
+        }
+
+        .travel-image-top{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 2;
+            display: block;
+        }
+
+        .travel-image-bottom{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            z-index: 1;
+        }
+
+        .travel-line{
+            height: 39px;
+            width: 10px;
+            border: #4F4D41;
+            background-color: #4F4D41;
+            float:left;
+            margin-top:4px;
+            margin-right:5px;
+        }
+
+        .travel-textbox{
+            padding-top: 140px;
+            font-family: "Micro 5", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 32px;
+            line-height: 60%;
+        }
+
+
+    </style>
+
+
+    <div id="layout">
+        <div id="sidebar">
+            <div id="sidebarlayout">
+
+                <div id="avatarbox">
+                    <div class="menu-title">
+                        <div class="menu-title-text micro-5-regular">[avatar]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+                    </div>
+                    <img style="width: 113px; margin-left: auto; margin-right: auto; margin-bottom: 4px;" src="images/avatar2.png">
+
+                </div>
+
+                <div id="menubox" class="micro-5-regular">
+                    <div class="menu-title">
+                        <div class="menu-title-text">[menu]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+
+                    </div>
+                    <a href="index.html"><div class="sidebaritem">./home</div></a>
+                    <a href="research.html"><div class="sidebaritem">./research</div></a>
+                    <a href="projects.html"> <div class="sidebaritem">./projects</div></a>
+                    <a href="personal.html"> <div class="sidebaritem">./personal</div></a>
+                </div>
+
+                <div id="linkbox" class="micro-5-regular">
+                    <div class="menu-title">
+                        <div class="menu-title-text">[links]</div>
+                        <img class="menu-decor" src="images/xbutton.png">
+
+                    </div>
+                    <a href="mailto:colin.auyeung403@gmail.com"><div class="sidebaritem">./email</div></a>
+                    <a href="https://www.linkedin.com/in/colin-au-yeung-348293312/"><div class="sidebaritem">./linkedin</div></a>
+                    <a href="https://drive.google.com/file/d/1OTkeZ4ZjH_2IN7mUH80-Wths0wfTNp-b/view?usp=sharing"> <div class="sidebaritem">./cv</div></a>
+
+                </div>
+                
+            </div>
+            
+
+        </div>
+        
+      <div id="dropdown-container">
+            <div id="dropdown">
+                <button class="dropbtn">./home</button>
+                <div class="dropdown-content">
+                    <div>[menu]</div>
+                    <a href="index.html">./home</a>
+                    <a href="research.html">./research</a>
+                    <a href="projects.html">./projects</a>
+                    <a href="personal.html">./personal</a>
+                    <div>[links]</div>
+                    <a href="mailto:colin.auyeung403@gmail.com">./email</a>
+                    <a href="https://www.linkedin.com/in/colin-au-yeung-348293312/">./linkedin</a>
+                    <a href="https://drive.google.com/file/d/1OTkeZ4ZjH_2IN7mUH80-Wths0wfTNp-b/view?usp=sharing">./cv</a>
+                </div>
+            </div>
+            <img id="dropdown-decor" src="images/xbutton.png">
+        </div>
+
+        <div id="mobile-header">
+
+
+            <img style="width: 60px; margin:10px; float:left;" src="images/avatar2.png">
+            <div id="mb-text-box">
+                <div id="mb-name-box">
+                    <div id="mb-name-box-block"></div>
+                    <div id="mb-name-box-text">colin.auyeung</div>
+                </div>
+                <div id="mb-title-box">developer/hci.researcher</div>
+            </div>
+
+        </div>
+
+
+        <div id="main-wrapper">
+            <div id="mainbox">
+                <div id="content-wrapper">
+                    <div id="titlebar">
+                        <div id="urltitle" class="micro-5-regular">colin.auyeung/home</div>
+                        <img class="top-decor" src="images/minbutton.png">
+                        <img class="top-decor" src="images/maxbutton.png">
+                        <img class="top-decor" src="images/xbutton2.png">
+                    </div>
+
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Hello!</div>
+                    </div>
+
+                    <div class="text-wrapper">
+                        <div class="bodytext">I’m Colin Au Yeung (he/him), a HCI researcher interested in how we may design technology to support meaningful interactions in social spaces. </div>
+                        <div class="linebreak"></div>
+                        <div class="bodytext">I’ve just recently finished my Master’s in Computer Science @ the University of Calgary with Dr. Lora Oehlberg in the Interactions Lab. My thesis is entitled “Virtual Attendees at Anime Conventions: Supporting Telepresence in Physical Third Places”.</div>
+                        <div class="linebreak"></div>
+                        <div class="bodytext">My undergrad degree is in Computer Science at the University of Calgary with a minor in Political Science. My specialty in PoliSci was American-East Asian relations!</div>
+                        <div class="linebreak"></div>
+                        <div class="bodytext">Beyond research, I have a passion for tangible computing, particularly in small hobby electronics to enable tactile experiences. I have really enjoyed 3D printing in the last few years.</div>
+                        <div class="linebreak"></div>
+                        <div class="bodytext" style="font-size: 16px;">
+                            <b>Email me @ colin.auyeung403@gmail.com</b>
+                        </div>
+
+                    </div>
+
+           
+
+                    <div class="innerheader">
+                        <div class="header-thick"></div>
+                        <div class="header-thin"></div>
+                        <div class="header-text">Travel</div>
+                    </div>
+
+                    <div id="travel-container">
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/Singapore-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/Singapore.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Singapore</div>
+                                <div class="travel-year">2024</div>
+                            </div>
+                        </div>
+
+
+                         <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/thailand-mon.png">
+                                <img class="travel-image-bottom" src="images/travel/thailand.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Thailand</div>
+                                <div class="travel-year">2024</div>
+                            </div>
+                        </div>
+
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/taiwan-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/taiwan.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Taiwan</div>
+                                <div class="travel-year">2024</div>
+                            </div>
+                        </div>
+
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/japan-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/japan.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Japan</div>
+                                <div class="travel-year">2025</div>
+                            </div>
+                        </div>
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/singapore1-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/singapore1.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Singapore</div>
+                                <div class="travel-year">2025</div>
+                            </div>
+                        </div>
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/japan2-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/japan2.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">Japan</div>
+                                <div class="travel-year">2026</div>
+                            </div>
+                        </div>
+
+                        <div class="travel-box">
+                            <div class="travel-image">
+                                <img class="travel-image-top" src="images/travel/uk-mono.png">
+                                <img class="travel-image-bottom" src="images/travel/uk.png">
+                            </div>
+                            <div class="travel-line"></div>
+                            <div class="travel-textbox">
+                                
+                                <div class="travel-country">U.K.</div>
+                                <div class="travel-year">2026</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+                
+
+
+            </div>
+            
+        </div>
+        <aside id="hiddenbar">
+
+        </aside>
+
+
+
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/animejs/dist/bundles/anime.umd.min.js"></script> -->
+    <script>
+
+
+    </script>
+
+
+
+
+</body>
+</html>

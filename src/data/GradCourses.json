@@ -1,0 +1,54 @@
+[
+    {
+        "title": "CPSC 601: Sustainable Interaction Design",
+        "imgurl": "sustainable.png",
+        "imgpos": "30% 70%",
+        "topText": "Let’s Go Out to Eat: Self-Reflections on the Experiences of Co-Dining",
+        "bottomText":"Autobiographical reflections on co-dining as a first exploration for designing technology for co-dining",
+        "links":[{
+            "title":"Term Paper",
+            "link":"https://drive.google.com/file/d/1FpfAbnxThFlDdeohBCHO5kzdaXqWQJUa/view?usp=sharing"
+        }],
+        "mode": "normal"
+    },
+
+    {
+        "title": "CPSC 601: Wearable Applications",
+        "imgurl": "cosplay.jpg",
+        "imgpos": "0% 0%",
+        "topText": "IN//OUT-OF Character: Controlling Dynamic Cosplay Elements with Implicit and Explicit Interaction",
+        "bottomText":"An embedded hardware interface to support both implicit and explict control of reactive cosplay elements",
+        "links":[
+            {
+                "title":"Term Paper",
+                "link":"https://drive.google.com/file/d/15Q2ypvzaCebIV3q592YdNx6yxm7A-i4W/view?usp=sharing"
+            },
+            {
+                "title":"Demo Video",
+                "link":"https://youtu.be/rLPgDWHCytA?si=iAFxQgO1_wZRBb3b"
+            }
+        ],
+        "mode": "normal"
+    },
+
+    {
+        "title": "CPSC 601: Wearables and Haptics",
+        "imgurl": "teabot.jpg",
+        "imgpos": "0% 0%",
+        "topText": "Teabot: Supporting Physicality in Remote Tea Sharing",
+        "bottomText":"A prototype system for supporting tangible embodied interactions in a remote co-dining setting.",
+        "links":[
+            {
+                "title":"Term Paper",
+                "link":"https://drive.google.com/file/d/1sBv3tzWJB6mNC1Srln2SquCojHvVLEbP/view?usp=sharing"
+            },
+            {
+                "title":"Demo Video",
+                "link":"https://youtu.be/xhRj49hDyQQ"
+            }
+        ],
+        "mode": "normal"
+    }
+
+
+]

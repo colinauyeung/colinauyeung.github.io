@@ -1,0 +1,110 @@
+.projectBlock{
+        /* position: relative; */
+    font-family: "Fira Mono", monospace;
+    display: block;
+    /* display:flex; */
+    /* max-height: 150px; */
+    padding-left:5px;
+    padding-right: 5px;
+    margin-right:5px;
+    margin-bottom: 20px;
+
+}
+
+
+.mainImage{
+    /* display: none; */
+    /* object-fit:cover; */
+    /* height: 100%; */
+    /* float: left; */
+    /* height: 100%; */
+    /* width: 100%; */
+    max-height: 180px;
+    width: 100%;
+    object-fit:cover;
+
+}
+
+
+
+.textBlock{
+    /* height: 100%; */
+    /* float: left; */
+    /* margin-left: 5px; */
+    /* margin-right: 5px; */
+    margin-top: 5px;
+    width: 100%;
+
+
+}
+
+.titleBanner{
+    background-color: #4F4D41;
+    min-height: 40px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    padding: 5px 0px;
+    /* margin-top: 20px; */
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 3px;
+
+}
+
+.titleBlock{
+    background-color: #4F4D41;
+    min-height: 40px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    padding: 5px 0px;
+    margin-bottom: 3px;
+
+}
+
+.titleDecor{
+    height: 20px;
+    min-width: 20px;
+    float: left;
+    background-color: #EAE4C2;
+    margin: 0px 10px;
+
+
+}
+
+.titleText{
+    color: #EAE4C2;
+    font-weight: 500;
+    font-size: 20px;
+    /* line-height: 40px; */
+
+}
+
+.titleTextSmaller{
+    color: #EAE4C2;
+    font-weight: 500;
+    font-size: 16px;
+    /* line-height: 40px; */
+
+}
+
+.topText{
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 120%;
+
+
+}
+
+.lineBreak{
+    height: 10px;
+
+}
+
+.bottomText{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 120%;
+
+}

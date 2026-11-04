@@ -1,0 +1,37 @@
+[
+    {
+
+        "title": "ICHEC 2025",
+        "imgurl": "ichec2025-web.png",
+        "imgpos": "0% 50%",
+        "topText": "Supporting Reviewing Reviews: How HCI Authors Handle Peer Reviews of Manuscripts",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Colin Au Yeung", "Jessi Stark", "Jiannan Li", "Fanny Chevalier", "Joonsuk Park", "Young-Ho Kim", "Tony Tang"],
+        "links":[{
+            "title":"Link",
+            "link":"https://dl.acm.org/doi/10.1145/3786995.3786998"
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": "CHI 2025 - Honourable Mention",
+        "imgurl": "chi2025-web2.png",
+        "imgpos": "80% 50%",
+        "topText": "Prompting an Embodied AI Agent: How Embodiment and Multimodal Signaling Affects Prompting Behaviour",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Tianyi Zhang", "Colin Au Yeung", "Emily Aurelia", "Yuki Onishi", "Neil Chulpongsatorn", "Jiannan Li", "Tony Tang" ],
+        "links":[{
+            "title":"Link",
+            "link":"https://dl.acm.org/doi/10.1145/3706598.3713110"
+        }],
+        "mode": "normal"
+    }
+
+
+
+]

@@ -1,0 +1,33 @@
+[
+    
+    {
+        "title": "MSc Computer Science",
+        "imgurl": "msc-web.png",
+        "imgpos": "0% 50%",
+        "topText": "Virtual Attendees at Anime Conventions: Supporting Telepresence in Physical Third Places",
+        "bottomText":"April 2026",
+        "links":[{
+            "title":"Link",
+            "link":"https://hdl.handle.net/1880/124849"
+        }],
+        "mode": "normal"
+    },
+
+    {
+
+        "title": "BCs Honours Computer Science",
+        "imgurl": "bsc-web.png",
+        "imgpos": "0% 0%",
+        "topText": "Whammy-Jammy Creation: Understanding Cosplay Maker Culture",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"April 2022",
+        "links":[{
+            "title":"Link",
+            "link":"https://drive.google.com/file/d/1IQrwWv7FL8gzetBuEfW8H8Z4J4EvleE5/view?usp=sharing"
+        }],
+        "mode": "normal"
+    }
+
+
+]
