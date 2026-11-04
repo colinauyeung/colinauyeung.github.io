@@ -1,6 +1,38 @@
 [
     {
 
+        "title": "GROUP 2027 *Just Accepted*",
+        "imgurl": "msc-web.png",
+        "imgpos": "0% 0%",
+        "topText": "Ghost in the Con: Exploring the Design of Telepresence Technologies for Anime Conventions",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Colin Au Yeung", "Lora Oehlberg"],
+        "links":[{
+            "title":"",
+            "link":""
+        }],
+        "mode": "normal"
+    },
+    {
+
+        "title": "CCF Transactions on Pervasive Computing and Interaction (2026)",
+        "imgurl": "chef.png",
+        "imgpos": "0% 50%",
+        "topText": "From Watching to Cooking: Interactive Assistance for Short-Form Video Recipes",
+        "subheader1": "",
+        "subheader2": "",
+        "bottomText":"",
+        "authors": ["Xiaochen Lio", "Tianyi Zhang", "Colin Au Yeung", "Bin Zhu", "Fan Li", "Tony Tang", "Dong Ma"],
+        "links":[{
+            "title":"Link",
+            "link":"https://link.springer.com/article/10.1007/s42486-026-00274-8"
+        }],
+        "mode": "normal"
+    },
+    {
+
         "title": "ICHEC 2025",
         "imgurl": "ichec2025-web.png",
         "imgpos": "0% 50%",
